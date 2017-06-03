@@ -12,5 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $title1 = '首页';
+    $title2 = null;
+    $titleLink1 = '/';
+    $titleLink2 = null;
+    return view('kpiIndex', compact('title1', 'title2', 'titleLink1', 'titleLink2'));
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/send_message', 'Auth\RegisterController@sendMessage');
