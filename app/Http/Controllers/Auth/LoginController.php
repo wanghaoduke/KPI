@@ -49,7 +49,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $this->validate($request, [
-            $this->username() => 'required|string|regex:"^1[0-9]{10}$"',
+            $this->username() => 'required|string|regex:"^1[0-9]{10}$"|exists:users',
             'password' => 'required|string',
         ]);
     }

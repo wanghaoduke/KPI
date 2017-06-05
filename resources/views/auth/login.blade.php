@@ -122,7 +122,7 @@
                                     登录
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                <a class="btn btn-link" href="/reset_get_code">
                                     忘记密码？找回密码。
                                 </a>
                             </div>

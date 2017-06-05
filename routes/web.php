@@ -23,3 +23,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/send_message', 'Auth\RegisterController@sendMessage');
+Route::get('/reset_get_code', 'ResetPasswordController@show');
+Route::post('/reset_send_code', 'ResetPasswordController@sendCode');
+Route::post('/reset_check_code', 'ResetPasswordController@resetCheckCode');
+Route::get('/reset_password', 'ResetPasswordController@resetPassword');
+Route::post('/new_password_store', 'ResetPasswordController@newPasswordStore');
