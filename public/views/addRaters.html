@@ -30,7 +30,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="" style="display: inline-block; background: darkgray; height: 80px; width: 120px; margin: 13px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" ng-repeat='staff in paged.staffs' ng-click='addStaff(staff)' ng-class="{selected: isInselected(staff)}">
+                <div class="" style="display: inline-block; background: darkgray; cursor: pointer; height: 80px; width: 120px; margin: 13px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" ng-repeat='staff in paged.staffs' ng-click='addStaff(staff)' ng-class="{selected: isInselected(staff)}">
                     <p style="font-size: 18px; text-align: center;">{{staff.name}}</p>
                     <p style="text-align: center;">{{staff.department | departmentFilter}}</p>
                 </div>

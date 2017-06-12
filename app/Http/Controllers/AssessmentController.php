@@ -40,9 +40,9 @@ class AssessmentController extends Controller
 
     //添加月份assessment
     public function createMonthAssessment(Request $request){
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $count = Assessment::where('year', $request->get('year'))->where('month', $request->get('month'))->count();
-        \Log::info($count);
+//        \Log::info($count);
         if($count > 0){
             $data = [];
             $data['error'] = '月份有重复！';
@@ -71,10 +71,6 @@ class AssessmentController extends Controller
     }
 
     //获取assessment详情
-    /**
-     * @param $id
-     * @param Request $request
-     */
     public function getAssessmentDetail ($id, Request $request){
         $raters = User::whereIn('department',[1,2])->where('status', 1)->get();
         $staffIds = StaffScore::distinct('staff_id')->where('assessment_id', $id)->pluck('staff_id');
@@ -184,5 +180,11 @@ class AssessmentController extends Controller
             ->where('assessment_id',$id)
             ->whereNotIn('id',$selectedIds)
             ->delete();
+    }
+
+    //获取所有的assessment
+    public function getAllAssessments (){
+        $assessments = Assessment::orderBy('year','DESC')->orderBy('month','DESC')->get();
+        return $assessments;
     }
 }

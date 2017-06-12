@@ -56,7 +56,7 @@ assessmentControllers.controller('CreateAssessmentDetailController',['$scope', '
         };
 
         $scope.ok = function(){
-            console.log($scope.assessmentDetail['id']);
+            $location.url("/");
         };
     }]
 );

@@ -8,12 +8,12 @@
                 <div style=" background: #e2dede; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px; text-align: center;" class="col-md-3">
                     <a id="create_Assessment" ng-click="createNewAssessment()"><span style="font-size: 110px; color: #aba5a5; text-decoration: none; cursor: pointer;">+</span></a>
                 </div>
-                <div style="background: gray; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px;" class="col-md-3">
-                    dsfdsf
+                <div ng-repeat="assessment in allAssessments" style="color: white; text-align: center; background: gray; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px;" class="col-md-3">
+                    <a style="text-decoration: none; color: white; cursor: pointer;" href="#/edit_assessment/{{assessment['id']}}"><h3>{{ assessment['year'] }}年{{assessment['month']}}月考核</h3></a>
                 </div>
-                <div style="background: gray; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px;" class="col-md-3">
-                    ddd
-                </div>
+                <!--<div style="background: gray; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px;" class="col-md-3">-->
+                    <!--ddd-->
+                <!--</div>-->
             </div>
 
         </div>

@@ -1,7 +1,9 @@
 var controllers = angular.module('controllers', []);
 
-controllers.controller('KpiManageController', ['$scope', '$http','$uibModal','$location',function($scope,$http,$uibModal,$location){
+controllers.controller('KpiManageController', ['$scope', '$http','$uibModal','$location','Kpi',
+    function($scope,$http,$uibModal,$location,Kpi){
 
+    //创建新的assessment
     $scope.createNewAssessment = function(){
         var modalInstance = $uibModal.open({
             templateUrl: 'views/selectDate.html',
@@ -9,20 +11,21 @@ controllers.controller('KpiManageController', ['$scope', '$http','$uibModal','$l
             size: 'md',
             backdrop: 'static'
         });
-        console.log('2');
         modalInstance.result.then(function(result){
             $scope.data = result;
-            console.log('1');
-            console.log($scope.data);
             if($scope.data){
                 if($scope.data['id']){
                     console.log('haha');
                     $location.url("/edit_assessment/" + $scope.data['id']);
-                    // window.location.href='/create_assessment/' + $scope.data['id'];
                 }
             }
-        })
-    }
+        });
+    };
+    
+    //获取所有的assessment
+    Kpi.getAllAssessments().then(function(data){
+        $scope.allAssessments = data;
+    })
 }]);
 
 controllers.controller('selectDateController', ['$scope',  '$uibModalInstance', 'Kpi', '$location',

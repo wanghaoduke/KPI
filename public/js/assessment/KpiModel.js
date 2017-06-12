@@ -61,6 +61,18 @@ resService.factory('Kpi', ['$http', '$q',
                 });
             });
         };
+
+        //获取所有的assessment
+        kpi.getAllAssessments = function (){
+            return $q(function(resolve, reject){
+                $http.get('/get_all_assessments')
+                    .success(function(data){
+                        resolve(data);
+                    }).error(function(data){
+                    reject(data);
+                });
+            });
+        };
         
         //获取所有被选员工的详情
         kpi.getSelectedStaffDetails = function(assessmentId ,data){
