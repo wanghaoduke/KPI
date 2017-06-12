@@ -1,0 +1,73 @@
+<div class="tools-lightbox">
+    <div class="panel-default">
+        <div class="modal-header clearfix" style="overflow:inherit;">
+            <h6 class="col-md-3 tools-line-h tools-m-0">请选择员工</h6>
+            <div class="col-md-12">
+                <!--<div class="col-md-3">-->
+                    <!--<ui-select id="department_id" name="department_id" ng-model="selected.departmentId" theme="bootstrap" ng-disabled="disabled" title="按部门选择">-->
+                        <!--<ui-select-match placeholder="按部门选择">{{$select.selected.name}}</ui-select-match>-->
+                        <!--<ui-select-choices repeat="department.id as department in departmentNames">{{department.name}}</ui-select-choices>-->
+                    <!--</ui-select>-->
+                <!--</div>-->
+                <!--<div class="col-md-3">-->
+                    <!--<ui-select id="job_id" name="job_id" ng-model="selected.jobId" theme="bootstrap" ng-disabled="disabled" title="按岗位职务选择">-->
+                        <!--<ui-select-match placeholder="按岗位职务选择">{{$select.selected.name}}</ui-select-match>-->
+                        <!--<ui-select-choices repeat="job.id as job in jobs">{{job.name}}</ui-select-choices>-->
+                    <!--</ui-select>-->
+                <!--</div>-->
+                <!--<div class="col-md-2">-->
+                    <!--<a href="javascript:;" class="btn btn-cancel btn-w2" ng-click="clearDepartmentJob()">清空</a>-->
+                <!--</div>-->
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="请输入姓名" ng-model="query" id="query">
+                        <a href="javascript:;" class="btn btn-primary input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="" style="display: inline-block; background: darkgray; height: 80px; width: 120px; margin: 13px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" ng-repeat='staff in paged.staffs' ng-click='addStaff(staff)' ng-class="{selected: isInselected(staff)}">
+                    <p style="font-size: 18px; text-align: center;">{{staff.name}}</p>
+                    <p style="text-align: center;">{{staff.department | departmentFilter}}</p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="tools-fr">
+                    <uib-pagination ng-model="currentPage" total-items="filterstaffs.length" max-size="5" items-per-page="12" boundary-links="true" force-ellipses="true"></uib-pagination>
+                </div>
+            </div>
+<br> <br> <br>
+        </div>
+        <div class="modal-footer">
+            <p class="col-md-12 text-left">已选择<span class="selected-num">{{selectedStaffs.length}}</span>位员工</p>
+            <div class="col-md-12 tools-p-0">
+                <!--<div class="lightbox-box" ng-repeat='staff in selectedStaffs' ng-click='deleteWork(worker)'>-->
+                    <!--<p>{{staff.name}}</p>-->
+                    <!--<small>{{staff.department | departmentFilter}}</small>-->
+                <!--</div>-->
+                <table class="table table-bordered" style="text-align: center;">
+                    <tr>
+                        <th style="background-color: #cdcece;">参评人姓名</th>
+                        <th style="background-color: #cdcece;">参评人组别</th>
+                        <th style="background-color: #cdcece;">参评人占比</th>
+                    </tr>
+                    <tr ng-repeat="staff in selectedStaffs">
+                        <td>{{ staff.name }}</td>
+                        <td>{{ staff.department | departmentFilter }}</td>
+                        <td><input ng-model="staff.percentage" style="text-align: center;">%</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <div class="footer-w-1 tools-mg-top-2">
+                    <button class="btn btn-primary" ng-click="ok()" id="ok">确认</button>
+                    <button class="btn btn-cancel" ng-click="cancel()" id="cancel">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

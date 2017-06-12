@@ -1,0 +1,21 @@
+<div class="panel-default" style="background: white; width: 600px; height: 250px;">
+    <br>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4"><h4>选择创建kpi的月份</h4></div>
+        </div>
+    <br>
+
+    <div class="input-group">
+        <input class="form-control col-md-8"  type="text" uib-datepicker-popup="yyyy-MM" is-open="opened" ng-model="kpiDate" datepicker-options="options" date-new-format="yyyy-MM" id="begin_date">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-position btn-radius-1" ng-click="open($event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+    </div>
+    <br>
+    <div class="row" style="text-align: center;">
+        <button class="btn btn-primary" style="margin: 5px 10px;" type="button" ng-click="submit()">保存</button>
+        <button class="btn btn-default" style="background: #eceff1; margin: 5px 10px;" type="button" ng-click="cancel()">取消</button>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br>
+            <h3 style="text-align: center;">{{ assessmentDetail.assessment.year }}年{{ assessmentDetail['assessment']['month'] }}月度考核</h3>
+            <br><br>
+            <div class="panel-body">
+                <br><br>
+
+                <div class="row">
+                    <h4 class="col-md-3">策划组参评设置</h4>
+                </div>
+
+                <div class="col-md-5" ng-repeat="planStaff in assessmentDetail.plan_staffs track by $index" style="background: #eaeaea; margin: 12px 38px; font-size: 25px; -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; height: 50px;">
+                    {{ planStaff.name }}&nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">参评：<span ng-repeat="rater in planStaff.staff_scores">/{{rater.name}}</span><a href="" style="text-decoration: none; float: right; position: relative; top: 15px;" ng-click="addRater(planStaff.id)">添加</a></span>
+                </div>
+                <br>
+
+                <div class="row"></div>
+                <div class="row">
+                    <h4 class="col-md-3">开发组参评设置</h4>
+                </div>
+
+                <div class="col-md-5" ng-repeat="developmentStaff in assessmentDetail.development_staffs track by $index" style="background: #eaeaea; margin: 12px 38px; font-size: 25px; -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px; height: 50px;">
+                    {{ developmentStaff.name }}&nbsp;&nbsp;&nbsp;<span style="font-size: 13px;">参评：<span ng-repeat="rater in developmentStaff.staff_scores">/{{rater.name}}</span><a href="" style="text-decoration: none; float: right; position: relative; top: 15px;" ng-click="addRater(developmentStaff.id)">添加</a></span>
+                </div>
+
+                <div class="row"></div>
+                <div class="row" style="text-align: center;">
+                    <br><br>
+                    <a class="btn btn-primary" style="padding: 10px 50px; margin-right: 38px;" ng-click="ok()">确认</a>
+                    <a class="btn btn-default" href="#/" style="padding: 10px 50px; background: #eaeaea;">取消</a>
+                    <br>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

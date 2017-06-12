@@ -26,5 +26,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('assessment_manage', function($user){
+            return $user->Jurisdiction == 1;
+        });
     }
 }
