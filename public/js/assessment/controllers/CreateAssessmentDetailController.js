@@ -107,6 +107,7 @@ assessmentControllers.controller('AddRaterController', ['$scope',  '$uibModalIns
         }, function(data){});
 
         $scope.isInselected = function (staff) {
+            console.log(11111)
             for (var i = 0; i < $scope.selectedStaffs.length; i++) {
                 if ($scope.selectedStaffs[i]['id'] == staff.id) {
                     return true;

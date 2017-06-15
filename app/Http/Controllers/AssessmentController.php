@@ -22,7 +22,7 @@ class AssessmentController extends Controller
         $titleLink1 = '/assessment_manage#/';
         $titleLink2 = null;
         if(Gate::denies('assessment_manage')){
-            return redirect()->back()->withErrors(['gateError' => '您没有进入的权限！']);
+            return redirect('/')->withErrors(['gateError' => '您没有进入的权限！']);
         }
         return view('kpiManage', compact('title1','title2','titleLink1','titleLink2'));
     }
@@ -109,7 +109,7 @@ class AssessmentController extends Controller
 
     //获取员工的评选人员
     public function getRaters ($id, Request $request){
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $raterIds = StaffScore::where('staff_id', $id)->where('assessment_id', $request->get('assessment_id'))->pluck('rater_id');
         $raters = User::whereIn('id', $raterIds)->get();
         return $raters;

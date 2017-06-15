@@ -1,4 +1,28 @@
 <div class="tools-lightbox">
+    <style>
+        .selected {
+            display: inline-block;
+            background: #5fbaf1;
+            cursor: pointer;
+            height: 80px;
+            width: 120px;
+            margin: 13px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+        .noSelected {
+            display: inline-block;
+            background: darkgray;
+            cursor: pointer;
+            height: 80px;
+            width: 120px;
+            margin: 13px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+    </style>
     <div class="panel-default">
         <div class="modal-header clearfix" style="overflow:inherit;">
             <h6 class="col-md-3 tools-line-h tools-m-0">请选择员工</h6>
@@ -30,7 +54,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="" style="display: inline-block; background: darkgray; cursor: pointer; height: 80px; width: 120px; margin: 13px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;" ng-repeat='staff in paged.staffs' ng-click='addStaff(staff)' ng-class="{selected: isInselected(staff)}">
+                <div  ng-repeat='staff in paged.staffs' ng-click='addStaff(staff)' ng-class="{selected: isInselected(staff), noSelected: !isInselected(staff) }">
                     <p style="font-size: 18px; text-align: center;">{{staff.name}}</p>
                     <p style="text-align: center;">{{staff.department | departmentFilter}}</p>
                 </div>

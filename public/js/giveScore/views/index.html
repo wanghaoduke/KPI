@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br><br>
+          <div class="panel panel-body">
+              <div ng-repeat="assessment in assessments" class="col-md-5" style="color: white; background: deepskyblue; margin: 40px; border-radius: 5px; text-align: center;">
+                  <br>
+                  <h3 style="color: white;">{{ assessment['year'] }}年{{ assessment['month'] }}月份考核</h3>
+                  <h3 style="color: white;"><a style="color: white;" href="#/give_score/{{ assessment['id'] }}">进入评分>></a></h3>
+                  <table class="table" style="font-size: 18px; border-top: 1px white solid; border-bottom: 1px white solid;">
+                      <tr>
+                          <td colspan="2" style="border-right: white 1px solid;">策划组考核</td>
+                          <td colspan="2">开发组考核</td>
+                      </tr>
+                      <tr>
+                          <td style="border-top: 0 solid red;">原型质量</td>
+                          <td style="border-right: white 1px solid; border-top: 0 solid red;">20分</td>
+                          <td style="border-top: 0 solid red;">开发质量</td>
+                          <td style="border-top: 0 solid red;">30分</td>
+                      </tr>
+                      <tr>
+                          <td style="border-top: 0 solid red;">成品质量 </td>
+                          <td style="border-right: white 1px solid; border-top: 0 solid red;">30分</td>
+                          <td style="border-top: 0 solid red;">开发效率</td>
+                          <td style="border-top: 0 solid red;">30分</td>
+                      </tr>
+                      <tr>
+                          <td style="border-top: 0 solid red;">能力与学习</td>
+                          <td style="border-right: white 1px solid; border-top: 0 solid red;">20分</td>
+                          <td style="border-top: 0 solid red;">能力与学习</td>
+                          <td style="border-top: 0 solid red;">20分</td>
+                      </tr>
+                      <tr>
+                          <td style="border-top: 0 solid red;">责任心</td>
+                          <td style="border-right: white 1px solid; border-top: 0 solid red;">30分</td>
+                          <td style="border-top: 0 solid red;">责任心</td>
+                          <td style="border-top: 0 solid red;">20分</td>
+                      </tr>
+                  </table>
+                  <h5>产品经理+技术主管+对接人，共占比100%</h5>
+                  <h5>具体占比由产品经理及技术主管设置</h5>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
