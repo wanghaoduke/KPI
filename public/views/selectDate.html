@@ -1,3 +1,18 @@
+<style>
+    .dateInput{
+        position: relative;
+        z-index: 2;
+        /*float: left;*/
+        margin-bottom: 0;
+        height: 36px;
+        padding: 6px 12px;
+        background-color: #fff;
+        border: 1px solid #ccd0d2;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+</style>
 <div class="panel-default" style="background: white; width: 600px; height: 250px;">
     <br>
         <div class="row">
@@ -5,14 +20,12 @@
         </div>
     <br>
 
-    <div class="input-group">
-        <input class="form-control col-md-8"  type="text" uib-datepicker-popup="yyyy-MM" is-open="opened" ng-model="kpiDate" datepicker-options="options" date-new-format="yyyy-MM" id="begin_date">
+    <input class="dateInput col-md-8 col-md-offset-1"  type="text" uib-datepicker-popup="yyyy-MM" is-open="opened" ng-model="kpiDate" datepicker-options="options" date-new-format="yyyy-MM" id="begin_date">
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default btn-position btn-radius-1" ng-click="open($event)">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </button>
                     </span>
-    </div>
     <br>
     <div class="row" style="text-align: center;">
         <button class="btn btn-primary" style="margin: 5px 10px;" type="button" ng-click="submit()">保存</button>

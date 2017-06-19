@@ -40,3 +40,8 @@ Route::get('/score/master', 'GiveScoreController@show');
 Route::get('/score/get_your_assessment', 'GiveScoreController@getYourAssessment');
 Route::get('/score/get_staff_scores/{id}', 'GiveScoreController@getStaffScores');
 Route::post('/score/save_staff_scores/{id}', 'GiveScoreController@saveStaffScores');
+
+//评分查看系统
+Route::get('/show_score/index', 'ShowScoreController@index');
+Route::get('/get_last_assessment_date', 'ShowScoreController@getLastAssessmentDate');
+Route::post('/get_period_all_scores', 'ShowScoreController@getPeriodAllScores');

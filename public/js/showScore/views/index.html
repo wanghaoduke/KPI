@@ -1,0 +1,133 @@
+<style>
+    .dateInput{
+        position: relative;
+        z-index: 2;
+        /*float: left;*/
+        margin-bottom: 0;
+        height: 36px;
+        padding: 6px 12px;
+        background-color: #fff;
+        border: 1px solid #ccd0d2;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+    .noSelected{
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.6;
+        border-radius: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        width: 100px;
+        height: 38px;
+    }
+    .selected{
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.6;
+        border-radius: 4px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background: #3097D1;
+        color: white;
+        width: 100px;
+        height: 38px;
+    }
+    table th{
+        text-align: center;
+    }
+    td{
+        text-align: center;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="alert alert-danger" ng-show="showErrorTip">
+                <ul>
+                    <li ng-repeat="error in errors"> {{ error }} </li>
+                </ul>
+            </div>
+            <div class="panel-body">
+                <br>
+                <br>
+                <div class="row">
+                    <h3 style="text-align: center;">评分查询</h3>
+                </div>
+                <br>
+                <div class="row" style="padding: 20px;">
+                    <input class="dateInput col-md-2" type="text" uib-datepicker-popup="yyyy-MM" is-open="startOpened" ng-model="startDate" datepicker-options="options" date-new-format="yyyy-MM">
+                        <span class="input-group-btn" style="float: left;">
+                            <button type="button" class="btn btn-default" ng-click="startOpen($event)">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    <span class="col-md-1" style="text-align: center; position: relative; left: 15px; font-size: 20px;">至</span>
+                    <input class="dateInput col-md-2" type="text" uib-datepicker-popup="yyyy-MM" is-open="endOpened" ng-model="endDate" datepicker-options="options" date-new-format="yyyy-MM">
+                        <span class="input-group-btn" style="float: left;">
+                            <button type="button" class="btn btn-default" ng-click="endOpen($event)">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    <span class="col-md-1 col-md-offset-1"><button class="btn btn-primary" style="position: relative; right: 50px;" ng-click="searchPeriod()">查询</button></span>
+                </div>
+                <div class="row" style="padding-left: 20px; margin-bottom: 10px;">
+                    <button ng-class="{selected: department == 'all',noSelected: department != 'all'}" ng-click="changeDepartment('all')">全部组</button>
+                    <button ng-class="{selected: department == 'plan',noSelected: department != 'plan'}" style="margin-left: 5px; margin-right: 5px;" ng-click="changeDepartment('plan')">策划组</button>
+                    <button ng-class="{selected: department == 'development',noSelected: department != 'development'}" ng-click="changeDepartment('development')">开发组</button>
+                </div>
+                <div class="row" style="padding-left: 20px; ">
+                    <button ng-class="{selected: item == 'all',noSelected: item != 'all'}" ng-click="itemChange('all')">全部项目</button>
+                    <button ng-class="{selected: item == 'prototype',noSelected: item != 'prototype'}" ng-click="itemChange('prototype')" style="margin-left: 5px; margin-right: 5px;">原型质量</button>
+                    <button ng-class="{selected: item == 'finishedProduct',noSelected: item != 'finishedProduct'}" ng-click="itemChange('finishedProduct')">成品质量</button>
+                    <button ng-class="{selected: item == 'developmentQuality',noSelected: item != 'developmentQuality'}" ng-click="itemChange('developmentQuality')" style="margin-left: 5px; margin-right: 5px;">开发质量</button>
+                    <button ng-class="{selected: item == 'developEfficiency',noSelected: item != 'developEfficiency'}" ng-click="itemChange('developEfficiency')">开发效率</button>
+                    <button ng-class="{selected: item == 'ability',noSelected: item != 'ability'}" ng-click="itemChange('ability')" style="margin-left: 5px; margin-right: 5px;">能力与学习</button>
+                    <button ng-class="{selected: item == 'responsibility',noSelected: item != 'responsibility'}" ng-click="itemChange('responsibility')">责任心</button>
+                </div>
+                <br>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>姓名</th>
+                        <th>所属工作组</th>
+                        <th>考核项目</th>
+                        <th>总分</th>
+                        <th>平均得分数</th>
+                    </tr>
+                    <tr ng-repeat="tableData in tableDatas">
+                        <td>{{ tableData['name'] }}</td>
+                        <td>{{ tableData['department'] }}</td>
+                        <td>{{ itemName }}</td>
+                        <td>{{ tableData['sumScore'] }}</td>
+                        <td>{{ tableData['avgScore'] }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
