@@ -34,6 +34,7 @@ Route::get('/get_all_staffs', 'AssessmentController@getAllStaffs');
 Route::post('/get_selected_staff_details/{id}', 'AssessmentController@getSelectedStaffDetails');
 Route::post('/edit_raters/{id}', 'AssessmentController@editRaters');
 Route::get('/get_all_assessments', 'AssessmentController@getAllAssessments');
+Route::post('/change_assessment_status/{id}', 'AssessmentController@changeAssessmentStatus');
 
 //评分
 Route::get('/score/master', 'GiveScoreController@show');

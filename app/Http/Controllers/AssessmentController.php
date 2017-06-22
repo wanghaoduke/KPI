@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AppResponse;
 use App\Assessment;
 use App\StaffScore;
 use App\User;
@@ -184,7 +185,28 @@ class AssessmentController extends Controller
 
     //获取所有的assessment
     public function getAllAssessments (){
-        $assessments = Assessment::orderBy('year','DESC')->orderBy('month','DESC')->get();
+        $assessments = Assessment::select([
+            '*',
+            \DB::raw("(select count(distinct(rater_id)) 
+                         from staff_scores
+                         where staff_scores.assessment_id = assessments.id
+                         group by staff_scores.assessment_id 
+                      ) as count_rater"),
+            \DB::raw("(select count(distinct(staff_scores.rater_id)) from staff_scores
+                         where staff_scores.assessment_id = assessments.id
+                         and staff_scores.is_completed = 0) as count_no_give_rater")
+        ])
+            ->orderBy('year','DESC')
+            ->orderBy('month','DESC')
+            ->get();
         return $assessments;
+    }
+
+    //更改考核的状态
+    public function changeAssessmentStatus($id){
+        \Log::info($id);
+        $assessment = Assessment::where('id', $id);
+//        Assessment::where('id', $id)->update(['is_completed' => 1]);
+        return AppResponse::result($assessment->update(['is_completed' => 1]));
     }
 }

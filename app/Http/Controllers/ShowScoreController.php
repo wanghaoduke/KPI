@@ -36,7 +36,7 @@ class ShowScoreController extends Controller
 
     //获取显示数据
     public function getPeriodAllScores(Request $request){
-//        \Log::info($request->all());
+        \Log::info($request->all());
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
         $AssessmentIds = Assessment::where('is_completed',1)
@@ -104,54 +104,96 @@ class ShowScoreController extends Controller
             //根据选的组来取数据
             switch($request->get('department')){
                 case 'all':
-                    $data = $staffScores->get();
+                    $data = $staffScores;
                     break;
                 case 'plan':
-                    $data = $staffScores->where('users.department','3')->get();
+                    $data = $staffScores->where('users.department','3');
                     break;
                 case 'development':
-                    $data = $staffScores->where('users.department','4')->get();
+                    $data = $staffScores->where('users.department','4');
                     break;
                 default:
-                    $data = $staffScores->get();
+                    $data = $staffScores;
             }
+
+            //根据item来排序
+            switch($request->get("item")){
+                case "all":
+                    $data = $data->orderBy("tt.sumScore", "DESC");
+                    break;
+                case "prototype":
+                    $data = $data->orderBy("tt.prototypeSumScore", "DESC");
+                    break;
+                case "finishedProduct":
+                    $data = $data->orderBy("tt.finishedProductSumScore", "DESC");
+                    break;
+                case "developmentQuality":
+                    $data = $data->orderBy("tt.developmentQualitySumScore", "DESC");
+                    break;
+                case "developEfficiency":
+                    $data = $data->orderBy("tt.developEfficiencySumScore", "DESC");
+                    break;
+                case "ability":
+                    $data = $data->orderBy("tt.abilitySumScore", "DESC");
+                    break;
+                case "responsibility":
+                    $data = $data->orderBy("tt.responsibilitySumScore", "DESC");
+                    break;
+                default:
+                    $data = $data->orderBy("tt.sumScore", "DESC");
+            }
+
+            $data = $data->get();
 
             //获取平均分数
             for($i = 0; $i < count($data); $i++){
                 $countAssessment = StaffScore::where('staff_id', $data[$i]['staff_id'])->whereIn('assessment_id',$AssessmentIds)->distinct('assessment_id')->count('assessment_id');
 //                \Log::info($countAssessment);
                 if($data[$i]['sumScore']){
-                    $data[$i]->avgScore = $data[$i]['sumScore'] / $countAssessment;
+                    $data[$i]->avgScore = round($data[$i]['sumScore'] / $countAssessment, 2);
+                    $data[$i]->sumScore = round($data[$i]['sumScore'], 2);
                 }else{
                     $data[$i]->avgScore = null;
                 }
+
                 if($data[$i]['abilitySumScore']){
-                    $data[$i]->abilityAvgScore = $data[$i]['abilitySumScore'] / $countAssessment;
+                    $data[$i]->abilityAvgScore = round($data[$i]['abilitySumScore'] / $countAssessment, 2);
+                    $data[$i]->abilitySumScore = round($data[$i]['abilitySumScore'], 2);
                 }else{
                     $data[$i]->abilityAvgScore = null;
                 }
+
                 if($data[$i]['responsibilitySumScore']){
-                    $data[$i]->responsibilityAvgScore = $data[$i]['responsibilitySumScore'] / $countAssessment;
+                    $data[$i]->responsibilityAvgScore = round($data[$i]['responsibilitySumScore'] / $countAssessment, 2);
+                    $data[$i]->responsibilitySumScore = round($data[$i]['responsibilitySumScore'], 2);
                 }else{
                     $data[$i]->responsibilityAvgScore = null;
                 }
+
                 if($data[$i]['prototypeSumScore']){
-                    $data[$i]->prototypeAvgScore = $data[$i]['prototypeSumScore'] / $countAssessment;
+                    $data[$i]->prototypeAvgScore = round($data[$i]['prototypeSumScore'] / $countAssessment, 2);
+                    $data[$i]->prototypeSumScore = round($data[$i]['prototypeSumScore'], 2);
                 }else{
                     $data[$i]->prototypeAvgScore = null;
                 }
+
                 if($data[$i]['finishedProductSumScore']){
-                    $data[$i]->finishedProductAvgScore = $data[$i]['finishedProductSumScore'] / $countAssessment;
+                    $data[$i]->finishedProductAvgScore = round($data[$i]['finishedProductSumScore'] / $countAssessment, 2);
+                    $data[$i]->finishedProductSumScore = round($data[$i]['finishedProductSumScore'], 2);
                 }else{
                     $data[$i]->finishedProductAvgScore = null;
                 }
+
                 if($data[$i]['developmentQualitySumScore']){
-                    $data[$i]->developmentQualityAvgScore = $data[$i]['developmentQualitySumScore'] / $countAssessment;
+                    $data[$i]->developmentQualityAvgScore = round($data[$i]['developmentQualitySumScore'] / $countAssessment, 2);
+                    $data[$i]->developmentQualitySumScore = round($data[$i]['developmentQualitySumScore'], 2);
                 }else{
                     $data[$i]->developmentQualityAvgScore = null;
                 }
+                
                 if($data[$i]['developEfficiencySumScore']){
-                    $data[$i]->developEfficiencyAvgScore = $data[$i]['developEfficiencySumScore'] / $countAssessment;
+                    $data[$i]->developEfficiencyAvgScore = round($data[$i]['developEfficiencySumScore'] / $countAssessment, 2);
+                    $data[$i]->developEfficiencySumScore = round($data[$i]['developEfficiencySumScore'], 2);
                 }else{
                     $data[$i]->developEfficiencyAvgScore = null;
                 }

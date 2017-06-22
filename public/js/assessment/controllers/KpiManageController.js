@@ -2,7 +2,6 @@ var controllers = angular.module('controllers', []);
 
 controllers.controller('KpiManageController', ['$scope', '$http','$uibModal','$location','Kpi',
     function($scope,$http,$uibModal,$location,Kpi){
-
     //创建新的assessment
     $scope.createNewAssessment = function(){
         var modalInstance = $uibModal.open({
@@ -15,17 +14,29 @@ controllers.controller('KpiManageController', ['$scope', '$http','$uibModal','$l
             $scope.data = result;
             if($scope.data){
                 if($scope.data['id']){
-                    console.log('haha');
+                    // console.log('haha');
                     $location.url("/edit_assessment/" + $scope.data['id']);
                 }
             }
         });
     };
-    
+
     //获取所有的assessment
     Kpi.getAllAssessments().then(function(data){
         $scope.allAssessments = data;
-    })
+    });
+
+        //改变assessment状态为已完成
+        $scope.changeAssessmentToCompleted = function(assessmentId){
+            var realchange = confirm("您是否要将改考核改为已完成？一旦改变为已完成，则考核不能编辑和打分！")
+            if(realchange){
+                Kpi.changeAssessmentStatus(assessmentId).then(function(data){
+                    Kpi.getAllAssessments().then(function(data){
+                        $scope.allAssessments = data;
+                    });
+                });
+            }
+        };
 }]);
 
 controllers.controller('selectDateController', ['$scope',  '$uibModalInstance', 'Kpi', '$location',

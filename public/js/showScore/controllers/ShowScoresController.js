@@ -1,57 +1,13 @@
 var controllers = angular.module('controllers', []);
 
-controllers.controller('ShowScoresController', ['$scope', 'ShowScore',
-    function($scope, ShowScore){
+controllers.controller('ShowScoresController', ['$scope', 'ShowScore', '$routeParams',
+    function($scope, ShowScore, $routeParams){
 
         // $scope.startDate = new Date();
         $scope.department = 'all';
         $scope.item = 'all';
         $scope.itemName = '全部项目';
         $scope.showErrorTip = false;
-        ShowScore.getLastAssessmentDate().then(function(data){
-            $scope.showErrorTip = false;
-            $scope.startDate = new Date(data);
-            $scope.endDate = new Date(data);
-            // console.log($scope.startDate);
-            $scope.getShowData();
-        },function(data){
-            $scope.showErrorTip = true;
-            $scope.startDate = new Date();
-            $scope.endDate = new Date();
-            $scope.errors = data;
-        });
-        //日历的打开
-        $scope.startOpen = function($event){
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.startOpened = true;
-        };
-        $scope.endOpen = function($event){
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.endOpened = true;
-        };
-
-
-
-
-        //换item
-        $scope.itemChange = function(newItem){
-            $scope.item = newItem;
-            $scope.changeTableDatas($scope.item, $scope.allDatas);
-        };
-
-        //日期的查询
-        $scope.searchPeriod = function(){
-            $scope.getShowData();
-        };
-
-        //改变部门函数
-        $scope.changeDepartment = function (newDepartment){
-            $scope.department = newDepartment;
-            // console.log($scope.department);
-            $scope.getShowData();
-        };
 
         //item改变后数据显示改变
         $scope.changeTableDatas = function (item, datas) {
@@ -146,6 +102,7 @@ controllers.controller('ShowScoresController', ['$scope', 'ShowScore',
 
             }
         };
+
         //获取需要显示的数据
         $scope.getShowData = function (){
             var startDateYear = $scope.startDate.getFullYear();
@@ -154,7 +111,7 @@ controllers.controller('ShowScoresController', ['$scope', 'ShowScore',
             var endDateMonth = $scope.endDate.getMonth() + 1;
             var startDate = startDateYear * 12 + startDateMonth;
             var endDate = endDateYear * 12 + endDateMonth;
-            ShowScore.getPeriodAllScores({'startDate': startDate, 'endDate': endDate, 'department': $scope.department}).then(function(data){
+            ShowScore.getPeriodAllScores({'startDate': startDate, 'endDate': endDate, 'department': $scope.department, 'item': $scope.item}).then(function(data){
                 $scope.showErrorTip = false;
                 $scope.allDatas = data['data'];
                 $scope.changeTableDatas($scope.item, $scope.allDatas);
@@ -164,7 +121,61 @@ controllers.controller('ShowScoresController', ['$scope', 'ShowScore',
                 $scope.errors = data;
             });
         };
-        
+
+        //初始化时候的日期
+        if($routeParams.searchDate){
+            $scope.showErrorTip = false;
+            $scope.startDate = new Date($routeParams.searchDate);
+            $scope.endDate = new Date($routeParams.searchDate);
+            // console.log($scope.startDate);
+            $scope.getShowData();
+        }else{
+            ShowScore.getLastAssessmentDate().then(function(data){
+                $scope.showErrorTip = false;
+                $scope.startDate = new Date(data);
+                $scope.endDate = new Date(data);
+                // console.log($scope.startDate);
+                $scope.getShowData();
+            },function(data){
+                $scope.showErrorTip = true;
+                $scope.startDate = new Date();
+                $scope.endDate = new Date();
+                $scope.errors = data;
+            });
+        }
+        //日历的打开
+        $scope.startOpen = function($event){
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.startOpened = true;
+        };
+        $scope.endOpen = function($event){
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.endOpened = true;
+        };
+
+
+
+
+        //换item
+        $scope.itemChange = function(newItem){
+            $scope.item = newItem;
+            $scope.getShowData();
+        };
+
+        //日期的查询
+        $scope.searchPeriod = function(){
+            $scope.getShowData();
+        };
+
+        //改变部门函数
+        $scope.changeDepartment = function (newDepartment){
+            $scope.department = newDepartment;
+            // console.log($scope.department);
+            $scope.getShowData();
+        };
+
 
         //日历的参数
         $scope.options = {

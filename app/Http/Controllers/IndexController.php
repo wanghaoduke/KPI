@@ -24,7 +24,7 @@ class IndexController extends Controller
             "tt.score"
         ])->leftJoin(\DB::raw("(select staff_scores.staff_id, 
                                     sum(
-                                      (staff_scores.ability + staff_scores.responsibility + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
+                                      (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
                                       + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency))*staff_scores.percentage*0.01
                                     )as score
@@ -44,7 +44,7 @@ class IndexController extends Controller
             "tt.score"
         ])->leftJoin(\DB::raw("(select staff_scores.staff_id, 
                                     sum(
-                                      (staff_scores.ability + staff_scores.responsibility + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
+                                      (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
                                       + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency))*staff_scores.percentage*0.01
                                     )as score

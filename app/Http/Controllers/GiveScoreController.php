@@ -73,12 +73,14 @@ class GiveScoreController extends Controller
             $data['finished_product'] = $request->get('finished_product');
             $data['ability'] = $request->get('ability');
             $data['responsibility'] = $request->get('responsibility');
+            $data['is_completed'] = 1;
         }
         if($request->get('department') == 4){
             $data['development_quality'] = $request->get('development_quality');
             $data['develop_efficiency'] = $request->get('develop_efficiency');
             $data['ability'] = $request->get('ability');
             $data['responsibility'] = $request->get('responsibility');
+            $data['is_completed'] = 1;
         }
         $staffScore = StaffScore::findOrFail($request->get('staff_score_id'));
         $staffScore->fill($data);

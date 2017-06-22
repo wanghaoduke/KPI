@@ -111,6 +111,24 @@ resService.factory('Kpi', ['$http', '$q',
             });
         };
 
+        //改变考核是否完成状态
+        kpi.changeAssessmentStatus = function(assessmentId){
+            return $q(function(resolve, reject){
+                $http({
+                    method: "POST",
+                    url: "/change_assessment_status/" + assessmentId,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                    .success(function(data){
+                        resolve(data);
+                    }).error(function(data){
+
+                });
+            });
+        };
+
         return kpi;
     }
 ]);
