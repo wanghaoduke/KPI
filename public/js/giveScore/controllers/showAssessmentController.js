@@ -48,7 +48,7 @@ controllers.controller('giveScoreController', ['$scope', '$http', '$location', '
         //保存一个后显示下一个
         $scope.saveScore = function(){
             if($scope.tempStaffScore.department == 3){
-                if(!($scope.tempStaffScore.prototype && $scope.tempStaffScore.finished_product && $scope.tempStaffScore.ability && $scope.tempStaffScore.responsibility)){
+                if(!($scope.tempStaffScore.prototype >= 0 && $scope.tempStaffScore.finished_product >= 0 && $scope.tempStaffScore.ability >= 0 && $scope.tempStaffScore.responsibility >= 0)){
                     alert('您有部分评分项未评！');
                 }else{
                     Score.saveStaffScore($scope.tempStaffScore).then(function(data){

@@ -69,7 +69,16 @@
                            </div>
                        @endif
                    </div>
-                    <hr>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div style="display: block; background: #e6e6e6; width: 390px; margin: 0 auto; padding: 28px 20px; -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;">
+                            <h4>分配比例：</h4>
+                            <h5>部门奖金总额：人员数量20人*600元=约12000元</h5>
+                            <h5>小组奖池分配：策划约4成/开发约6成，具体视情况而定</h5>
+                            <h5>人员奖励规则：最后 1~3 名无奖励，其他按名次分配比例</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
