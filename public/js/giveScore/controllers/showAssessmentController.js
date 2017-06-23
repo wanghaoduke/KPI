@@ -71,7 +71,7 @@ controllers.controller('giveScoreController', ['$scope', '$http', '$location', '
                 }
             }
             if($scope.tempStaffScore.department == 4){
-                if(!($scope.tempStaffScore.development_quality && $scope.tempStaffScore.develop_efficiency && $scope.tempStaffScore.ability && $scope.tempStaffScore.responsibility)){
+                if(!($scope.tempStaffScore.development_quality >= 0 && $scope.tempStaffScore.develop_efficiency >= 0 && $scope.tempStaffScore.ability >= 0 && $scope.tempStaffScore.responsibility >= 0)){
                     alert('您有部分评分项未评！');
                 }else{
                     Score.saveStaffScore($scope.tempStaffScore).then(function(data){
