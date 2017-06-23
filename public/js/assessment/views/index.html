@@ -5,6 +5,26 @@
             color: white;
             cursor: pointer;
         }
+        .assessmentIsCompleted {
+            color: white;
+            text-align: center;
+            background: gray;
+            margin: 40px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            height: 170px;
+        }
+        .assessmentNotCompleted {
+            color: white;
+            text-align: center;
+            background: rgb(212, 175, 34);
+            margin: 40px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            height: 170px;
+        }
     </style>
     <div class="row">
         <div class="panel panel-default">
@@ -15,10 +35,11 @@
                 <div style=" background: #e2dede; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px; text-align: center;" class="col-md-3">
                     <a id="create_Assessment" ng-click="createNewAssessment()"><span style="font-size: 110px; color: #aba5a5; text-decoration: none; cursor: pointer;">+</span></a>
                 </div>
-                <div ng-repeat="assessment in allAssessments" style="color: white; text-align: center; background: gray; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 170px;" class="col-md-3">
-                    <h3 style="margin-bottom: 20px;"><a class="newA" href="#/edit_assessment/{{assessment['id']}}">{{ assessment['year'] }}年{{assessment['month']}}月考核</a></h3>
+                <div ng-repeat="assessment in allAssessments" class="col-md-3" ng-class="{assessmentIsCompleted: assessment['is_completed'], assessmentNotCompleted: !assessment['is_completed']}">
+                    <h3 style="margin-bottom: 20px;" ng-if="!assessment['is_completed']"><a class="newA" href="#/edit_assessment/{{assessment['id']}}">{{ assessment['year'] }}年{{assessment['month']}}月考核</a></h3>
+                    <h3 style="margin-bottom: 20px;" ng-if="assessment['is_completed']">{{ assessment['year'] }}年{{assessment['month']}}月考核</h3>
                     <!--<br>-->
-                    <h4 ng-if="assessment['is_completed']"  style="margin-bottom: 20px;">评审结束!</h4>
+                    <h4 ng-if="assessment['is_completed']" style="margin-bottom: 20px;">评审结束!</h4>
                     <h4 ng-if="!assessment['is_completed']"  style="margin-bottom: 20px;">
                         <span>共{{ assessment['count_rater'] }}人评审，</span>
                         <span ng-if="assessment['count_no_give_rater'] > 0">还有{{ assessment['count_no_give_rater'] }}人未评</span>
