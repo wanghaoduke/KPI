@@ -16,13 +16,15 @@ class IndexController extends Controller
         $titleLink2 = null;
 
         $assessment = Assessment::where('is_completed', 1)->orderBy('year',"DESC")->orderBy('month', "DESC")->first();
-//        \Log::info($assessment);
-        //策划组
-        $planScores = User::select([
-            "users.id",
-            "users.name",
-            "tt.score"
-        ])->leftJoin(\DB::raw("(select staff_scores.staff_id, 
+        \Log::info($assessment);
+        if($assessment){
+            //策划组
+            $planScores = User::select([
+                "users.id",
+                "users.name",
+                "tt.score",
+                "tt.completed_count"
+            ])->leftJoin(\DB::raw("(select staff_scores.staff_id, sum(staff_scores.is_completed)as completed_count, 
                                     sum(
                                       (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
@@ -31,18 +33,20 @@ class IndexController extends Controller
                                    from staff_scores 
                                    where staff_scores.assessment_id = '$assessment->id' group by staff_scores.staff_id
                                  ) as tt"),
-            'tt.staff_id', '=', 'users.id')
-            ->where('users.department',3)
-            ->orderBy('tt.score',"DESC")
-            ->limit(10)
-            ->get();
+                'tt.staff_id', '=', 'users.id')
+                ->where('users.department',3)
+                ->where('tt.completed_count', '>', 0)
+                ->orderBy('tt.score',"DESC")
+                ->limit(7)
+                ->get();
 //        \Log::info($planScores);
-        //开发组
-        $developmentScores = User::select([
-            "users.id",
-            "users.name",
-            "tt.score"
-        ])->leftJoin(\DB::raw("(select staff_scores.staff_id, 
+            //开发组
+            $developmentScores = User::select([
+                "users.id",
+                "users.name",
+                "tt.score",
+                "tt.completed_count"
+            ])->leftJoin(\DB::raw("(select staff_scores.staff_id, sum(staff_scores.is_completed)as completed_count, 
                                     sum(
                                       (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
@@ -51,11 +55,17 @@ class IndexController extends Controller
                                    from staff_scores 
                                    where staff_scores.assessment_id = '$assessment->id' group by staff_scores.staff_id
                                  ) as tt"),
-            'tt.staff_id', '=', 'users.id')
-            ->where('users.department',4)
-            ->orderBy('tt.score',"DESC")
-            ->limit(10)
-            ->get();
+                'tt.staff_id', '=', 'users.id')
+                ->where('users.department',4)
+                ->where('tt.completed_count', '>', 0)
+                ->orderBy('tt.score',"DESC")
+                ->limit(7)
+                ->get();
+        }else{
+            $developmentScores = null;
+            $planScores = null;
+        }
+
 //        \Log::info($developmentScores);
         return view('kpiIndex', compact('title1', 'title2', 'titleLink1', 'titleLink2', 'assessment', 'planScores', 'developmentScores'));
     }
