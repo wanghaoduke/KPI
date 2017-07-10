@@ -36,7 +36,7 @@ class ShowScoreController extends Controller
 
     //获取显示数据
     public function getPeriodAllScores(Request $request){
-        \Log::info($request->all());
+//        \Log::info($request->all());
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
         $AssessmentIds = Assessment::where('is_completed',1)
@@ -57,7 +57,7 @@ class ShowScoreController extends Controller
                 }
             }
 //            \Log::info($assessmentIdString);
-            $sql = "(select staff_scores.staff_id,
+            $sql = "(select staff_scores.staff_id,sum(staff_scores.is_completed)as completed_count,
                           sum(
                                  (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
@@ -89,7 +89,7 @@ class ShowScoreController extends Controller
             $staffScores = User::select([
                 'users.id as id',
                 'users.name as name',
-                \DB::raw("(case when users.department = 3 then '策划部' when users.department = 4 then '开发部' end) as department"),
+                \DB::raw("(case when users.department = 3 then '策划组' when users.department = 4 then '开发组' end) as department"),
                 'tt.staff_id as staff_id',
                 'tt.sumScore',
                 'tt.abilitySumScore',
@@ -99,6 +99,7 @@ class ShowScoreController extends Controller
                 'tt.developmentQualitySumScore',
                 'tt.developEfficiencySumScore'
             ])->leftJoin(\DB::raw($sql), 'tt.staff_id', '=', 'users.id')
+                ->where('tt.completed_count', '>', 0)
                 ->whereNotNull('tt.staff_id');
 
             //根据选的组来取数据
@@ -117,31 +118,31 @@ class ShowScoreController extends Controller
             }
 
             //根据item来排序
-            switch($request->get("item")){
-                case "all":
-                    $data = $data->orderBy("tt.sumScore", "DESC");
-                    break;
-                case "prototype":
-                    $data = $data->orderBy("tt.prototypeSumScore", "DESC");
-                    break;
-                case "finishedProduct":
-                    $data = $data->orderBy("tt.finishedProductSumScore", "DESC");
-                    break;
-                case "developmentQuality":
-                    $data = $data->orderBy("tt.developmentQualitySumScore", "DESC");
-                    break;
-                case "developEfficiency":
-                    $data = $data->orderBy("tt.developEfficiencySumScore", "DESC");
-                    break;
-                case "ability":
-                    $data = $data->orderBy("tt.abilitySumScore", "DESC");
-                    break;
-                case "responsibility":
-                    $data = $data->orderBy("tt.responsibilitySumScore", "DESC");
-                    break;
-                default:
-                    $data = $data->orderBy("tt.sumScore", "DESC");
-            }
+//            switch($request->get("item")){
+//                case "all":
+//                    $data = $data->orderBy("tt.sumScore", "DESC");
+//                    break;
+//                case "prototype":
+//                    $data = $data->orderBy("tt.prototypeSumScore", "DESC");
+//                    break;
+//                case "finishedProduct":
+//                    $data = $data->orderBy("tt.finishedProductSumScore", "DESC");
+//                    break;
+//                case "developmentQuality":
+//                    $data = $data->orderBy("tt.developmentQualitySumScore", "DESC");
+//                    break;
+//                case "developEfficiency":
+//                    $data = $data->orderBy("tt.developEfficiencySumScore", "DESC");
+//                    break;
+//                case "ability":
+//                    $data = $data->orderBy("tt.abilitySumScore", "DESC");
+//                    break;
+//                case "responsibility":
+//                    $data = $data->orderBy("tt.responsibilitySumScore", "DESC");
+//                    break;
+//                default:
+//                    $data = $data->orderBy("tt.sumScore", "DESC");
+//            }
 
             $data = $data->get();
 
@@ -197,6 +198,104 @@ class ShowScoreController extends Controller
                 }else{
                     $data[$i]->developEfficiencyAvgScore = null;
                 }
+            }
+
+            switch($request->get("item")){
+                case "all":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['avgScore'] < $data[$j]['avgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "prototype":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['prototypeAvgScore'] < $data[$j]['prototypeAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "finishedProduct":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['finishedProductAvgScore'] < $data[$j]['finishedProductAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "developmentQuality":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['developmentQualityAvgScore'] < $data[$j]['developmentQualityAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "developEfficiency":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['developEfficiencyAvgScore'] < $data[$j]['developEfficiencyAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "ability":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['abilityAvgScore'] < $data[$j]['abilityAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "responsibility":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['responsibilityAvgScore'] < $data[$j]['responsibilityAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['avgScore'] < $data[$j]['avgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
             }
             return AppResponse::result(true, $data);
         }else{

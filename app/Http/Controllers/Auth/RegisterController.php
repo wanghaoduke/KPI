@@ -55,7 +55,12 @@ class RegisterController extends Controller
             'phone' => 'required|string|regex:"^1[0-9]{10}$"|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'department' => 'required|integer',
-        ]);
+        ],[
+            'phone.regex' => '手机格式不正确！',
+            'phone.unique' => '手机账户已存在！',
+            'password.min' => '密码最少要6位数！',
+            'password.confirmed' => '两次密码不一样！',
+        ],[]);
     }
 
     /**
@@ -133,11 +138,26 @@ class RegisterController extends Controller
             $authenticationCodeError = null;
         }
 
-        return view('auth.register', compact('title1','titleLink1', 'titleLink2','title2', 'phone', 'name', 'password', 'passwordConfirm', 'sendMessageError', 'phoneChanged', 'authenticationCodeError'));
+        if($request->session()->has('isClickSendMessage')){
+            $isClickSendMessage = $request->session()->get('isClickSendMessage');
+            $request->session()->forget('isClickSendMessage');
+        }else{
+            $isClickSendMessage = false;
+        }
+
+        return view('auth.register', compact('title1','titleLink1', 'titleLink2','title2', 'phone', 'name', 'password', 'passwordConfirm', 'sendMessageError', 'phoneChanged', 'authenticationCodeError', 'isClickSendMessage'));
     }
     
     //发生短信验证吗
     public function sendMessage(Request $request){
+        $validator = \Validator::make($request->all(), [
+            'phone' => 'string|regex:"^1[0-9]{10}$"|unique:users'
+        ],['phone.regex' => '手机格式不正确！',
+            'phone.unique' => '手机账户已存在！',
+        ],[]);
+        if($validator->fails()){
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
         if($request->session()->has('create_user_phone')){
             $request->session()->forget('create_user_phone');
             $request->session()->put('create_user_phone',$request->get('phone'));
@@ -171,6 +191,13 @@ class RegisterController extends Controller
                 $request->session()->put('send_message_error','您没有填要发到的手机号码!');
             }
             $request->session()->put('send_message_error','您没有填要发到的手机号码!');
+        }else{
+            if($request->session()->has('isClickSendMessage')){
+                $request->session()->forget('isClickSendMessage');
+                $request->session()->put('isClickSendMessage', true);
+            }else{
+                $request->session()->put('isClickSendMessage', true);
+            }
         }
 
         $createCode = rand(100000, 999999);

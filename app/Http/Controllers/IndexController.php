@@ -28,7 +28,7 @@ class IndexController extends Controller
                                     sum(
                                       (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
-                                      + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency))*staff_scores.percentage*0.01
+                                      + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency))*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
                                     )as score
                                    from staff_scores 
                                    where staff_scores.assessment_id = '$assessment->id' group by staff_scores.staff_id
@@ -37,9 +37,9 @@ class IndexController extends Controller
                 ->where('users.department',3)
                 ->where('tt.completed_count', '>', 0)
                 ->orderBy('tt.score',"DESC")
-                ->limit(7)
+//                ->limit(7)
                 ->get();
-//        \Log::info($planScores);
+        \Log::info($planScores->toArray());
             //开发组
             $developmentScores = User::select([
                 "users.id",
@@ -50,7 +50,7 @@ class IndexController extends Controller
                                     sum(
                                       (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
                                       + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
-                                      + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency))*staff_scores.percentage*0.01
+                                      + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency))*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
                                     )as score
                                    from staff_scores 
                                    where staff_scores.assessment_id = '$assessment->id' group by staff_scores.staff_id
@@ -59,7 +59,7 @@ class IndexController extends Controller
                 ->where('users.department',4)
                 ->where('tt.completed_count', '>', 0)
                 ->orderBy('tt.score',"DESC")
-                ->limit(7)
+//                ->limit(7)
                 ->get();
         }else{
             $developmentScores = null;

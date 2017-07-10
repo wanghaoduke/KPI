@@ -51,7 +51,9 @@ class LoginController extends Controller
         $this->validate($request, [
             $this->username() => 'required|string|regex:"^1[0-9]{10}$"|exists:users',
             'password' => 'required|string',
-        ]);
+        ],[$this->username().".regex" => "手机号码格式不正确！",
+            $this->username().".exists" => "该手机号码账户不存在！",
+        ],[]);
     }
 
     /**

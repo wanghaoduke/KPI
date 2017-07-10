@@ -33,14 +33,26 @@ class ResetPasswordController extends Controller
         }else{
             $resetCodeError = null;
         }
-        return view('resetGetCode', compact('title1','title2','titleLink1','titleLink2','sendCodeNoPhone','resetPhoneChanged','resetCodeError'));
+
+        if($request->session()->has('isClickSendMessageReset')){
+            $isClickSendMessage = $request->session()->get('isClickSendMessageReset');
+            $request->session()->forget('isClickSendMessageReset');
+        }else{
+            $isClickSendMessage = false;
+        }
+        return view('resetGetCode', compact('title1','title2','titleLink1','titleLink2','sendCodeNoPhone','resetPhoneChanged','resetCodeError','isClickSendMessage'));
     }
 
     public function sendCode (Request $request){
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
-            'phone' => 'string|regex:"^1[0-9]{10}$"'
-        ]);
+            'phone' => 'string|regex:"^1[0-9]{10}$"|exists:users'
+        ],['phone.regex' => '手机格式不正确！',
+        'phone.exists' => "该手机号码账户不存在！"
+        ],[]);
+        if($validator->fails()){
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
         if(!$request->has('phone')){
             if($request->session()->has('reset_send_code_no_phone')){
                 $request->session()->forget('reset_send_code_no_phone');
@@ -57,6 +69,12 @@ class ResetPasswordController extends Controller
                 $request->session()->put('reset_send_phone',$request->get('phone'));
             }
 
+            if($request->session()->has('isClickSendMessageReset')){
+                $request->session()->forget('isClickSendMessageReset');
+                $request->session()->put('isClickSendMessageReset', true);
+            }else{
+                $request->session()->put('isClickSendMessageReset', true);
+            }
         }
 
         $resetCode = rand(100000, 999999);
@@ -126,7 +144,9 @@ class ResetPasswordController extends Controller
         $validator = \Validator::make($request->all(), [
             'phone' => 'required|string|regex:"^1[0-9]{10}$"|exists:users',
             'password' => 'required|string|min:6|confirmed',
-        ]);
+        ],['password.min' => '密码最少要6位数！',
+            'password.confirmed' => '两次密码不一样！'
+        ],[]);
         if($validator->fails()){
             return redirect()->back()->withInput()->withErrors($validator);
         }

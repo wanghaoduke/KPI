@@ -27,28 +27,52 @@ controllers.controller('giveScoreController', ['$scope', '$http', '$location', '
 
         //选择被评人的分数
         $scope.prototypeSelectScore = function (score){
-            $scope.tempStaffScore.prototype = parseInt(score);
+            if(score || score == 0){
+                $scope.tempStaffScore.prototype = parseInt(score);
+            }else{
+                $scope.tempStaffScore.prototype = null;
+            }
         };
         $scope.finishedProductSelectScore = function (score){
-            $scope.tempStaffScore.finished_product = parseInt(score);
+            if(score || score == 0){
+                $scope.tempStaffScore.finished_product = parseInt(score);
+            }else{
+                $scope.tempStaffScore.finished_product = null;
+            }
         };
         $scope.developmentQualitySelectScore = function (score){
-            $scope.tempStaffScore.development_quality = parseInt(score);
+            if(score || score == 0){
+                $scope.tempStaffScore.development_quality = parseInt(score);
+            }else{
+                $scope.tempStaffScore.development_quality = null;
+            }
         };
         $scope.developEfficiencySelectScore = function (score){
-            $scope.tempStaffScore.develop_efficiency = parseInt(score);
+            if(score || score == 0){
+                $scope.tempStaffScore.develop_efficiency = parseInt(score);
+            }else{
+                $scope.tempStaffScore.develop_efficiency = null;
+            }
         };
         $scope.abilitySelectScore = function (score){
-            $scope.tempStaffScore.ability = parseInt(score);
+            if(score || score == 0){
+                $scope.tempStaffScore.ability = parseInt(score);
+            }else{
+                $scope.tempStaffScore.ability = null;
+            }
         };
         $scope.responsibilitySelectScore = function (score){
-            $scope.tempStaffScore.responsibility = parseInt(score);
+            if(score || score == 0){
+                $scope.tempStaffScore.responsibility = parseInt(score);
+            }else{
+                $scope.tempStaffScore.responsibility = null;
+            }
         };
 
         //保存一个后显示下一个
         $scope.saveScore = function(){
             if($scope.tempStaffScore.department == 3){
-                if(!($scope.tempStaffScore.prototype >= 0 && $scope.tempStaffScore.finished_product >= 0 && $scope.tempStaffScore.ability >= 0 && $scope.tempStaffScore.responsibility >= 0)){
+                if(!(($scope.tempStaffScore.prototype || $scope.tempStaffScore.prototype == 0) && ($scope.tempStaffScore.finished_product || $scope.tempStaffScore.finished_product == 0) && ($scope.tempStaffScore.ability || $scope.tempStaffScore.ability == 0) && ($scope.tempStaffScore.responsibility || $scope.tempStaffScore.responsibility == 0))){
                     alert('您有部分评分项未评！');
                 }else{
                     Score.saveStaffScore($scope.tempStaffScore).then(function(data){
@@ -66,12 +90,13 @@ controllers.controller('giveScoreController', ['$scope', '$http', '$location', '
                         if(i > $scope.staffLength -1){
                             $scope.isLastStaff = true;
                             $scope.isComplete = true;
+                            $location.url("/");
                         }
                     });
                 }
             }
             if($scope.tempStaffScore.department == 4){
-                if(!($scope.tempStaffScore.development_quality >= 0 && $scope.tempStaffScore.develop_efficiency >= 0 && $scope.tempStaffScore.ability >= 0 && $scope.tempStaffScore.responsibility >= 0)){
+                if(!(($scope.tempStaffScore.development_quality || $scope.tempStaffScore.development_quality == 0) && ($scope.tempStaffScore.develop_efficiency || $scope.tempStaffScore.develop_efficiency == 0) && ($scope.tempStaffScore.ability || $scope.tempStaffScore.ability ==0) && ($scope.tempStaffScore.responsibility || $scope.tempStaffScore.responsibility ==0))){
                     alert('您有部分评分项未评！');
                 }else{
                     Score.saveStaffScore($scope.tempStaffScore).then(function(data){
@@ -89,7 +114,7 @@ controllers.controller('giveScoreController', ['$scope', '$http', '$location', '
                         if(i > $scope.staffLength -1){
                             $scope.isLastStaff = true;
                             $scope.isComplete = true;
-                            alert('当前评分已完成，谢谢！');
+                            $location.url("/");
                         }
                     });
                 }
@@ -98,7 +123,7 @@ controllers.controller('giveScoreController', ['$scope', '$http', '$location', '
 
         //取消
         $scope.cancel = function(){
-            $location.url("/device/device?restore_grid=true");
+            $location.url("/");
         };
     }
 ]);

@@ -49,9 +49,17 @@
                                         </span>
                                     @endif
                                 </div>
-
-                                <div class="col-md-1">
+                                @if(!$isClickSendMessage)
+                                    <p id="isClickSend" hidden>notSend</p>
+                                @endif
+                                @if($isClickSendMessage)
+                                    <p id="isClickSend" hidden>isSend</p>
+                                @endif
+                                <div class="col-md-1" id="isShow1">
                                     <a class="btn btn-primary" href="#" onclick="event.preventDefault(); sendMessage()">获取验证码</a>
+                                </div>
+                                <div class="col-md-1" id="isShow2">
+                                    <a class="btn btn-primary" href="#" id="sendMessageA" onclick="event.preventDefault();">获取验证码</a>
                                 </div>
                             </div>
 
@@ -78,6 +86,28 @@
         function sendMessage(){
             document.getElementById('resetCopyPhone').value = document.getElementById('phone').value;
             document.getElementById('sendMessage').submit();
+        }
+        function showNext(a){
+            if(a > 0){
+                setTimeout(function(){
+                    showText.innerHTML = a + "秒";
+                    showNext(a-1);
+                }, 1000);
+            }else{
+                document.getElementById('isShow1').style.display = "block";
+                document.getElementById('isShow2').style.display = "none";
+            }
+        }
+        var isSend = document.getElementById('isClickSend');
+        if(isSend.innerHTML == 'isSend'){
+            document.getElementById('isShow1').style.display = "none";
+            document.getElementById('isShow2').style.display = "block";
+            var showText = document.getElementById('sendMessageA');
+//        var i = 60;
+            showNext(60);
+        }else{
+            document.getElementById('isShow1').style.display = "block";
+            document.getElementById('isShow2').style.display = "none";
         }
     </script>
 

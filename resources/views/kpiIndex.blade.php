@@ -22,51 +22,43 @@
                     <br>
                     <br>
                    <div class="row">
-                       @if(count($planScores) > 0)
+                       @if($assessment['id'])
                            <div class="col-md-4 col-md-offset-1">
-                               <h3>策划组排行 &nbsp;&nbsp;&nbsp;<span style="font-size: 15px; color: #CCCCCC;">{{ $assessment['year'] }}年{{ $assessment['month'] }}月份</span></h3>
-                               <table class="table table-bordered">
-                                   <tr>
-                                       <th style="text-align: center;">排名</th>
-                                       <th style="text-align: center;">姓名</th>
-                                       <th style="text-align: center;">平均得分数</th>
-                                   </tr>
-                                   @for($i = 0; $i < count($planScores); $i++)
-                                       <tr>
-                                           <th style="text-align: center;">{{ $i + 1 }}</th>
-                                           <th style="text-align: center;">{{ $planScores[$i]['name'] }}</th>
-                                           <th style="text-align: center;">{{ $planScores[$i]['score'] }}</th>
-                                       </tr>
-                                   @endfor
-                               </table>
+                           <h3>策划组排行 &nbsp;&nbsp;&nbsp;<span style="font-size: 15px; color: #CCCCCC;">{{ $assessment['year'] }}年{{ $assessment['month'] }}月份</span></h3>
+                           <table class="table table-bordered">
+                           <tr>
+                           <th style="text-align: center;">排名</th>
+                           <th style="text-align: center;">姓名</th>
+                           <th style="text-align: center;">平均得分数</th>
+                           </tr>
+                           @for($i = 0; $i < count($planScores); $i++)
+                           <tr>
+                           <th style="text-align: center;">{{ $i + 1 }}</th>
+                           <th style="text-align: center;">{{ $planScores[$i]['name'] }}</th>
+                           <th style="text-align: center;">{{ $planScores[$i]['score'] }}</th>
+                           </tr>
+                           @endfor
+                           </table>
+                           </div>
+                           <div class="col-md-4 col-md-offset-1">
+                           <h3>开发组排行 &nbsp;&nbsp;&nbsp;<span style="font-size: 15px; color: #CCCCCC;">{{ $assessment['year'] }}年{{ $assessment['month'] }}月份</span></h3>
+                           <table class="table table-bordered">
+                               <tr>
+                                 <th style="text-align: center;">排名</th>
+                           <th style="text-align: center;">姓名</th>
+                           <th style="text-align: center;">平均得分数</th>
+                           </tr>
+                           @for($i = 0; $i < count($developmentScores); $i++)
+                           <tr>
+                           <th style="text-align: center;">{{ $i + 1 }}</th>
+                           <th style="text-align: center;">{{ $developmentScores[$i]['name'] }}</th>
+                           <th style="text-align: center;">{{ $developmentScores[$i]['score'] }}</th>
+                           </tr>
+                           @endfor
+                           </table>
                            </div>
                        @else
-                           <div class="col-md-4 col-md-offset-1">
-                               <h4>策划组暂时还没有数据！</h4>
-                           </div>
-                       @endif
-                       @if(count($developmentScores) > 0)
-                           <div class="col-md-4 col-md-offset-1">
-                                   <h3>开发组排行 &nbsp;&nbsp;&nbsp;<span style="font-size: 15px; color: #CCCCCC;">{{ $assessment['year'] }}年{{ $assessment['month'] }}月份</span></h3>
-                                   <table class="table table-bordered">
-                                       <tr>
-                                           <th style="text-align: center;">排名</th>
-                                           <th style="text-align: center;">姓名</th>
-                                           <th style="text-align: center;">平均得分数</th>
-                                       </tr>
-                                       @for($i = 0; $i < count($developmentScores); $i++)
-                                           <tr>
-                                               <th style="text-align: center;">{{ $i + 1 }}</th>
-                                               <th style="text-align: center;">{{ $developmentScores[$i]['name'] }}</th>
-                                               <th style="text-align: center;">{{ $developmentScores[$i]['score'] }}</th>
-                                           </tr>
-                                       @endfor
-                                   </table>
-                               </div>
-                       @else
-                           <div class="col-md-4 col-md-offset-1">
-                               <h4>开发组暂时还没有数据！</h4>
-                           </div>
+                           <h3 style="text-align: center;">没有任何已评完数据</h3>
                        @endif
                    </div>
                     <br>

@@ -81,6 +81,7 @@ class AssessmentController extends Controller
                 'staff_scores.id',
                 'staff_scores.rater_id',
                 'staff_scores.staff_id',
+                'staff_scores.percentage',
                 'users.name',
             ])->leftJoin('users', 'users.id', '=', 'staff_scores.rater_id')
                 ->where('assessment_id', $id);
@@ -88,12 +89,25 @@ class AssessmentController extends Controller
         ])->whereIn('users.id', $staffIds)
             ->where('department', 3)
             ->get();
+
+        for($i = 0; $i < count($planStaffs); $i++){
+            $sumPercentage = 0;
+            for($j = 0; $j < count($planStaffs[$i]['staffScores']); $j++){
+                $sumPercentage = $sumPercentage + $planStaffs[$i]['staffScores'][$j]['percentage'];
+            }
+            if($sumPercentage == 100){
+                $planStaffs[$i]->isAdded = true;
+            }else{
+                $planStaffs[$i]->isAdded = false;
+            }
+        }
         
         $developmentStaffs = User::with(['staffScores' => function($query) use ($id){
             $query->select([
                 'staff_scores.id',
                 'staff_scores.rater_id',
                 'staff_scores.staff_id',
+                'staff_scores.percentage',
                 'users.name',
             ])
                 ->leftJoin('users','users.id','=','staff_scores.rater_id')
@@ -102,6 +116,18 @@ class AssessmentController extends Controller
         ])->whereIn('users.id', $staffIds)
             ->where('department', 4)
             ->get();
+
+        for($i = 0; $i < count($developmentStaffs); $i++){
+            $sumPercentage = 0;
+            for($j = 0; $j < count($developmentStaffs[$i]['staffScores']); $j++){
+                $sumPercentage = $sumPercentage + $developmentStaffs[$i]['staffScores'][$j]['percentage'];
+            }
+            if($sumPercentage == 100){
+                $developmentStaffs[$i]->isAdded = true;
+            }else{
+                $developmentStaffs[$i]->isAdded = false;
+            }
+        }
 
         $assessment = Assessment::where('id', $id)->first();
 
