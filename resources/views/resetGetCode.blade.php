@@ -56,16 +56,16 @@
                                     <p id="isClickSend" hidden>isSend</p>
                                 @endif
                                 <div class="col-md-1" id="isShow1">
-                                    <a class="btn btn-primary" href="#" onclick="event.preventDefault(); sendMessage()">获取验证码</a>
+                                    <a class="btn btn-primary" href="#" onclick="event.preventDefault(); sendMessage()" style="position: relative; right: 25px;">获取验证码</a>
                                 </div>
                                 <div class="col-md-1" id="isShow2">
-                                    <a class="btn btn-primary" href="#" id="sendMessageA" onclick="event.preventDefault();">获取验证码</a>
+                                    <a class="btn btn-primary" href="#" id="sendMessageA" onclick="event.preventDefault();" style="position: relative; right: 25px;">获取验证码</a>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
+                                <div class="col-md-4 col-md-offset-4">
+                                    <button type="submit" class="btn btn-primary col-md-12">
                                         提交
                                     </button>
                                 </div>

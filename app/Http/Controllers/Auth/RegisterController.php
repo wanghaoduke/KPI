@@ -57,6 +57,7 @@ class RegisterController extends Controller
             'department' => 'required|integer',
         ],[
             'phone.regex' => '手机格式不正确！',
+            'phone.required' => '手机号必须填写！',
             'phone.unique' => '手机账户已存在！',
             'password.min' => '密码最少要6位数！',
             'password.confirmed' => '两次密码不一样！',
@@ -151,8 +152,9 @@ class RegisterController extends Controller
     //发生短信验证吗
     public function sendMessage(Request $request){
         $validator = \Validator::make($request->all(), [
-            'phone' => 'string|regex:"^1[0-9]{10}$"|unique:users'
+            'phone' => 'required|regex:"^1[0-9]{10}$"|unique:users'
         ],['phone.regex' => '手机格式不正确！',
+            'phone.required' => '手机号必须填写！',
             'phone.unique' => '手机账户已存在！',
         ],[]);
         if($validator->fails()){

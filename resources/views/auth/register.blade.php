@@ -51,13 +51,15 @@
                             </div>
 
                             <div class="col-md-1" id="isShow1">
-                                <a class="btn btn-primary" href="#" onclick="event.preventDefault(); sendMessage()">获取验证码</a>
+                                <a class="btn btn-primary" href="#" onclick="event.preventDefault(); sendMessage()" style="position: relative; right: 25px;">获取验证码</a>
                             </div>
+                            {{--<a id="isShow1" class="btn btn-primary col-md-1" href="#" onclick="event.preventDefault(); sendMessage()" style="position: relative; right: 11px;">获取验证码</a>--}}
                             @if(!$isClickSendMessage)
                                 <p id="isClickSend" hidden>notSend</p>
                             @endif
+                            {{--<a id="isShow2" class="btn btn-primary col-md-1" href="#" onclick="event.preventDefault();" style="position: relative; right: 11px;">获取验证码</a>--}}
                             <div class="col-md-1" id="isShow2">
-                                <a class="btn btn-primary" href="#" onclick="event.preventDefault();" id="sendMessageA">获取验证码</a>
+                                <a class="btn btn-primary" href="#" onclick="event.preventDefault();" id="sendMessageA" style="position: relative; right: 25px;">获取验证码</a>
                             </div>
                             @if($isClickSendMessage)
                                 <p id="isClickSend" hidden>isSend</p>
@@ -129,8 +131,8 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-5">
-                                <button type="submit" class="btn btn-primary">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary col-md-12">
                                     注册
                                 </button>
                             </div>

@@ -46,9 +46,10 @@ class ResetPasswordController extends Controller
     public function sendCode (Request $request){
         \Log::info($request->all());
         $validator = \Validator::make($request->all(), [
-            'phone' => 'string|regex:"^1[0-9]{10}$"|exists:users'
+            'phone' => 'required|regex:"^1[0-9]{10}$"|exists:users'
         ],['phone.regex' => '手机格式不正确！',
-        'phone.exists' => "该手机号码账户不存在！"
+            'phone.required' => '手机号码必须填写！',
+            'phone.exists' => "该手机号码账户不存在！"
         ],[]);
         if($validator->fails()){
             return redirect()->back()->withInput()->withErrors($validator);

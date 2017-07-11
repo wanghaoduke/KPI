@@ -80,4 +80,16 @@ class LoginController extends Controller
         return view('auth.login', compact('title1','title2','titleLink1','titleLink2'));
     }
 
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [$this->username() => '该账户密码错误！'];
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors);
+    }
 }
