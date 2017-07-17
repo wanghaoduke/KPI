@@ -1,0 +1,78 @@
+<style>
+    table th{
+        text-align: center;
+    }
+    table td{
+        text-align: center;
+    }
+    .form-control {
+        width: 70%;
+        height: 36px;
+        background-color: #fff;
+        border: 1px solid #ccd0d2;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        display: inline;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">默认评论员设置</h3>
+            <div class="panel-body">
+                <br>
+                <br>
+                <h3 style="text-align: center;">策划组默认评论员</h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>姓名</th>
+                        <th>电话号码</th>
+                        <th>所属工作组</th>
+                        <th>评分百分比（%）</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr ng-repeat="planRater in planRaters">
+                        <td>{{ planRater['name'] }}</td>
+                        <td>{{ planRater['phone'] }}</td>
+                        <td>{{ planRater['department'] | departmentFilter }}</td>
+                        <td>
+                            <input type="text" class="form-control" ng-model="planRater['percentage_plan']" ng-if="planRater['is_edit']">
+                            <button class="btn btn-primary" ng-if="planRater['is_edit']" ng-click="savePercentage(planRater['id'],'plan',planRater['percentage_plan'])">保存</button>
+                            <input type="text" class="form-control" ng-model="planRater['percentage_plan']" disabled="disabled" ng-if="!planRater['is_edit']">
+                            <button class="btn btn-primary" ng-if="!planRater['is_edit']" ng-click="letPercentageEdit(planRater['id'], 'plan')">修改</button>
+                        </td>
+                        <td><button class="btn btn-danger" ng-click="deleteRater(planRater['id'],'plan')">删除</button> </td>
+                    </tr>
+                </table>
+                <h3 style="text-align: center;"><button class="btn btn-primary" ng-click="addRater('plan')">添加评论的员工</button></h3>
+                <br>
+                <br>
+                <h3 style="text-align: center;">开发组默认评论员</h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>姓名</th>
+                        <th>电话号码</th>
+                        <th>所属工作组</th>
+                        <th>评分百分比</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr ng-repeat="developmentRater in developmentRaters">
+                        <td>{{ developmentRater['name'] }}</td>
+                        <td>{{ developmentRater['phone'] }}</td>
+                        <td>{{ developmentRater['department'] | departmentFilter }}</td>
+                        <td>
+                            <input type="text" class="form-control" ng-model="developmentRater['percentage_development']" ng-if="developmentRater['is_edit']">
+                            <button class="btn btn-primary" ng-if="developmentRater['is_edit']" ng-click="savePercentage(developmentRater['id'],'development',developmentRater['percentage_plan'])">保存</button>
+                            <input type="text" class="form-control" ng-model="developmentRater['percentage_development']" disabled="disabled" ng-if="!developmentRater['is_edit']">
+                            <button class="btn btn-primary" ng-if="!developmentRater['is_edit']" ng-click="letPercentageEdit(developmentRater['id'], 'development')">修改</button>
+                        </td>
+                        <td><button class="btn btn-danger" ng-click="deleteRater(developmentRater['id'],'development')">删除</button> </td>
+                    </tr>
+                </table>
+                <h3 style="text-align: center;"><button class="btn btn-primary" ng-click="addRater('development')">添加评论的员工</button></h3>
+            </div>
+        </div>
+    </div>
+</div>

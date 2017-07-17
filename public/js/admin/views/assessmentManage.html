@@ -1,0 +1,35 @@
+<style>
+    table th{
+        text-align: center;
+    }
+    table td{
+        text-align: center;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">员工管理页面</h3>
+            <div class="panel-body">
+                <br>
+                <br>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>年份</th>
+                        <th>月份</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr ng-repeat="assessment in assessments">
+                        <th>{{ assessment['year'] }}</th>
+                        <th>{{ assessment['month'] }}</th>
+                        <th ng-if="assessment['is_completed'] == 1"><button class="btn btn-primary" ng-click="changeCompleted(assessment['id'], 0)">已完成</button></th>
+                        <th ng-if="assessment['is_completed'] == 0"><button class="btn btn-danger" ng-click="changeCompleted(assessment['id'], 1)">未完成</button> </th>
+                        <th><button class="btn btn-danger" ng-click="deleteAssessment(assessment['id'])">删除</button></th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<style>
+    table th{
+        text-align: center;
+    }
+    table td{
+        text-align: center;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">员工管理页面</h3>
+            <div class="panel-body">
+                <br>
+                <br>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>姓名</th>
+                        <th>电话号码</th>
+                        <th>所属工作组</th>
+                        <th>进入考核权限</th>
+                        <th>是否高管人员</th>
+                        <th>员工状态</th>
+                    </tr>
+                    <tr ng-repeat="staffData in staffDatas">
+                        <td>{{ staffData['name'] }}</td>
+                        <td>{{ staffData['phone'] }}</td>
+                        <td>{{ staffData['department'] | departmentFilter }}</td>
+                        <td ng-if="staffData['Jurisdiction'] == 1"><button class="btn btn-primary" ng-click="changeJurisdiction(staffData['id'], 0)">拥有权限</button></td>
+                        <td ng-if="staffData['Jurisdiction'] == 0"><button class="btn btn-danger" ng-click="changeJurisdiction(staffData['id'], 1)">没有权限</button></td>
+                        <td ng-if="staffData['is_senior_manager'] == 1"><button class="btn btn-primary" ng-click="changeManagerStatus(staffData['id'], 0)">是</button></td>
+                        <td ng-if="staffData['is_senior_manager'] == 0"><button class="btn btn-danger" ng-click="changeManagerStatus(staffData['id'], 1)">否</button></td>
+                        <td ng-if="staffData['status'] == 1"><button class="btn btn-primary" ng-click="changeStatus(staffData['id'], 0)">在职</button> </td>
+                        <td ng-if="staffData['status'] == 0"><button class="btn btn-danger" ng-click="changeStatus(staffData['id'], 1)">离职</button> </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

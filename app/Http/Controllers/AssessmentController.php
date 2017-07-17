@@ -50,8 +50,8 @@ class AssessmentController extends Controller
             return $data;
         }
         $assessment = Assessment::create($request->all());
-        $staffs = User::where('Jurisdiction', 0)->whereIn('department', [3,4])->where('status', 1)->get();
-        $raters = User::whereIn('department',[1,2])->where('status', 1)->get();
+        $staffs = User::whereIn('department', [3,4])->where('status', 1)->get();
+        $raters = User::where('is_default',1)->where('status', 1)->get();
 
         if($staffs->count() > 0){
             foreach ($staffs as $staff){

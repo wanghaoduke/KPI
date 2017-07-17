@@ -19,7 +19,12 @@
                     </ul>
                     <div style="display: inline-block; position: relative; right: 5px; float: right;">
                         @if(Auth::check())
-                            <div style="display: inline-block;">欢迎用户：{{ Auth::user()->name }}！</div>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div style="display: inline-block;">欢迎用户：{{ Auth::user()->name }}！</div>
+                            @if(Auth::user()->is_admin == 1)
+                                <div style="display: inline-block;"><a href="/admin" class="btn btn-primary">员工管理</a></div>
+                            @else
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                            @endif
                             <div style="display: inline-block;"><a href="" onclick="event.preventDefault(); document.getElementById('logout-form').submit()" class="btn btn-danger">注销</a></div>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                 {{ csrf_field() }}

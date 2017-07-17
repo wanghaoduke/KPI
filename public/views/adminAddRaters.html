@@ -1,0 +1,65 @@
+<div class="tools-lightbox">
+    <style>
+        .selected {
+            display: inline-block;
+            background: #5fbaf1;
+            cursor: pointer;
+            height: 80px;
+            width: 120px;
+            margin: 13px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+        .noSelected {
+            display: inline-block;
+            background: darkgray;
+            cursor: pointer;
+            height: 80px;
+            width: 120px;
+            margin: 13px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+    </style>
+    <div class="panel-default">
+        <div class="modal-header clearfix" style="overflow:inherit;">
+            <h6 class="col-md-3 tools-line-h tools-m-0">请选择员工</h6>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="请输入姓名" ng-model="query" id="query">
+                        <a href="javascript:;" class="btn btn-primary input-group-addon" id="search"><span class="glyphicon glyphicon-search"></span></a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div ng-repeat="staff in paged.staffs" ng-click="addStaff(staff)" ng-class="{ selected: isInSelected(staff), noSelected: !isInSelected(staff) }">
+                    <p style="font-size: 18px; text-align: center;">{{staff.name}}</p>
+                    <p style="text-align: center;">{{staff.department | departmentFilter}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: left;">
+            <p class="col-md-12 text-left">已选择<span class="selected-num">{{ newAddStaffs.length }}</span>位员工</p>
+            <div class="col-md-12 tools-p-0">
+                <div ng-repeat="staff in newAddStaffs" ng-class="{ selected: isInSelected(staff), noSelected: !isInSelected(staff) }">
+                    <p style="font-size: 18px; text-align: center;">{{staff.name}}</p>
+                    <p style="text-align: center;">{{staff.department | departmentFilter}}</p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="footer-w-1 tools-mg-top-2" style="text-align: center;">
+                    <button class="btn btn-primary" ng-click="ok()" id="ok">确认</button>
+                    <button class="btn btn-cancel" ng-click="cancel()" id="cancel">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
