@@ -28,10 +28,10 @@ class AdminController extends Controller
 
     //获取全部员工信息 不包括离职的
     public function getAllStaffsNoLeave(Request $request){
-        \Log::info($request->all());
+//        \Log::info($request->all());
         if($request->has('selectedIds')){
             $selectedIds = $request->get('selectedIds');
-            \Log::info($selectedIds);
+//            \Log::info($selectedIds);
         }
         $staffs = User::select()->where('is_admin', 0)->where('status', 1)->whereNotIn('id', $selectedIds)->get();
         return $staffs;
@@ -39,7 +39,7 @@ class AdminController extends Controller
 
     //添加新的评论人
     public function addNewRaters(Request $request){
-        \Log::info($request->all());
+//        \Log::info($request->all());
         if($request->get('team') == 'plan'){
             $staffs = User::whereIn('id', $request->get('newAddIds'))->update(['is_default_plan' => 1]);
         }
@@ -94,7 +94,7 @@ class AdminController extends Controller
 
     //获取全部assessment
     public function getAllAssessmentsDetail (){
-        $assessments = Assessment::get();
+        $assessments = Assessment::orderBy('year', "DESC")->orderBy("month", "DESC")->get();
         return $assessments;
     }
 
