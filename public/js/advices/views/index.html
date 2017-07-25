@@ -1,0 +1,76 @@
+<style>
+    th{
+        background: rgba(239, 239, 239, 1);
+        text-align: center;
+    }
+    td{
+        text-align: center;
+    }
+    
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">合理化建议</h3>
+            <div class="panel-body">
+                <br>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-2 col-md-offset-2 control-label" style="font-size: 18px;"><span style="color: red;">*</span>标题：</label>
+                        <div class="col-md-5">
+                            <input type="text" ng-model="advice.title" class="form-control">
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        <lable class="col-md-2 col-md-offset-2 control-label" style="font-size: 18px;"><span style="color: red;">*</span>建议内容：</lable>
+                        <div class="col-md-5">
+                            <textarea class="form-control" rows="7" ng-model="advice.content"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <br><br><br>
+                <div class="row" style="text-align: center;">
+                    <a class="btn btn-primary" style="font-size: 18px; width: 120px;" ng-click="saveAdvice()">提交</a>&nbsp;&nbsp;
+                    <a class="btn btn-default" style="font-size: 18px; width: 120px;" href="/">取消</a>
+                </div>
+                <br>
+                <br>
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-1"><h5 style="text-align: center;">我的建议</h5></div>
+                </div>
+                <div class="col-md-10 col-md-offset-1">
+                    <table class="table">
+                        <tr>
+                            <th>标题</th>
+                            <th>建议内容</th>
+                            <th>提出时间</th>
+                            <th>状态</th>
+                            <th>分值</th>
+                            <th>回复</th>
+                        </tr>
+                        <tr ng-repeat="formData in paged['detail']">
+                            <td style="width: 18%;"><a href="#/advice_show/{{formData['id']}}">{{ formData['showTitle'] }}</a></td>
+                            <td style="width: 35%;"><a href="#/advice_show/{{formData['id']}}">{{ formData['showContent'] }}</a></td>
+                            <td>{{ formData['created_at'] }}</td>
+                            <!--<td>{{ formData['is_processed'] }}</td>-->
+                            <td ng-if="formData['is_processed'] == 0">未处理</td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 0">未采纳</td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 1">已采纳</td>
+                            <!--<td>{{ formData['score'] }}</td>-->
+                            <td ng-if="formData['score'] > 0">+{{formData['score']}}分</td>
+                            <td ng-if="!(formData['score'] > 0)"></td>
+                            <td ng-if="formData['comment']"><a href="" ng-click="showDetail(formData['comment'])">详情</a></td>
+                            <td ng-if="!formData['comment']"></td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center;">
+                        <uib-pagination ng-model="currentPage" total-items="formDatas.length" max-size="5" items-per-page="10" boundary-links="true" force-ellipses="true"></uib-pagination>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

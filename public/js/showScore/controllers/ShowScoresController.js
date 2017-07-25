@@ -23,6 +23,39 @@ controllers.controller('ShowScoresController', ['$scope', 'ShowScore', '$routePa
                         $scope.tableDatas[i]['avgScore'] = datas[i]['avgScore'];
                     }
                     break;
+                case 'advices':
+                    $scope.itemName = '建议评分';
+                    $scope.tableDatas = {};
+                    for(var i = 0; i < datas.length; i++){
+                        $scope.tableDatas[i] = {};
+                        $scope.tableDatas[i]['name'] = datas[i]['name'];
+                        $scope.tableDatas[i]['department'] = datas[i]['department'];
+                        $scope.tableDatas[i]['sumScore'] = datas[i]['advicesSumScore'];
+                        $scope.tableDatas[i]['avgScore'] = datas[i]['advicesAvgScore'];
+                    }
+                    break;
+                case 'quality':
+                    $scope.itemName = '质量评分';
+                    $scope.tableDatas = {};
+                    for(var i = 0; i < datas.length; i++){
+                        $scope.tableDatas[i] = {};
+                        $scope.tableDatas[i]['name'] = datas[i]['name'];
+                        $scope.tableDatas[i]['department'] = datas[i]['department'];
+                        $scope.tableDatas[i]['sumScore'] = datas[i]['qualitySumScore'];
+                        $scope.tableDatas[i]['avgScore'] = datas[i]['qualityAvgScore'];
+                    }
+                    break;
+                case 'attitude':
+                    $scope.itemName = '态度评分';
+                    $scope.tableDatas = {};
+                    for(var i = 0; i < datas.length; i++){
+                        $scope.tableDatas[i] = {};
+                        $scope.tableDatas[i]['name'] = datas[i]['name'];
+                        $scope.tableDatas[i]['department'] = datas[i]['department'];
+                        $scope.tableDatas[i]['sumScore'] = datas[i]['attitudeSumScore'];
+                        $scope.tableDatas[i]['avgScore'] = datas[i]['attitudeAvgScore'];
+                    }
+                    break;
                 case 'prototype':
                     $scope.itemName = '原型质量';
                     $scope.tableDatas = {};
@@ -111,7 +144,19 @@ controllers.controller('ShowScoresController', ['$scope', 'ShowScore', '$routePa
             var endDateMonth = $scope.endDate.getMonth() + 1;
             var startDate = startDateYear * 12 + startDateMonth;
             var endDate = endDateYear * 12 + endDateMonth;
-            ShowScore.getPeriodAllScores({'startDate': startDate, 'endDate': endDate, 'department': $scope.department, 'item': $scope.item}).then(function(data){
+            if(startDateMonth < 10){
+                var tempStartDateMonth = "0" + startDateMonth;
+            }else{
+                var tempStartDateMonth = startDateMonth;
+            }
+            if(endDateMonth < 10){
+                var tempEndDateMonth = "0" + endDateMonth;
+            }else{
+                var tempEndDateMonth = endDateMonth;
+            }
+            var startDateStr = startDateYear + "-" + tempStartDateMonth;
+            var endDateStr = startDateYear + "-" + tempEndDateMonth;
+            ShowScore.getPeriodAllScores({'startDate': startDate, 'startDateStr': startDateStr, 'endDateStr': endDateStr, 'endDate': endDate, 'department': $scope.department, 'item': $scope.item}).then(function(data){
                 $scope.showErrorTip = false;
                 $scope.allDatas = data['data'];
                 $scope.changeTableDatas($scope.item, $scope.allDatas);

@@ -38,6 +38,9 @@ routeApp.filter('departmentFilter', function(){
             case 4:
                 return '开发组';
             break;
+            case 5:
+                return '产品总监组';
+            break;
         }
     }
 });

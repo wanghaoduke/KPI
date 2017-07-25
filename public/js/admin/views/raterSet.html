@@ -64,7 +64,7 @@
                         <td>{{ developmentRater['department'] | departmentFilter }}</td>
                         <td>
                             <input type="text" class="form-control" ng-model="developmentRater['percentage_development']" ng-if="developmentRater['is_edit']">
-                            <button class="btn btn-primary" ng-if="developmentRater['is_edit']" ng-click="savePercentage(developmentRater['id'],'development',developmentRater['percentage_plan'])">保存</button>
+                            <button class="btn btn-primary" ng-if="developmentRater['is_edit']" ng-click="savePercentage(developmentRater['id'],'development',developmentRater['percentage_development'])">保存</button>
                             <input type="text" class="form-control" ng-model="developmentRater['percentage_development']" disabled="disabled" ng-if="!developmentRater['is_edit']">
                             <button class="btn btn-primary" ng-if="!developmentRater['is_edit']" ng-click="letPercentageEdit(developmentRater['id'], 'development')">修改</button>
                         </td>

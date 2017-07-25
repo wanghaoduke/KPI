@@ -17,7 +17,18 @@
                     <br>
                     <br>
                     <div style="text-align: center;">
-                        <a class="btn btn-primary" href="/show_score/index" style="font-size: 20px; margin: 5px;">评分查询</a><a class="btn btn-primary" href="/score/master" style="font-size: 20px; margin: 5px;">进入系统</a><a href="/assessment_manage" class="btn btn-primary" style="font-size: 20px; margin: 5px;">考核管理</a>
+                        <a class="btn btn-primary" href="/show_score/index" style="font-size: 20px; margin: 5px;">评分查询</a>
+                        <a class="btn btn-primary" href="/score/master" style="font-size: 20px; margin: 5px;">进入系统</a>
+                        <a href="/assessment_manage" class="btn btn-primary" style="font-size: 20px; margin: 5px;">考核管理</a>
+
+                        @if(Auth::check())
+                            @if(auth()->user()->is_senior_manager == 1)
+                                <a href="/advices#/rater/index" class="btn btn-primary" style="font-size: 20px; margin: 5px;">合理化建议</a>
+                            @else
+                                <a href="/advices" class="btn btn-primary" style="font-size: 20px; margin: 5px;">合理化建议</a>
+                            @endif
+                        @endif
+
                     </div>
                     <br>
                     <br>

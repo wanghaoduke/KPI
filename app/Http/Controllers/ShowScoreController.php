@@ -6,6 +6,7 @@ use App\AppResponse;
 use App\Assessment;
 use App\StaffScore;
 use App\User;
+use App\Advice;
 use Illuminate\Http\Request;
 
 class ShowScoreController extends Controller
@@ -39,6 +40,8 @@ class ShowScoreController extends Controller
 //        \Log::info($request->all());
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
+        $startDateStr = $request->get('startDateStr');
+        $endDateStr = $request->get('endDateStr');
         $AssessmentIds = Assessment::where('is_completed',1)
             ->whereRaw("(assessments.year * 12 + assessments.month) <= '$endDate' and (assessments.year * 12 + assessments.month) >= '$startDate'")
             ->pluck('assessments.id');
@@ -59,11 +62,15 @@ class ShowScoreController extends Controller
 //            \Log::info($assessmentIdString);
             $sql = "(select staff_scores.staff_id,sum(staff_scores.is_completed)as completed_count,
                           sum(
-                                 (if(staff_scores.ability is null, 0, staff_scores.ability) + if(staff_scores.responsibility is null, 0, staff_scores.responsibility) + if(staff_scores.prototype is null, 0,staff_scores.prototype) 
-                                      + if(staff_scores.finished_product is null, 0, staff_scores.finished_product)+ if(staff_scores.development_quality is null, 0, staff_scores.development_quality) 
-                                      + if(staff_scores.develop_efficiency is null, 0, staff_scores.develop_efficiency)
+                                 (if(staff_scores.quality_score is null, 0, staff_scores.quality_score) + if(staff_scores.attitude_score is null, 0, staff_scores.attitude_score)
                                  )*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
                           )as sumScore,
+                          sum(
+                                 (staff_scores.quality_score)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
+                          )as qualitySumScore,
+                          sum(
+                                 (staff_scores.attitude_score)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
+                          )as attitudeSumScore,
                           sum(
                                  (staff_scores.ability)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
                           )as abilitySumScore,
@@ -92,6 +99,8 @@ class ShowScoreController extends Controller
                 \DB::raw("(case when users.department = 3 then '策划组' when users.department = 4 then '开发组' end) as department"),
                 'tt.staff_id as staff_id',
                 'tt.sumScore',
+                'tt.qualitySumScore',
+                'tt.attitudeSumScore',
                 'tt.abilitySumScore',
                 'tt.responsibilitySumScore',
                 'tt.prototypeSumScore',
@@ -145,6 +154,26 @@ class ShowScoreController extends Controller
 //            }
 
             $data = $data->get();
+            //把合理化建议分数加入
+            $advices = Advice::select([
+                \DB::raw("sum(score) as sumScore"),
+                "advices.suggest_id"
+            ])
+                ->whereRaw("date_format(created_at, '%Y-%m') >= '$startDateStr' and date_format(created_at, '%Y-%m') <= '$endDateStr'")
+                ->groupBy("advices.suggest_id")
+                ->get();
+//            \Log::info($advices);
+            for($i = 0; $i < count($advices); $i++){
+                if($advices[$i]["sumScore"] > 30){
+                    $advices[$i]["sumScore"] = 30;
+                }
+                for($j = 0; $j < count($data); $j++){
+                    if($advices[$i]['suggest_id'] == $data[$j]['id']){
+                        $data[$j]["sumScore"] = $data[$j]["sumScore"] + $advices[$i]["sumScore"];
+                        $data[$j]->advicesSumScore = $advices[$i]["sumScore"];
+                    }
+                }
+            }
 
             //获取平均分数
             for($i = 0; $i < count($data); $i++){
@@ -155,6 +184,27 @@ class ShowScoreController extends Controller
                     $data[$i]->sumScore = round($data[$i]['sumScore'], 2);
                 }else{
                     $data[$i]->avgScore = null;
+                }
+
+                if($data[$i]['qualitySumScore']){
+                    $data[$i]->advicesAvgScore = round($data[$i]['advicesSumScore'] / $countAssessment, 2);
+                    $data[$i]->advicesSumScore = round($data[$i]['advicesSumScore'], 2);
+                }else{
+                    $data[$i]->advicesAvgScore = null;
+                }
+
+                if($data[$i]['qualitySumScore']){
+                    $data[$i]->qualityAvgScore = round($data[$i]['qualitySumScore'] / $countAssessment, 2);
+                    $data[$i]->qualitySumScore = round($data[$i]['qualitySumScore'], 2);
+                }else{
+                    $data[$i]->qualityAvgScore = null;
+                }
+
+                if($data[$i]['attitudeSumScore']){
+                    $data[$i]->attitudeAvgScore = round($data[$i]['attitudeSumScore'] / $countAssessment, 2);
+                    $data[$i]->attitudeSumScore = round($data[$i]['attitudeSumScore'], 2);
+                }else{
+                    $data[$i]->attitudeAvgScore = null;
                 }
 
                 if($data[$i]['abilitySumScore']){
@@ -200,12 +250,49 @@ class ShowScoreController extends Controller
                 }
             }
 
+            //不同分项目的不同排序
             switch($request->get("item")){
                 case "all":
                     for($i = 0; $i < count($data); $i++){
                         for($j = $i + 1; $j < count($data); $j++){
                             $tempData = [];
                             if($data[$i]['avgScore'] < $data[$j]['avgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "advices":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['advicesAvgScore'] < $data[$j]['advicesAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "quality":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['qualityAvgScore'] < $data[$j]['qualityAvgScore']){
+                                $tempData = $data[$j];
+                                $data[$j] = $data[$i];
+                                $data[$i] = $tempData;
+                            }
+                        }
+                    }
+                    break;
+                case "attitude":
+                    for($i = 0; $i < count($data); $i++){
+                        for($j = $i + 1; $j < count($data); $j++){
+                            $tempData = [];
+                            if($data[$i]['attitudeAvgScore'] < $data[$j]['attitudeAvgScore']){
                                 $tempData = $data[$j];
                                 $data[$j] = $data[$i];
                                 $data[$i] = $tempData;
@@ -297,6 +384,7 @@ class ShowScoreController extends Controller
                         }
                     }
             }
+            \Log::info($data->toArray());
             return AppResponse::result(true, $data);
         }else{
             return AppResponse::result(false, '没有任何数据，请先增加考评或者换查询时间段！');

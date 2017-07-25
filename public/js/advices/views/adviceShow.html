@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">{{ advice['title'] }}</h3>
+            <div class="panel-body">
+                <br>
+                <div style="font-size: 18px;">
+                    {{ advice['content'] }}
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <div class="row" style="text-align: center;">
+                    <a ng-if="advice['is_processed'] == 0" class="btn btn-primary" href="#/advice_edit/{{advice['id']}}">编辑</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

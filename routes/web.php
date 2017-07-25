@@ -40,7 +40,8 @@ Route::post('/change_assessment_status/{id}', 'AssessmentController@changeAssess
 Route::get('/score/master', 'GiveScoreController@show');
 Route::get('/score/get_your_assessment', 'GiveScoreController@getYourAssessment');
 Route::get('/score/get_staff_scores/{id}', 'GiveScoreController@getStaffScores');
-Route::post('/score/save_staff_scores/{id}', 'GiveScoreController@saveStaffScores');
+//Route::post('/score/save_staff_scores/{id}', 'GiveScoreController@saveStaffScores');
+Route::post('/score/save_the_staff_score/{id}', 'GiveScoreController@saveTheStaffScore');
 
 //评分查看系统
 Route::get('/show_score/index', 'ShowScoreController@index');
@@ -62,3 +63,13 @@ Route::post('/admin/change_staff_is_senior_manager/{id}', "AdminController@chang
 Route::get('/admin/get_all_assessments_detail', "AdminController@getAllAssessmentsDetail");
 Route::post('/admin/change_assessment_completed/{id}', "AdminController@changeAssessmentCompleted");
 Route::post('/admin/delete_assessment/{id}', "AdminController@deleteAssessment");
+Route::post('/admin/change_is_admin/{id}', "AdminController@changeIsAdmin");
+Route::post('/admin/save_staff_department/{id}', "AdminController@saveStaffDepartment");
+
+
+//合理化建议
+Route::get('/advices/get_all_auth_advices', 'AdvicesController@getAllAuthAdvices');
+Route::get('/advices/rater/get_all_suggester_all_advices', 'AdvicesController@getAllSuggesterAdvices');
+Route::get('/rater_edit/get_advice_detail/{id}', 'AdvicesController@raterEditGetAdviceDetail');
+Route::post('/rater_edit/rater_judge_advice/{id}', "AdvicesController@raterJudgeAdvice");
+Route::resource('advices', 'AdvicesController');

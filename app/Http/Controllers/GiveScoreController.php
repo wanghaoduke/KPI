@@ -32,9 +32,26 @@ class GiveScoreController extends Controller
     public function getYourAssessment () {
         $userId = auth::user()->id;
         $assessmentIds = StaffScore::where('rater_id', $userId)->distinct('assessment_id')->pluck('assessment_id');
-        \Log::info($assessmentIds);
+//        \Log::info($assessmentIds);
         $assessments = Assessment::whereIn('id', $assessmentIds)->where('is_completed', 0)->orderBy('year', 'DESC')->orderBy('month', "DESC")->get();
         return $assessments;
+    }
+
+    //保存评分数
+    public function saveTheStaffScore ($id, Request $request){
+//        \Log::info($id);
+//        \Log::info($request->all());
+        $staffScore = StaffScore::find($id);
+        if($request->get('item') == 'quality'){
+            $staffScore->update(['quality_score' => $request->get('score')]);
+        }
+        if($request->get('item') == 'attitude'){
+            $staffScore->update(['attitude_score' => $request->get('score')]);
+        }
+        $newStaffScore = StaffScore::find($id);
+        if(!is_null($newStaffScore['quality_score']) && !is_null($newStaffScore['attitude_score'])){
+            StaffScore::find($id)->update(['is_completed' => 1]);
+        }
     }
 
     //获取该月份的所有被评详情
@@ -47,12 +64,8 @@ class GiveScoreController extends Controller
             'staff_scores.id as staff_score_id',
             'assessments.year',
             'assessments.month',
-            'staff_scores.ability',
-            'staff_scores.responsibility',
-            'staff_scores.prototype',
-            'staff_scores.finished_product',
-            'staff_scores.development_quality',
-            'staff_scores.develop_efficiency',
+            'staff_scores.quality_score',
+            'staff_scores.attitude_score',
         ])
             ->leftJoin('users', "users.id", "=", "staff_scores.staff_id")
             ->leftJoin('assessments', 'assessments.id', '=', 'staff_scores.assessment_id')

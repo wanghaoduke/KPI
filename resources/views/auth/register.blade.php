@@ -86,6 +86,7 @@
                             <div class="col-md-4">
                                 <select id="department" class="form-control" placeholder="请输入您的姓名" name="department" required>
                                     <option value="" selected="true" disabled="true">请选择您的组别</option>
+                                    <option value="5">产品总监组</option>
                                     <option value="1">产品经理组</option>
                                     <option value="2">技术主管组</option>
                                     <option value="3">策划组</option>

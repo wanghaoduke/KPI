@@ -8,58 +8,70 @@ controllers.controller("AdminIndexController", ['$scope',
 
 controllers.controller("StaffManageController", ["$scope", "AdminManage",
     function($scope, AdminManage){
+        $scope.departmentArray = [{name: '产品经理组', value: 1},{name: '技术主管组', value: 2},{name: '策划组', value: 3},{name: '开发组', value: 4},{name: '产品总监组', value: 5}];
+        //切换显示内容
+        $scope.staffStatus = 'all';
+        //分组打开选择
+        $scope.changeSelectAllow = function(id){
+            for(var i = 0; i < $scope.staffDatas.length; i++){
+                if(id == $scope.staffDatas[i]['id']){
+                    $scope.staffDatas[i]['selectAllow'] = true;
+                }
+            }
+        };
+
+        // 保存分组改变
+        $scope.saveDepartment = function(id, department){
+            AdminManage.saveTheDepartment(id, department).then(function(data){
+                getStaffs($scope.staffStatus);
+            });
+        };
+        function getStaffs(value){
+            AdminManage.getAllStaffs(value).then(function(data){
+                if(data.length){
+                    $scope.hasStaffData = true;
+                }else{
+                    $scope.hasStaffData = false;
+                }
+                $scope.staffDatas = data;
+                for(var i = 0; i < $scope.staffDatas.length; i++){
+                    $scope.staffDatas[i]['selectAllow'] = false;
+                }
+            });
+        }
+        $scope.changeStaffShow = function(value){
+            $scope.staffStatus = value;
+            getStaffs($scope.staffStatus);
+        };
 
         //获取全体员工信息
-        AdminManage.getAllStaffs().then(function(data){
-            if(data.length){
-                console.log(1);
-                $scope.hasStaffData = true;
-            }else{
-                console.log(2);
-                $scope.hasStaffData = false;
-            }
-            $scope.staffDatas = data;
-        });
+        getStaffs($scope.staffStatus);
 
         //改变员工的进入考核权限
         $scope.changeJurisdiction = function(id, value){
             AdminManage.changeStaffJurisdiction(id,value).then(function(data){
-                AdminManage.getAllStaffs().then(function(data){
-                    if(data.length){
-                        $scope.hasStaffData = true;
-                    }else{
-                        $scope.hasStaffData = false;
-                    }
-                    $scope.staffDatas = data;
-                });
+                getStaffs($scope.staffStatus);
             })
+        };
+
+        //改变员工是否有后台权限
+        $scope.changeIsAdmin = function(id, value){
+            AdminManage.changeAdmin(id, value).then(function(data){
+                getStaffs($scope.staffStatus);
+            });
         };
 
         //改变员工的是否为高级管理员
         $scope.changeManagerStatus = function(id, value){
             AdminManage.changeStaffIsSeniorManager(id,value).then(function(data){
-                AdminManage.getAllStaffs().then(function(data){
-                    if(data.length){
-                        $scope.hasStaffData = true;
-                    }else{
-                        $scope.hasStaffData = false;
-                    }
-                    $scope.staffDatas = data;
-                });
+                getStaffs($scope.staffStatus);
             });
         };
         
         //改变员工的状态
         $scope.changeStatus = function(id, value){
             AdminManage.changeStaffStatus(id,value).then(function(data){
-                AdminManage.getAllStaffs().then(function(data){
-                    if(data.length){
-                        $scope.hasStaffData = true;
-                    }else{
-                        $scope.hasStaffData = false;
-                    }
-                    $scope.staffDatas = data;
-                });
+                getStaffs($scope.staffStatus);
             })
         }
     }

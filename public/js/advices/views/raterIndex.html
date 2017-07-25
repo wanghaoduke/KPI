@@ -1,0 +1,61 @@
+<style>
+    th{
+        background: rgba(239, 239, 239, 1);
+        text-align: center;
+    }
+    td{
+        text-align: center;
+    }
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">合理化建议</h3>
+            <div class="panel-body">
+                <div class="col-md-10 col-md-offset-1">
+                    <button ng-if="team == 'all'" class="btn btn-primary" style="margin-bottom: 10px;">全部</button>
+                    <button ng-if="team != 'all'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeTeam('all')">全部</button>
+                    <button ng-if="team == 'untreated'" class="btn btn-primary" style="margin-bottom: 10px;">未处理</button>
+                    <button ng-if="team != 'untreated'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeTeam('untreated')">未处理</button>
+                    <button ng-if="team == 'Adopted'" class="btn btn-primary" style="margin-bottom: 10px;">已采纳</button>
+                    <button ng-if="team != 'Adopted'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeTeam('Adopted')">已采纳</button>
+                    <button ng-if="team == 'notAdopted'" class="btn btn-primary" style="margin-bottom: 10px;">未采纳</button>
+                    <button ng-if="team != 'notAdopted'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeTeam('notAdopted')">未采纳</button>
+                    <div style="float: right;">
+                        <input ng-model="search">
+                        <button class="btn btn-primary" style="padding: 3px 10px;" ng-click="searchInput()">搜索</button>
+                    </div>
+                    <br>
+                    <table class="table">
+                        <tr>
+                            <th>标题</th>
+                            <th>建议内容</th>
+                            <th>提出人</th>
+                            <th>提出时间</th>
+                            <th>状态</th>
+                            <th>分值</th>
+                        </tr>
+                        <tr ng-repeat="formData in paged['detail']">
+                            <td style="width: 18%;"><span title="{{ formData['title'] }}" style="cursor: pointer;">{{ formData['showTitle'] }}</span></td>
+                            <td style="width: 35%;"><a href="" ng-click="showContentDetail(formData['content'])">{{ formData['showContent'] }}</a></td>
+                            <td>{{ formData['name'] }}</td>
+                            <td>{{ formData['created_at'] }}</td>
+                            <!--<td>{{ formData['is_processed'] }}</td>-->
+                            <td ng-if="formData['is_processed'] == 0">未处理</td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 0">未采纳</td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 1">已采纳</td>
+                            <td ng-if="formData['is_processed'] == 0"><a class="btn btn-primary" style="padding: 0px 5px;" href="#/rater_edit/{{formData['id']}}">去评审</a></td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 1">+{{formData['score']}}分</td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 0"></td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center;">
+                        <uib-pagination ng-model="currentPage" total-items="formDatas.length" max-size="5" items-per-page="3" boundary-links="true" force-ellipses="true"></uib-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

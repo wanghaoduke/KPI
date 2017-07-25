@@ -8,7 +8,8 @@ class StaffScore extends Model
 {
     //
     protected $fillable = [
-        'staff_id','rater_id','assessment_id','percentage','is_completed','ability','responsibility','prototype','finished_product','development_quality','develop_efficiency'
+        'staff_id','rater_id','assessment_id','percentage','is_completed','ability','responsibility','prototype','finished_product','development_quality','develop_efficiency',
+        "quality_score", "attitude_score"
     ];
 
     public function user(){

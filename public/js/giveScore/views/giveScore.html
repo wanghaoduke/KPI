@@ -1,176 +1,209 @@
 <div class="container">
     <style>
-        ul li {
-            display: inline-block;
-            margin: 7px;
-        }
-        button.noSelected {
-            background: #e4e2e2;
-            width: 43px;
-            height: 35px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-bottom: 0;
-            font-weight: 400;
+        /*ul li {*/
+            /*display: inline-block;*/
+            /*margin: 7px;*/
+        /*}*/
+        /*button.noSelected {*/
+            /*background: #e4e2e2;*/
+            /*width: 43px;*/
+            /*height: 35px;*/
+            /*-webkit-border-radius: 5px;*/
+            /*-moz-border-radius: 5px;*/
+            /*border-radius: 5px;*/
+            /*display: inline-block;*/
+            /*margin-bottom: 0;*/
+            /*font-weight: 400;*/
+            /*text-align: center;*/
+            /*vertical-align: middle;*/
+            /*-ms-touch-action: manipulation;*/
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            /*border: 1px solid transparent;*/
+            /*white-space: nowrap;*/
+            /*padding: 6px 12px;*/
+            /*font-size: 14px;*/
+            /*line-height: 1.6;*/
+            /*-webkit-user-select: none;*/
+            /*-moz-user-select: none;*/
+            /*-ms-user-select: none;*/
+            /*user-select: none;*/
+        /*}*/
+        /*button.selected {*/
+            /*background: #fbae38;*/
+            /*width: 43px;*/
+            /*height: 35px;*/
+            /*-webkit-border-radius: 5px;*/
+            /*-moz-border-radius: 5px;*/
+            /*border-radius: 5px;*/
+            /*color: white;*/
+            /*display: inline-block;*/
+            /*margin-bottom: 0;*/
+            /*font-weight: 400;*/
+            /*text-align: center;*/
+            /*vertical-align: middle;*/
+            /*-ms-touch-action: manipulation;*/
+            /*touch-action: manipulation;*/
+            /*cursor: pointer;*/
+            /*border: 1px solid transparent;*/
+            /*white-space: nowrap;*/
+            /*padding: 6px 12px;*/
+            /*font-size: 14px;*/
+            /*line-height: 1.6;*/
+            /*-webkit-user-select: none;*/
+            /*-moz-user-select: none;*/
+            /*-ms-user-select: none;*/
+            /*user-select: none;*/
+        /*}*/
+        table th,td {
             text-align: center;
-            vertical-align: middle;
-            -ms-touch-action: manipulation;
-            touch-action: manipulation;
-            cursor: pointer;
-            border: 1px solid transparent;
-            white-space: nowrap;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.6;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        button.selected {
-            background: #fbae38;
-            width: 43px;
-            height: 35px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            color: white;
-            display: inline-block;
-            margin-bottom: 0;
-            font-weight: 400;
-            text-align: center;
-            vertical-align: middle;
-            -ms-touch-action: manipulation;
-            touch-action: manipulation;
-            cursor: pointer;
-            border: 1px solid transparent;
-            white-space: nowrap;
-            padding: 6px 12px;
-            font-size: 14px;
-            line-height: 1.6;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
     </style>
     <div class="row">
         <div class="panel panel-default">
             <div class="panel-body">
                 <br><br>
-                <h3 style="text-align: center;">{{tempStaffScore.name}}的{{tempStaffScore.year}}年{{tempStaffScore.month}}月评分</h3>
+                <h3 style="text-align: center;">{{tempStaffScore.year}}年{{tempStaffScore.month}}月评分</h3>
 
-                <div class="row" ng-if="tempStaffScore.department == 3">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">原型质量</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">20</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score20 in score20Array"><button ng-click="prototypeSelectScore(score20)" ng-class="{noSelected: tempStaffScore.prototype != {{score20}},selected: tempStaffScore.prototype == {{score20}}}">{{score20}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row" ng-if="tempStaffScore.department == 3">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">原型质量</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">20</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score20 in score20Array"><button ng-click="prototypeSelectScore(score20)" ng-class="{noSelected: tempStaffScore.prototype != {{score20}},selected: tempStaffScore.prototype == {{score20}}}">{{score20}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row" ng-if="tempStaffScore.department == 3">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">成品质量</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score30 in score30Array"><button ng-click="finishedProductSelectScore(score30)" ng-class="{noSelected: tempStaffScore.finished_product != {{score30}},selected: tempStaffScore.finished_product == {{score30}}}">{{score30}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row" ng-if="tempStaffScore.department == 3">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">成品质量</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score30 in score30Array"><button ng-click="finishedProductSelectScore(score30)" ng-class="{noSelected: tempStaffScore.finished_product != {{score30}},selected: tempStaffScore.finished_product == {{score30}}}">{{score30}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row" ng-if="tempStaffScore.department == 4">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">开发质量</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score30 in score30Array"><button ng-click="developmentQualitySelectScore(score30)" ng-class="{noSelected: tempStaffScore.development_quality != {{score30}},selected: tempStaffScore.development_quality == {{score30}}}">{{score30}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row" ng-if="tempStaffScore.department == 4">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">开发质量</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score30 in score30Array"><button ng-click="developmentQualitySelectScore(score30)" ng-class="{noSelected: tempStaffScore.development_quality != {{score30}},selected: tempStaffScore.development_quality == {{score30}}}">{{score30}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row" ng-if="tempStaffScore.department == 4">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">开发效率</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score30 in score30Array"><button ng-click="developEfficiencySelectScore(score30)" ng-class="{noSelected: tempStaffScore.develop_efficiency != {{score30}},selected: tempStaffScore.develop_efficiency == {{score30}}}">{{score30}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row" ng-if="tempStaffScore.department == 4">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">开发效率</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score30 in score30Array"><button ng-click="developEfficiencySelectScore(score30)" ng-class="{noSelected: tempStaffScore.develop_efficiency != {{score30}},selected: tempStaffScore.develop_efficiency == {{score30}}}">{{score30}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="padding: 0; position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">能力与学习</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">20</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score20 in score20Array"><button ng-click="abilitySelectScore(score20)" ng-class="{noSelected: tempStaffScore.ability != {{score20}},selected: tempStaffScore.ability == {{score20}}}">{{score20}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="padding: 0; position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">能力与学习</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">20</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score20 in score20Array"><button ng-click="abilitySelectScore(score20)" ng-class="{noSelected: tempStaffScore.ability != {{score20}},selected: tempStaffScore.ability == {{score20}}}">{{score20}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row" ng-if="tempStaffScore.department == 3">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">责任心</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score30 in score30Array"><button ng-click="responsibilitySelectScore(score30)" ng-class="{noSelected: tempStaffScore.responsibility != {{score30}},selected: tempStaffScore.responsibility == {{score30}}}">{{score30}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row" ng-if="tempStaffScore.department == 3">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">责任心</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">30</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score30 in score30Array"><button ng-click="responsibilitySelectScore(score30)" ng-class="{noSelected: tempStaffScore.responsibility != {{score30}},selected: tempStaffScore.responsibility == {{score30}}}">{{score30}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div class="row" ng-if="tempStaffScore.department == 4">
-                    <br>
-                    <div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">
-                        <span style="font-size: 15px; position: relative; top: 5px;">责任心</span>
-                    </div>
-                    <div class="col-md-1" style="text-align: center;">
-                        <span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">20</span><span style="font-size: 15px;">分</span>
-                    </div>
-                    <div class="col-md-8">
-                        <ul style="list-style-type: none; display: inline-block;">
-                            <li ng-repeat="score20 in score20Array"><button ng-click="responsibilitySelectScore(score20)" ng-class="{noSelected: tempStaffScore.responsibility != {{score20}},selected: tempStaffScore.responsibility == {{score20}}}">{{score20}}</button></li>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="row" ng-if="tempStaffScore.department == 4">-->
+                    <!--<br>-->
+                    <!--<div class="col-md-1 col-md-offset-1" style="position: relative; top: 5px; text-align: center; height: 35px; background: #e4e2e2; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">-->
+                        <!--<span style="font-size: 15px; position: relative; top: 5px;">责任心</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-1" style="text-align: center;">-->
+                        <!--<span style="font-size: 15px;">共</span><span style="font-size: 25px; color: red;">20</span><span style="font-size: 15px;">分</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-8">-->
+                        <!--<ul style="list-style-type: none; display: inline-block;">-->
+                            <!--<li ng-repeat="score20 in score20Array"><button ng-click="responsibilitySelectScore(score20)" ng-class="{noSelected: tempStaffScore.responsibility != {{score20}},selected: tempStaffScore.responsibility == {{score20}}}">{{score20}}</button></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <table class="table table-bordered">
+                    <tr>
+                        <td>被评人</td>
+                        <td>工作组</td>
+                        <td>质量评分</td>
+                        <td>态度评分</td>
+                    </tr>
+                    <tr ng-repeat="staffScore in staffScores">
+                        <td>{{staffScore.name}}</td>
+                        <td>{{staffScore['department'] | departmentFilter}}</td>
+                        <td width="28%">
+                            <span ng-if="!staffScore['selectQualityScore']" ng-click="changeQualityAbleSelect(staffScore['staff_score_id'])" style="cursor: pointer;">{{staffScore['quality_score']}}分</span>
+                            <ui-select ng-if="staffScore['selectQualityScore']" ng-disabled="disabled" ng-model="staffScore['quality_score']" on-select="saveScore(staffScore['staff_score_id'], 'quality', staffScore['quality_score'])">
+                                <ui-select-match placeholder="请选择分数">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="qualityScore.value as qualityScore in qualityScoreArr">
+                                    {{ qualityScore.name }}
+                                </ui-select-choices>
+                            </ui-select>
+                        </td>
+                        <td width="28%">
+                            <span ng-if="!staffScore['selectAttitudeScore']" ng-click="changeAttitudeAbleSelect(staffScore['staff_score_id'])" style="cursor: pointer;">{{staffScore['attitude_score']}}分</span>
+                            <ui-select ng-if="staffScore['selectAttitudeScore']" ng-disabled="disabled" ng-model="staffScore['attitude_score']" on-select="saveScore(staffScore['staff_score_id'], 'attitude', staffScore['attitude_score'])">
+                                <ui-select-match placeholder="请选择分数">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="attributeScore.value as attributeScore in attributeScoreArr">
+                                    {{ attributeScore.name }}
+                                </ui-select-choices>
+                            </ui-select>
+                        </td>
+                    </tr>
+                </table>
 <br><br>
                 <div class="row" style="text-align: center;">
-                    <a ng-if="!isLastStaff" class="btn btn-primary" style="width: 130px; margin: 5px;" ng-click="saveScore()">保存，下一个</a>
-                    <a ng-if="isLastStaff" class="btn btn-primary" style="width: 130px; margin: 5px;" ng-click="saveScore()">完成</a>
-                    <a class="btn btn-default" style="width: 130px; margin: 5px; background: #e4e2e2;" ng-click="cancel()">取消</a>
+                    <!--<a ng-if="!isLastStaff" class="btn btn-primary" style="width: 130px; margin: 5px;" ng-click="saveScore()">保存，下一个</a>-->
+                    <!--<a ng-if="isLastStaff" class="btn btn-primary" style="width: 130px; margin: 5px;" ng-click="saveScore()">完成</a>-->
+                    <!--<a class="btn btn-default" style="width: 130px; margin: 5px; background: #e4e2e2;" ng-click="cancel()">取消</a>-->
                 </div>
                 <br><br><br>
             </div>

@@ -51,16 +51,32 @@ class AssessmentController extends Controller
         }
         $assessment = Assessment::create($request->all());
         $staffs = User::whereIn('department', [3,4])->where('status', 1)->get();
-        $raters = User::where('is_default',1)->where('status', 1)->get();
+        $planRaters = User::where('is_default_plan',1)->where('status', 1)->get();
+        $developmentRaters = User::where('is_default_development',1)->where('status', 1)->get();
 
         if($staffs->count() > 0){
             foreach ($staffs as $staff){
-                foreach ($raters as $rater){
-                    $staffScore = [];
-                    $staffScore['assessment_id'] = $assessment->id;
-                    $staffScore['staff_id'] = $staff->id;
-                    $staffScore['rater_id'] = $rater->id;
-                    $createStaffScore = StaffScore::create($staffScore);
+                if($staff['department'] == 3){
+                    foreach ($planRaters as $rater){
+                        $staffScore = [];
+                        $staffScore['assessment_id'] = $assessment->id;
+                        $staffScore['staff_id'] = $staff->id;
+                        $staffScore['rater_id'] = $rater->id;
+                        $staffScore['percentage'] = $rater->percentage_plan;
+                        $createStaffScore = StaffScore::create($staffScore);
+
+                    }
+                }
+                if($staff['department'] == 4){
+                    foreach ($developmentRaters as $rater){
+                        $staffScore = [];
+                        $staffScore['assessment_id'] = $assessment->id;
+                        $staffScore['staff_id'] = $staff->id;
+                        $staffScore['rater_id'] = $rater->id;
+                        $staffScore['percentage'] = $rater->percentage_development;
+                        $createStaffScore = StaffScore::create($staffScore);
+
+                    }
                 }
             }
         }else{

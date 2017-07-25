@@ -14,23 +14,40 @@
             <div class="panel-body">
                 <br>
                 <br>
+                <button ng-if="staffStatus == 'all'" class="btn btn-primary" style="margin-bottom: 10px;" ng-click="changeStaffShow('all')">全部</button>
+                <button ng-if="staffStatus != 'all'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeStaffShow('all')">全部</button>&nbsp;&nbsp;&nbsp;
+                <button ng-if="staffStatus == 'onWork'" class="btn btn-primary" style="margin-bottom: 10px;" ng-click="changeStaffShow('onWork')">在职</button>
+                <button ng-if="staffStatus != 'onWork'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeStaffShow('onWork')">在职</button>&nbsp;&nbsp;&nbsp;
+                <button ng-if="staffStatus == 'leave'" class="btn btn-primary" style="margin-bottom: 10px;" ng-click="changeStaffShow('leave')">离职</button>
+                <button ng-if="staffStatus != 'leave'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeStaffShow('leave')">离职</button>
+
                 <table class="table table-bordered">
                     <tr>
                         <th>姓名</th>
                         <th>电话号码</th>
                         <th>所属工作组</th>
-                        <th>进入考核权限</th>
-                        <th>是否高管人员</th>
+                        <th>权限设置</th>
                         <th>员工状态</th>
                     </tr>
                     <tr ng-repeat="staffData in staffDatas">
                         <td>{{ staffData['name'] }}</td>
                         <td>{{ staffData['phone'] }}</td>
-                        <td>{{ staffData['department'] | departmentFilter }}</td>
-                        <td ng-if="staffData['Jurisdiction'] == 1"><button class="btn btn-primary" ng-click="changeJurisdiction(staffData['id'], 0)">拥有权限</button></td>
-                        <td ng-if="staffData['Jurisdiction'] == 0"><button class="btn btn-danger" ng-click="changeJurisdiction(staffData['id'], 1)">没有权限</button></td>
-                        <td ng-if="staffData['is_senior_manager'] == 1"><button class="btn btn-primary" ng-click="changeManagerStatus(staffData['id'], 0)">是</button></td>
-                        <td ng-if="staffData['is_senior_manager'] == 0"><button class="btn btn-danger" ng-click="changeManagerStatus(staffData['id'], 1)">否</button></td>
+                        <td style="width: 20%;">
+                            <span ng-if="!staffData['selectAllow']" style="cursor: pointer;" ng-click="changeSelectAllow(staffData['id'])">{{ staffData['department'] | departmentFilter }}</span>
+                            <ui-select ng-if="staffData['selectAllow']" ng-disabled="disabled" ng-model="staffData['department']" on-select="saveDepartment(staffData['id'], staffData['department'])">
+                                <ui-select-match placeholder="请选择分组">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="department.value as department in departmentArray">
+                                    {{ department['name'] }}
+                                </ui-select-choices>
+                            </ui-select>
+                        </td>
+                        <td>
+                            <button  ng-if="staffData['is_admin'] == 1" class="btn btn-primary" ng-click="changeIsAdmin(staffData['id'], 0)">后台管理</button>
+                            <button  ng-if="staffData['is_admin'] == 0" class="btn btn-default" ng-click="changeIsAdmin(staffData['id'], 1)">后台管理</button>
+                            <button  ng-if="staffData['Jurisdiction'] == 1" class="btn btn-primary" ng-click="changeJurisdiction(staffData['id'], 0)">考核权限</button>
+                            <button  ng-if="staffData['Jurisdiction'] == 0" class="btn btn-default" ng-click="changeJurisdiction(staffData['id'], 1)">考核权限</button>
+                            <button ng-if="staffData['is_senior_manager'] == 1" class="btn btn-primary" ng-click="changeManagerStatus(staffData['id'], 0)">建议评审</button>
+                            <button  ng-if="staffData['is_senior_manager'] == 0" class="btn btn-default" ng-click="changeManagerStatus(staffData['id'], 1)">建议评审</button></td>
                         <td ng-if="staffData['status'] == 1"><button class="btn btn-primary" ng-click="changeStatus(staffData['id'], 0)">在职</button> </td>
                         <td ng-if="staffData['status'] == 0"><button class="btn btn-danger" ng-click="changeStatus(staffData['id'], 1)">离职</button> </td>
                     </tr>

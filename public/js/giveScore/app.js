@@ -2,5 +2,6 @@ var giveScoreApp = angular.module('giveScoreApp',[
     'ui.bootstrap',
     'controllers',
     'giveScoreRoute',
-    'resService'
+    'resService',
+    'ui.select'
 ]);

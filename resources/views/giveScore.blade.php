@@ -40,6 +40,8 @@
         <div  ng-view ></div>
     </div>
 
+    <script src="{{ asset('angular-ui-select/dist/select.js') }}"></script>
+    <link href="{{ asset('angular-ui-select/dist/select.css') }}" rel="stylesheet" type="text/css" >
     <script src="{{ asset('js/giveScore/app.js') }}"></script>
     <script src="{{ asset('js/giveScore/giveScoreRoute.js') }}"></script>
     <script src="{{ asset('js/giveScore/controllers/showAssessmentController.js') }}"></script>

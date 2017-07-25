@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h3 style="text-align: center;">合理化建议</h3>
+            <div class="panel-body">
+                <br>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-md-2 col-md-offset-2 control-label" style="font-size: 18px;"><span style="color: red;">*</span>标题：</label>
+                        <div class="col-md-5">
+                            <input type="text" ng-model="advice.title" class="form-control">
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        <lable class="col-md-2 col-md-offset-2 control-label" style="font-size: 18px;"><span style="color: red;">*</span>建议内容：</lable>
+                        <div class="col-md-5">
+                            <textarea class="form-control" rows="7" ng-model="advice.content"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <br><br><br>
+                <div class="row" style="text-align: center;">
+                    <a class="btn btn-primary" style="font-size: 18px; width: 120px;" ng-click="updateAdvice()">提交</a>&nbsp;&nbsp;
+                    <a class="btn btn-default" style="font-size: 18px; width: 120px;" href="#/advice_show/{{advice.id}}">取消</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

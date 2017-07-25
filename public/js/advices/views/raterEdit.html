@@ -1,0 +1,67 @@
+<style>
+    td{
+        text-align: center;
+    }
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <br><br>
+            <h2 style="text-align: center;">合理化建议评审</h2>
+            <div class="panel-body">
+                <div class="col-md-10 col-md-offset-1">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td style="background: #f1f5fd; width: 17%;">标题</td>
+                            <td colspan="3">{{ adviceDetail['title'] }}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #f1f5fd; width: 17%;">建议内容</td>
+                            <td colspan="3">{{ adviceDetail['content'] }}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #f1f5fd; width: 17%;">提出日期</td>
+                            <td style="width: 33%;">{{ adviceDetail['created_at'] }}</td>
+                            <td style="background: #f1f5fd; width: 17%;">提出人</td>
+                            <td>{{ adviceDetail['name'] }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div>
+                        <span>是否采纳：</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button ng-if="isAdopt" class="btn btn-primary" style="padding: 2px 30px;">是</button>
+                        <button ng-if="!isAdopt" class="btn btn-default" ng-click="changeIsAdopt(1)" style="padding: 2px 30px;">是</button>&nbsp;&nbsp;
+                        <button ng-if="!isAdopt" class="btn btn-primary" style="padding: 2px 30px;">否</button>
+                        <button ng-if="isAdopt" class="btn btn-default" ng-click="changeIsAdopt(0)" style="padding: 2px 30px;">否</button>
+                    </div>
+                    <div style="padding-top:20px;" ng-if="isAdopt">
+                        <span>你的评价：</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span ng-if="!starArray[0]" ng-click="changeScore(1)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #999999; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="starArray[0]" ng-click="changeScore(1)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #ff9900; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="!starArray[1]" ng-click="changeScore(2)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #999999; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="starArray[1]" ng-click="changeScore(2)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #ff9900; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="!starArray[2]" ng-click="changeScore(3)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #999999; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="starArray[2]" ng-click="changeScore(3)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #ff9900; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="!starArray[3]" ng-click="changeScore(4)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #999999; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="starArray[3]" ng-click="changeScore(4)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #ff9900; cursor: pointer; margin-right: 10px;"></span>
+                        <span ng-if="!starArray[4]" ng-click="changeScore(5)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #999999; cursor: pointer; margin-right: 20px;"></span>
+                        <span ng-if="starArray[4]" ng-click="changeScore(5)" class="glyphicon glyphicon-star" style="font-size: 25px; color: #ff9900; cursor: pointer; margin-right: 20px;"></span>
+                        <span>（对应分值1-5分）</span>
+                    </div>
+                    <div style="padding-top:20px;" ng-if="isAdopt">
+                        <span>简评：</span>
+                    </div>
+                    <div style="padding-top:10px;" ng-if="isAdopt">
+                        <textarea class="form-control" ng-model="comment" ng rows="6">
+                        </textarea>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a class="btn btn-primary" style="font-size: 17px; padding: 2px 30px;" ng-click="saveRaterEdit(adviceDetail['id'])">提交</a>&nbsp;&nbsp;
+                        <a class="btn btn-primary" style="font-size: 17px; padding: 2px 30px;" href="#/rater/index">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

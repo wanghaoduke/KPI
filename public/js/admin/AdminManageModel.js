@@ -4,9 +4,9 @@ resService.factory("AdminManage", ['$http', '$q',
         var adminManage = {};
 
         //获取所有员工信息
-        adminManage.getAllStaffs = function(){
+        adminManage.getAllStaffs = function(value){
             return $q(function(resolve, reject){
-                $http.get('/admin/get_all_staffs_with_leave')
+                $http.get('/admin/get_all_staffs_with_leave?status=' + value)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -168,6 +168,24 @@ resService.factory("AdminManage", ['$http', '$q',
             });
         };
 
+        //改变员工分组
+        adminManage.saveTheDepartment = function(id, department){
+            return $q(function(resolve, reject){
+                $http({
+                    method: "POST",
+                    url: "/admin/save_staff_department/"+ id + "?department=" + department,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                    .success(function(data){
+                        resolve(data);
+                    }).error(function(data){
+                    reject(data);
+                });
+            });
+        };
+
         //改变assessment状态
         adminManage.changeAssessmentCompleted = function(id, value){
             return $q(function(resolve, reject){
@@ -192,6 +210,24 @@ resService.factory("AdminManage", ['$http', '$q',
                 $http({
                     method: "POST",
                     url: "/admin/delete_assessment/" + id,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                    .success(function(data){
+                        resolve(data);
+                    }).error(function(data){
+                    reject(data);
+                });
+            });
+        };
+        
+        //改变后台管理权限
+        adminManage.changeAdmin = function(id, value){
+            return $q(function(resolve, reject){
+                $http({
+                    method: "POST",
+                    url: "/admin/change_is_admin/" + id + "?is_admin=" + value,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }

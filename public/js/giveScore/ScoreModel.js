@@ -45,6 +45,25 @@ resService.factory('Score', ['$http', '$q',
                 });
             });
         };
+        
+        //新评分保存
+        score.saveTheStaffScore = function(id, data){
+            return $q(function(resolve, reject){
+                $http({
+                    method: "POST",
+                    url: "/score/save_the_staff_score/" + id,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    data: $.param(data)
+                })
+                    .success(function(data){
+                        resolve(data);
+                    }).error(function(data){
+                    reject(data);
+                });
+            });
+        };
 
         return score;
     }
