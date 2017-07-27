@@ -7,6 +7,7 @@ use App\Assessment;
 use App\StaffScore;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
@@ -143,6 +144,14 @@ class IndexController extends Controller
         }
 
 //        \Log::info($developmentScores);
-        return view('kpiIndex', compact('title1', 'title2', 'titleLink1', 'titleLink2', 'assessment', 'planScores', 'developmentScores'));
+        //判断是否显示评分系统
+        if(Auth::check()){
+            $count = StaffScore::leftJoin('assessments', 'assessments.id', '=', 'staff_scores.assessment_id')->where('rater_id', auth::user()->id)->where('assessments.is_completed', 0)->count();
+        }
+        return view('kpiIndex', compact('title1', 'title2', 'titleLink1', 'titleLink2', 'assessment', 'planScores', 'developmentScores', 'count'));
+    }
+
+    public function rulesDown(){
+        return response()->download(realpath(base_path('public')).'/downFiles/rules.docx');
     }
 }

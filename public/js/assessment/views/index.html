@@ -40,12 +40,17 @@
                     <h3 style="margin-bottom: 20px;" ng-if="assessment['is_completed']">{{ assessment['year'] }}年{{assessment['month']}}月考核</h3>
                     <!--<br>-->
                     <h4 ng-if="assessment['is_completed']" style="margin-bottom: 20px;">评审结束!</h4>
-                    <h4 ng-if="!assessment['is_completed']"  style="margin-bottom: 20px;">
-                        <span>共{{ assessment['count_rater'] }}人评审，</span>
+                    <h5 ng-if="!assessment['is_completed']"  style="margin-bottom: 10px;">
+                        <span>质量和态度：共{{ assessment['count_rater'] }}人评审，</span>
                         <span ng-if="assessment['count_no_give_rater'] > 0">还有{{ assessment['count_no_give_rater'] }}人未评</span>
-                        <span ng-if="assessment['count_no_give_rater'] == 0">所有人已评完。</span>
-                    </h4>
-                    <h4 ng-if="(assessment['count_no_give_rater'] == 0) && (assessment['is_completed'] == 0)"><button class="btn btn-primary" ng-click="changeAssessmentToCompleted(assessment['id'])">评审结束</button></h4>
+                        <span ng-if="assessment['count_no_give_rater'] == 0">所有人已评完</span>
+                    </h5>
+                    <h5 ng-if="!assessment['is_completed']"  style="margin-bottom: 10px;">
+                        <span>合理化建议：</span>
+                        <span ng-if="assessment['not_processed_advices_count'] == 0">已全部评完</span>
+                        <span ng-if="assessment['not_processed_advices_count'] > 0">还有{{ assessment['not_processed_advices_count'] }}条未评审</span>
+                    </h5>
+                    <h4 ng-if="(assessment['count_no_give_rater'] == 0) && (assessment['is_completed'] == 0) && (assessment['not_processed_advices_count'] == 0)"><button class="btn btn-primary" ng-click="changeAssessmentToCompleted(assessment['id'])">评审结束</button></h4>
                     <h4 ng-if="(assessment['is_completed'] == 1)"><a class="newA" href="/show_score/index#/?searchDate={{assessment['year']}}-{{assessment['month']}}">查看评审结果</a></h4>
 
                 </div>

@@ -12,6 +12,7 @@
 */
 
 Route::get('/', "IndexController@index");
+Route::get('/rules_down', "IndexController@rulesDown");
 
 Auth::routes();
 

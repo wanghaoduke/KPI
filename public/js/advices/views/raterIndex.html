@@ -23,10 +23,12 @@
                     <button ng-if="team != 'Adopted'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeTeam('Adopted')">已采纳</button>
                     <button ng-if="team == 'notAdopted'" class="btn btn-primary" style="margin-bottom: 10px;">未采纳</button>
                     <button ng-if="team != 'notAdopted'" class="btn btn-default" style="margin-bottom: 10px;" ng-click="changeTeam('notAdopted')">未采纳</button>
-                    <div style="float: right;">
-                        <input ng-model="search">
-                        <button class="btn btn-primary" style="padding: 3px 10px;" ng-click="searchInput()">搜索</button>
-                    </div>
+                    <input ng-model="search" ng-blur="searchInput()" style="float: right;">
+                    <span ng-show="showClear" ng-click="clearInput()" class="glyphicon glyphicon-remove" style="left: 150px; float: right; top: 8px;"></span>
+
+                        <!--<a style="text-decoration: none; position:relative; left: -25px; font-size: 23px; color: rgba(145, 153, 158, 0.45); cursor: pointer; background:  url('../images/user_icon.png") no-repeat 315px ');"></a>-->
+                        <!--<button class="btn btn-primary" style="padding: 3px 10px;" ng-click="searchInput()">搜索</button>-->
+
                     <br>
                     <table class="table">
                         <tr>
@@ -39,7 +41,11 @@
                         </tr>
                         <tr ng-repeat="formData in paged['detail']">
                             <td style="width: 18%;"><span title="{{ formData['title'] }}" style="cursor: pointer;">{{ formData['showTitle'] }}</span></td>
-                            <td style="width: 35%;"><a href="" ng-click="showContentDetail(formData['content'])">{{ formData['showContent'] }}</a></td>
+                            <!--<td style="width: 35%;"><a href="" ng-click="showContentDetail(formData['content'])">{{ formData['showContent'] }}</a></td>-->
+                            <td >
+                                    <a href="" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{ formData['content'] }}">{{ formData['showContent'] }}</a>
+                            </td>
+                            <!--<td></td>-->
                             <td>{{ formData['name'] }}</td>
                             <td>{{ formData['created_at'] }}</td>
                             <!--<td>{{ formData['is_processed'] }}</td>-->
@@ -47,12 +53,13 @@
                             <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 0">未采纳</td>
                             <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 1">已采纳</td>
                             <td ng-if="formData['is_processed'] == 0"><a class="btn btn-primary" style="padding: 0px 5px;" href="#/rater_edit/{{formData['id']}}">去评审</a></td>
-                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 1">+{{formData['score']}}分</td>
-                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 0"></td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 1">+{{formData['score']}}分&nbsp;&nbsp;<a href="#/rater_edit/{{formData['id']}}" ng-if="formData['can_change']">编辑</a></td>
+                            <td ng-if="formData['is_processed'] == 1 && formData['is_accept'] == 0"><a href="#/rater_edit/{{formData['id']}}" ng-if="formData['can_change']">编辑</a></td>
                         </tr>
                     </table>
+                    </div>
                     <div style="text-align: center;">
-                        <uib-pagination ng-model="currentPage" total-items="formDatas.length" max-size="5" items-per-page="3" boundary-links="true" force-ellipses="true"></uib-pagination>
+                        <uib-pagination ng-model="currentPage" total-items="formDatas.length" max-size="5" items-per-page="15" boundary-links="true" force-ellipses="true"></uib-pagination>
                     </div>
                 </div>
             </div>

@@ -34,39 +34,46 @@ controllers.controller('AdvicesController',['$scope', "Advices", "$uibModal",
 
         
         //保存建议呀
+        $scope.isSaving = false;
         $scope.saveAdvice = function(){
-            Advices.saveTheAdvice($scope.advice).then(function(data){
-                Advices.getAllAdvices().then(function(data){
-                    $scope.formDatas = data;
-                    $scope.advice = {};
-                    for(var i = 0; i < $scope.formDatas.length; i++){
-                        if($scope.formDatas[i]['title'].length > 10){
-                            $scope.formDatas[i]['showTitle'] = $scope.formDatas[i]['title'].substr(0, 8);
-                            $scope.formDatas[i]['showTitle'] = $scope.formDatas[i]['showTitle'] + '...';
-                        }else{
-                            $scope.formDatas[i]['showTitle'] = $scope.formDatas[i]['title'];
+            if(!$scope.isSaving){
+                $scope.isSaving = true;
+                Advices.saveTheAdvice($scope.advice).then(function(data){
+                    alert("已经保存成功！");
+                    $scope.isSaving = false;
+                    Advices.getAllAdvices().then(function(data){
+                        $scope.formDatas = data;
+                        $scope.advice = {};
+                        for(var i = 0; i < $scope.formDatas.length; i++){
+                            if($scope.formDatas[i]['title'].length > 10){
+                                $scope.formDatas[i]['showTitle'] = $scope.formDatas[i]['title'].substr(0, 8);
+                                $scope.formDatas[i]['showTitle'] = $scope.formDatas[i]['showTitle'] + '...';
+                            }else{
+                                $scope.formDatas[i]['showTitle'] = $scope.formDatas[i]['title'];
+                            }
+                            if($scope.formDatas[i]['content'].length > 20){
+                                $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['content'].substr(0, 17);
+                                $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['showContent'] + '...';
+                            }else{
+                                $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['content'];
+                            }
                         }
-                        if($scope.formDatas[i]['content'].length > 20){
-                            $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['content'].substr(0, 17);
-                            $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['showContent'] + '...';
-                        }else{
-                            $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['content'];
+                        $scope.currentPage = 1;
+                        $scope.paged = {
+                            detail: $scope.formDatas.slice(0, 10)
+                        };
+                    });
+                },function(data){
+                    $scope.isSaving = false;
+                    if(data){
+                        if(data['data']){
+                            angular.forEach(data['data'], function(data){
+                                alert(data);
+                            })
                         }
                     }
-                    $scope.currentPage = 1;
-                    $scope.paged = {
-                        detail: $scope.formDatas.slice(0, 10)
-                    };
                 });
-            },function(data){
-                if(data){
-                    if(data['data']){
-                       angular.forEach(data['data'], function(data){
-                           alert(data);
-                       })
-                    }
-                }
-            });
+            }
         };
         
         
@@ -123,6 +130,7 @@ controllers.controller("RaterAdvicesController", ['$scope', 'Advices', '$uibModa
     function($scope, Advices, $uibModal){
         $scope.team = "all";
         $scope.search = "";
+        $scope.showClear = false;
 
         function getAllData (){
             Advices.getAllSuggesterAllAdvices($scope.team, $scope.search).then(function(data){
@@ -142,19 +150,38 @@ controllers.controller("RaterAdvicesController", ['$scope', 'Advices', '$uibModa
                     }
                 }
                 $scope.currentPage = 1;
-                $scope.itemsPerPage = 3;
+                $scope.itemsPerPage = 15;
                 $scope.$watch('currentPage', function(){
                     var begin = ($scope.currentPage - 1) * $scope.itemsPerPage;
                     var end = begin + $scope.itemsPerPage;
                     $scope.paged = {
                         detail: $scope.formDatas.slice(begin, end)
                     };
+                    $(document).ready(function(){
+                        $("[data-toggle='popover']").popover();
+                    });
                 });
             });
         }
 
         //获取所有的advice内容
         getAllData();
+
+        //清除input内的搜索内容
+        $scope.clearInput = function(){
+            $scope.search = "";
+            $scope.showClear = false;
+            getAllData();
+        };
+
+        //什么时候显示清除按钮
+        $scope.$watch("search", function(){
+            if($scope.search.length > 0){
+                $scope.showClear = true;
+            }else{
+                $scope.showClear = false;
+            }
+        });
 
         //搜索框内内容
         $scope.searchInput = function(){
@@ -208,9 +235,15 @@ controllers.controller("RaterEditController", ["$scope", "Advices", "$routeParam
     function($scope, Advices, $routeParams, $location){
         $scope.isAdopt = false;
         $scope.starArray = [false, false, false, false, false];
+        $scope.rater = {};
         //获取advice的内容
         Advices.raterGetAdviceDetail($routeParams['id']).then(function(data){
             $scope.adviceDetail = data[0];
+            if($scope.adviceDetail['is_accept'] == 1){
+                $scope.isAdopt = $scope.adviceDetail['is_accept'];
+                $scope.changeScore($scope.adviceDetail['score']);
+                $scope.rater.comment = $scope.adviceDetail['comment'];
+            }
         });
 
         //修改分数的五角星
@@ -242,7 +275,7 @@ controllers.controller("RaterEditController", ["$scope", "Advices", "$routeParam
             $scope.temdata = {};
             $scope.temdata['is_processed'] = 1;
             $scope.temdata['score'] = $scope.raterScore;
-            $scope.temdata['comment'] = $scope.comment;
+            $scope.temdata['comment'] = $scope.rater.comment;
             if($scope.isAdopt){
                 $scope.temdata['is_accept'] = 1;
                 if(!$scope.temdata['score']){

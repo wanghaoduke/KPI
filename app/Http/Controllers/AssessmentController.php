@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Advice;
 use App\AppResponse;
 use App\Assessment;
 use App\StaffScore;
@@ -228,7 +229,12 @@ class AssessmentController extends Controller
     //获取所有的assessment
     public function getAllAssessments (){
         $assessments = Assessment::select([
-            '*',
+            'assessments.year',
+            'assessments.month',
+            'assessments.is_completed',
+            'assessments.created_at',
+            'assessments.updated_at',
+            'assessments.id',
             \DB::raw("(select count(distinct(rater_id)) 
                          from staff_scores
                          where staff_scores.assessment_id = assessments.id
@@ -241,6 +247,23 @@ class AssessmentController extends Controller
             ->orderBy('year','DESC')
             ->orderBy('month','DESC')
             ->get();
+        $advices = Advice::select([
+            '*',
+            \DB::raw("date_format(created_at, '%Y')as year"),
+            \DB::raw("date_format(created_at, '%m')as month"),
+        ])->where("advices.is_processed", 0)
+            ->get();
+
+        $countArray = [];
+        for($i = 0; $i < count($assessments); $i++){
+            $countArray[$i] = 0;
+            for($j = 0; $j < count($advices); $j++){
+                if((intval($assessments[$i]['year']) == intval($advices[$j]['year'])) && (intval($assessments[$i]['month']) == intval($advices[$j]['month']))){
+                    $countArray[$i] = $countArray[$i] + 1;
+                }
+            }
+            $assessments[$i]->not_processed_advices_count = $countArray[$i];
+        }
         return $assessments;
     }
 

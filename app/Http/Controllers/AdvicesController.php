@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Advice;
 use App\AppResponse;
+use App\Assessment;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -148,9 +149,25 @@ class AdvicesController extends Controller
             }
             $idArray3 = array_flip($idArray);
             $idArray = array_flip($idArray3);
-            $advices = $advices->whereIn("advices.id", $idArray)->get();
+            $advices = $advices->whereIn("advices.id", $idArray)->orderBy("advices.created_at", "DESC")->get();
         }else{
-           $advices = $advices->get();
+           $advices = $advices->orderBy("advices.created_at", "DESC")->get();
+        }
+
+        $year = [];
+        $month = [];
+        //判断是否可以修改评分
+        $notCompletedAssessments = Assessment::where('is_completed', 0)->get();
+        for($i = 0; $i < count($advices); $i++){
+            $year[$i] = intval(date("Y", strtotime($advices[$i]['created_at'])));
+            $month[$i] = intval(date("m", strtotime($advices[$i]['created_at'])));
+            $advices[$i]->can_change = false;
+            for($j = 0; $j < count($notCompletedAssessments); $j++){
+                if(($year[$i] == $notCompletedAssessments[$j]['year']) && ($month[$i] == $notCompletedAssessments[$j]['month'])){
+                    $advices[$i]->can_change = true;
+                }
+            }
+
         }
         return $advices;
     }
