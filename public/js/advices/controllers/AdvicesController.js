@@ -148,21 +148,35 @@ controllers.controller("RaterAdvicesController", ['$scope', 'Advices', '$uibModa
                     }else{
                         $scope.formDatas[i]['showContent'] = $scope.formDatas[i]['content'];
                     }
+                    // $scope.formDatas[i]['showTips'] = false;
                 }
+
                 $scope.currentPage = 1;
                 $scope.itemsPerPage = 15;
+
                 $scope.$watch('currentPage', function(){
                     var begin = ($scope.currentPage - 1) * $scope.itemsPerPage;
                     var end = begin + $scope.itemsPerPage;
                     $scope.paged = {
                         detail: $scope.formDatas.slice(begin, end)
                     };
-                    $(document).ready(function(){
-                        $("[data-toggle='popover']").popover();
-                    });
+                    for(var i = 0; i < $scope.paged['detail'].length; i++){
+                        $scope.paged['detail'][i]['showTips'] = false;
+                    }
                 });
             });
         }
+        // $scope.$watch('currentPage', function(){
+        //     // console.log('sss');
+        //     // console.log($scope.currentPage);
+        //     if($scope.currentPage){
+        //         var begin = ($scope.currentPage - 1) * $scope.itemsPerPage;
+        //         var end = begin + $scope.itemsPerPage;
+        //         $scope.paged = {
+        //             detail: $scope.formDatas.slice(begin, end)
+        //         };
+        //     }
+        // });
 
         //获取所有的advice内容
         getAllData();
@@ -195,41 +209,71 @@ controllers.controller("RaterAdvicesController", ['$scope', 'Advices', '$uibModa
         };
 
 
-        $scope.$watch('currentPage', function(){
-            // console.log('sss');
-            // console.log($scope.currentPage);
-            if($scope.currentPage){
-                var begin = ($scope.currentPage - 1) * $scope.itemsPerPage;
-                var end = begin + $scope.itemsPerPage;
-                $scope.paged = {
-                    detail: $scope.formDatas.slice(begin, end)
-                };
-            }
-        });
+
         
         //点击建议内容后显示弹出框
-        $scope.showContentDetail = function(content){
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/showSuggesterContent.html',
-                controller: 'ShowSuggesterContentController',
-                size: 'md',
-                // backdrop: 'static'
-                resolve: {
-                    adviceContent: function(){
-                        return content;
+        $scope.is_show_stauts = true;
+        $scope.showContentDetail = function(id){
+            if(id == $scope.tempId){
+                for(var i = 0; i < $scope.paged['detail'].length; i++){
+                    if(id == $scope.paged['detail'][i]['id']){
+                        $scope.paged['detail'][i]['showTips'] = !$scope.tempValue;
+                        $scope.tempValue = $scope.paged['detail'][i]['showTips'];
+                    }else{
+                        $scope.paged['detail'][i]['showTips'] = false;
                     }
                 }
-            });
-        }
+            }
+        };
+
+        //失去焦点后处理
+        $scope.lostBlur = function(){
+            if($scope.is_show_stauts){
+                for(var i = 0; i < $scope.paged['detail'].length; i++){
+                    $scope.paged['detail'][i]['showTips'] = false;
+                }
+            }
+        };
+
+        //鼠标overA标签处理
+        $scope.mouseOverA = function(id, value){
+            $scope.tempId = id;
+            $scope.tempValue = value;
+        };
+
+        //鼠标离开A标签处理
+        $scope.mouseLeaveA = function(){
+            $scope.tempId = null;
+            $scope.tempValue = null;
+        };
+
+
+        //鼠标是否在弹出框内
+        $scope.getId = function(value){
+            $scope.is_show_stauts = value;
+        };
+        // $scope.showContentDetail = function(content){
+        //     var modalInstance = $uibModal.open({
+        //         templateUrl: 'views/showSuggesterContent.html',
+        //         controller: 'ShowSuggesterContentController',
+        //         size: 'md',
+        //         // backdrop: 'static'
+        //         resolve: {
+        //             adviceContent: function(){
+        //                 return content;
+        //             }
+        //         }
+        //     });
+        // }
 
     }
 ]);
 
-controllers.controller("ShowSuggesterContentController", ["$scope", "$uibModalInstance", "Advices", "adviceContent",
-    function($scope, $uibModalInstance, Advices, adviceContent){
-        $scope.adviceContent = adviceContent;
-    }
-]);
+// controllers.controller("ShowSuggesterContentController", ["$scope", "$uibModalInstance", "Advices", "adviceContent",
+//     function($scope, $uibModalInstance, Advices, adviceContent){
+//         $scope.adviceContent = adviceContent;
+//     }
+// ]);
 
 controllers.controller("RaterEditController", ["$scope", "Advices", "$routeParams", '$location',
     function($scope, Advices, $routeParams, $location){

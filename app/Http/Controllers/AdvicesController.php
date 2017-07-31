@@ -19,10 +19,10 @@ class AdvicesController extends Controller
         $title1 = '合理化建议';
         $title2 = null;
 
-        if(auth()->user()->id == 1){
-            $titleLink1 = '/advices#/suggester/index';
-        }else{
+        if(auth()->user()->is_senior_manager == 1){
             $titleLink1 = '/advices#/rater/index';
+        }else{
+            $titleLink1 = '/advices#/suggester/index';
         }
         $titleLink2 = null;
         
