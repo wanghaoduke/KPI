@@ -79,7 +79,7 @@
                        @endif
                    </div>
                     <div class="row">
-                        <a href="/rules_down" class="col-md-1 col-md-offset-9" style="text-align: right;">评分规则</a>
+                        <a href="/rules_down" class="col-md-2 col-md-offset-8" style="text-align: right;">评分规则</a>
                     </div>
                     <br>
 
