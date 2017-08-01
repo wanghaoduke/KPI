@@ -32,7 +32,7 @@
             <h3 style="text-align: center;">考核管理</h3>
             <div class="panel-body">
                 <h4>考核情况/新建考核</h4>
-                <div style=" background: #e2dede; margin: 40px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 166px; text-align: center; cursor: pointer;" class="col-md-3" ng-click="createNewAssessment()">
+                <div style=" background: #e2dede; margin: 38px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; height: 166px; text-align: center; cursor: pointer;" class="col-md-3" ng-click="createNewAssessment()">
                     <a id="create_Assessment" style="font-size: 110px; color: #aba5a5; text-decoration: none;">+</a>
                 </div>
                 <div ng-repeat="assessment in allAssessments" class="col-md-3" ng-class="{assessmentIsCompleted: assessment['is_completed'], assessmentNotCompleted: !assessment['is_completed']}">
