@@ -5,6 +5,7 @@
     }
     td{
         text-align: center;
+        position: relative;
     }
     
 </style>
@@ -61,7 +62,16 @@
                             <!--<td>{{ formData['score'] }}</td>-->
                             <td ng-if="formData['score'] > 0">+{{formData['score']}}分</td>
                             <td ng-if="!(formData['score'] > 0)"></td>
-                            <td ng-if="formData['comment']"><a href="" ng-click="showDetail(formData['comment'])">详情</a></td>
+                            <!--<td ng-if="formData['comment']"><a href="" ng-click="showDetail(formData['comment'])">详情</a></td>-->
+                            <td ng-if="formData['comment']">
+                                <a href="" ng-mouseover="mouseOverA(formData['id'], formData['showTips'])" ng-mouseleave="mouseLeaveA()" ng-click="changeShowTips(formData['id'])" ng-blur="lostBlurA()">详情</a>
+                                <div ng-if="formData['showTips']" class="popover fade bottom in" style="position: absolute; top: 25px; display: block; left: -100%; width: 300%;">
+                                    <div class="arrow" style="left: 50%"></div>
+                                    <div ng-mouseover="mouseOverDiv()" ng-mouseleave="mouseLeaveDiv()" ng-blur="lostBlurDiv()" tabindex="1" class="popover-content">
+                                        {{ formData['comment'] }}
+                                    </div>
+                                </div>
+                            </td>
                             <td ng-if="!formData['comment']"></td>
                         </tr>
                     </table>

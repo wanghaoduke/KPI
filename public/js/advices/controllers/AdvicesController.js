@@ -29,6 +29,9 @@ controllers.controller('AdvicesController',['$scope', "Advices", "$uibModal",
                 $scope.paged = {
                     detail: $scope.formDatas.slice(begin, end)
                 };
+                for(var i = 0; i < $scope.paged['detail'].length; i++){
+                    $scope.paged['detail'][i]['showTips'] = false;
+                }
             });
         });
 
@@ -62,6 +65,9 @@ controllers.controller('AdvicesController',['$scope', "Advices", "$uibModal",
                         $scope.paged = {
                             detail: $scope.formDatas.slice(0, 10)
                         };
+                        for(var i = 0; i < $scope.paged['detail'].length; i++){
+                            $scope.paged['detail'][i]['showTips'] = false;
+                        }
                     });
                 },function(data){
                     $scope.isSaving = false;
@@ -78,20 +84,63 @@ controllers.controller('AdvicesController',['$scope', "Advices", "$uibModal",
         
         
         //点击详情后弹出显示框
-        $scope.showDetail = function(comment){
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/showRaterComment.html',
-                controller: 'ShowRaterCommentController',
-                size: 'sm',
-                // backdrop: 'static'
-                resolve: {
-                    adviceComment: function(){
-                        return comment;
+        // $scope.showDetail = function(comment){
+        //     var modalInstance = $uibModal.open({
+        //         templateUrl: 'views/showRaterComment.html',
+        //         controller: 'ShowRaterCommentController',
+        //         size: 'sm',
+        //         // backdrop: 'static'
+        //         resolve: {
+        //             adviceComment: function(){
+        //                 return comment;
+        //             }
+        //         }
+        //     });
+        // }
+        
+        $scope.is_change_show = true;   //a标签失去焦点后 是否改变显示状态
+        $scope.mouseOverA = function(id, value){
+            $scope.advice_tempId = id;
+            $scope.advice_tempValue = value;
+        };
+        $scope.mouseLeaveA = function(){
+            $scope.advice_tempId = null;
+            $scope.advice_tempValue = null;
+        };
+        $scope.changeShowTips = function(id){   //点击a标签后事件
+            if(id == $scope.advice_tempId){
+                for(var i = 0; i < $scope.paged['detail'].length; i++){
+                    if(id == $scope.paged['detail'][i]['id']){
+                        $scope.paged['detail'][i]['showTips'] = !$scope.advice_tempValue;
+                        $scope.advice_tempValue = $scope.paged['detail'][i]['showTips'];
+                    }else{
+                        $scope.paged['detail'][i]['showTips'] = false;
                     }
                 }
-            });
-        }
+            }
+        };
         
+        $scope.lostBlurA = function(){
+            if($scope.is_change_show){
+                for(var i = 0; i < $scope.paged['detail'].length; i++){
+                    $scope.paged['detail'][i]['showTips'] = false;
+                }
+            }
+        };
+
+        $scope.mouseOverDiv = function(){
+            $scope.is_change_show = false;
+        };
+
+        $scope.mouseLeaveDiv = function(){
+            $scope.is_change_show = true;
+        };
+        
+        $scope.lostBlurDiv = function(){
+            for(var i = 0; i < $scope.paged['detail'].length; i++){
+                $scope.paged['detail'][i]['showTips'] = false;
+            }
+        };
     }
 ]);
 
