@@ -133,9 +133,33 @@ resService.factory("AdminManage", ['$http', '$q',
         };
         
         //获取默认策划组的评论员
-        adminManage.getPlanRater = function(){
+        // adminManage.getPlanRater = function(){
+        //     return $q(function(resolve, reject){
+        //         $http.get('/admin/get_plan_rater')
+        //             .success(function(data){
+        //                 resolve(data);
+        //             }).error(function(data){
+        //             reject(data);
+        //         });
+        //     });
+        // };
+
+        //获取默认开发组的评论员
+        // adminManage.getDevelopmentRater = function(){
+        //     return $q(function(resolve, reject){
+        //         $http.get('/admin/get_development_rater')
+        //             .success(function(data){
+        //                 resolve(data);
+        //             }).error(function(data){
+        //             reject(data);
+        //         });
+        //     });
+        // };
+
+        //获取默认的评论员
+        adminManage.getDepartmentRater = function(department){
             return $q(function(resolve, reject){
-                $http.get('/admin/get_plan_rater')
+                $http.get('/admin/get_raters?department='+department)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -148,18 +172,6 @@ resService.factory("AdminManage", ['$http', '$q',
         adminManage.getAllAssessmentsDetail = function(){
             return $q(function(resolve, reject){
                 $http.get('/admin/get_all_assessments_detail')
-                    .success(function(data){
-                        resolve(data);
-                    }).error(function(data){
-                    reject(data);
-                });
-            });
-        };
-
-        //获取默认开发组的评论员
-        adminManage.getDevelopmentRater = function(){
-            return $q(function(resolve, reject){
-                $http.get('/admin/get_development_rater')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){

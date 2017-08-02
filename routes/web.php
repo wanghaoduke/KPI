@@ -67,8 +67,9 @@ Route::post('/admin/change_staff_status/{id}', 'BackgroundManagement\StaffManage
 Route::post('/admin/change_staff_is_senior_manager/{id}', 'BackgroundManagement\StaffManagementController@changeStaffIsSeniorManager');
 
 //默认参评人管理
-Route::get('/admin/get_plan_rater', 'BackgroundManagement\RaterManagementController@getPlanRater');
-Route::get('/admin/get_development_rater', 'BackgroundManagement\RaterManagementController@getDevelopmentRater');
+//Route::get('/admin/get_plan_rater', 'BackgroundManagement\RaterManagementController@getPlanRater');
+//Route::get('/admin/get_development_rater', 'BackgroundManagement\RaterManagementController@getDevelopmentRater');
+Route::get('/admin/get_raters', 'BackgroundManagement\RaterManagementController@getRaters');
 Route::post('/admin/save_rater_percentage/{id}', 'BackgroundManagement\RaterManagementController@saveRaterPercentage');
 Route::post('/admin/delete_default_rater/{id}', 'BackgroundManagement\RaterManagementController@deleteDefaultRater');
 Route::post('/admin/add_new_raters', 'BackgroundManagement\RaterManagementController@addNewRaters');

@@ -22,6 +22,21 @@ class RaterManagementController extends Controller
         return $raters;
     }
 
+    //获取评论员
+    public function getRaters(Request $request){
+        switch($request->get('department')){
+            case 'plan':
+                $raters = User::where('is_default_plan', 1)->get();
+                break;
+            case 'development':
+                $raters = User::where('is_default_development', 1)->get();
+                break;
+            default:
+                $raters = User::get();
+        }
+        return $raters;
+    }
+
     //保存默认百分比
     public function saveRaterPercentage($id, Request $request){
 //        \Log::info($request->all());

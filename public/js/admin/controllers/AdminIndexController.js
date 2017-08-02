@@ -80,20 +80,38 @@ controllers.controller("StaffManageController", ["$scope", "AdminManage",
 controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModal',
     function($scope, AdminManage, $uibModal){
         //获取默认策划的评论员信息
-        AdminManage.getPlanRater().then(function(data){
-            $scope.planRaters = data;
-            for(var i = 0; i < $scope.planRaters.length; i++){
-                $scope.planRaters[i]['is_edit'] = false;
-            }
-        });
-        
+        function getRaters(department){
+            AdminManage.getDepartmentRater(department).then(function(data){
+                if(department == 'plan'){
+                    $scope.planRaters = data;
+                    for(var i = 0; i < $scope.planRaters.length; i++){
+                        $scope.planRaters[i]['is_edit'] = false;
+                    }
+                }
+                if(department == 'development'){
+                    $scope.developmentRaters = data;
+                    for(var i = 0; i < $scope.developmentRaters.length; i++){
+                        $scope.developmentRaters[i]['is_edit'] = false;
+                    }
+                }
+            });
+        }
+        getRaters("plan");
+        getRaters("development");
+        // AdminManage.getPlanRater().then(function(data){
+        //     $scope.planRaters = data;
+        //     for(var i = 0; i < $scope.planRaters.length; i++){
+        //         $scope.planRaters[i]['is_edit'] = false;
+        //     }
+        // });
+
         //获取默认开发的评论员信息
-        AdminManage.getDevelopmentRater().then(function(data){
-            $scope.developmentRaters = data;
-            for(var i = 0; i < $scope.developmentRaters.length; i++){
-                $scope.developmentRaters[i]['is_edit'] = false;
-            }
-        });
+        // AdminManage.getDevelopmentRater().then(function(data){
+        //     $scope.developmentRaters = data;
+        //     for(var i = 0; i < $scope.developmentRaters.length; i++){
+        //         $scope.developmentRaters[i]['is_edit'] = false;
+        //     }
+        // });
         
         //让百分比可以修改
         $scope.letPercentageEdit = function(id, team){
@@ -142,24 +160,25 @@ controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModa
         //删除默认的评论员
         $scope.deleteRater = function(id, team){
             AdminManage.deleteDefaultRater(id,{'id': id, "team": team}).then(function(data){
-                if(team == 'plan'){
-                    AdminManage.getPlanRater().then(function(data){
-                        $scope.planRaters = data;
-                        for(var i = 0; i < $scope.planRaters.length; i++){
-                            $scope.planRaters[i]['is_edit'] = false;
-                        }
-                    });
-                }
-                if(team == "development"){
-                    AdminManage.getDevelopmentRater().then(function(data){
-                        $scope.developmentRaters = data;
-                        for(var i = 0; i < $scope.developmentRaters.length; i++){
-                            $scope.developmentRaters[i]['is_edit'] = false;
-                        }
-                    });
-                }
+                // if(team == 'plan'){
+                //     AdminManage.getPlanRater().then(function(data){
+                //         $scope.planRaters = data;
+                //         for(var i = 0; i < $scope.planRaters.length; i++){
+                //             $scope.planRaters[i]['is_edit'] = false;
+                //         }
+                //     });
+                // }
+                // if(team == "development"){
+                //     AdminManage.getDevelopmentRater().then(function(data){
+                //         $scope.developmentRaters = data;
+                //         for(var i = 0; i < $scope.developmentRaters.length; i++){
+                //             $scope.developmentRaters[i]['is_edit'] = false;
+                //         }
+                //     });
+                // }
+                getRaters(team);
             });
-        }
+        };
         
         //点击打开弹出页面选择员工
         $scope.addRater = function(team){
@@ -182,19 +201,21 @@ controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModa
             });
             modalInstance.result.then(function(result){
                 //获取默认策划的评论员信息
-                AdminManage.getPlanRater().then(function(data){
-                    $scope.planRaters = data;
-                    for(var i = 0; i < $scope.planRaters.length; i++){
-                        $scope.planRaters[i]['is_edit'] = false;
-                    }
-                });
+                // AdminManage.getPlanRater().then(function(data){
+                //     $scope.planRaters = data;
+                //     for(var i = 0; i < $scope.planRaters.length; i++){
+                //         $scope.planRaters[i]['is_edit'] = false;
+                //     }
+                // });
                 //获取默认开发的评论员信息
-                AdminManage.getDevelopmentRater().then(function(data){
-                    $scope.developmentRaters = data;
-                    for(var i = 0; i < $scope.developmentRaters.length; i++){
-                        $scope.developmentRaters[i]['is_edit'] = false;
-                    }
-                });
+                // AdminManage.getDevelopmentRater().then(function(data){
+                //     $scope.developmentRaters = data;
+                //     for(var i = 0; i < $scope.developmentRaters.length; i++){
+                //         $scope.developmentRaters[i]['is_edit'] = false;
+                //     }
+                // });
+                getRaters("plan");
+                getRaters("development");
             });
         };
     }
