@@ -11,7 +11,7 @@ class RaterManagementController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('admin');
     }
 
     //获得策划组的评论员
@@ -27,7 +27,7 @@ class RaterManagementController extends Controller
 //    }
 
     //获取评论员
-    public function getRaters(Request $request){
+    public function index(Request $request){
         switch($request->get('department')){
             case 'plan':
                 $raters = User::where('is_default_plan', 1)->get();

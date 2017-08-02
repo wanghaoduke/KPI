@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 class StaffManagementController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('admin');
     }
 
     //获取全部员工信息 包括离职的
-    public function getAllStaffsWithLeave(Request $request){
+    public function index(Request $request){
 //        \Log::info(auth()->user()->id);
         $staffs = User::select()->where('id', '!=', auth()->user()->id);
         switch($request->get('status')){

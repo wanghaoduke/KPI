@@ -6,7 +6,7 @@ resService.factory("AdminManage", ['$http', '$q',
         //获取所有员工信息
         adminManage.getAllStaffs = function(value){
             return $q(function(resolve, reject){
-                $http.get('/admin/staff_management/get_all_staffs_with_leave?status=' + value)
+                $http.get('/admin/staff_management?status=' + value)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -45,7 +45,7 @@ resService.factory("AdminManage", ['$http', '$q',
             return $q(function(resolve, reject){
                 $http({
                     method: 'PUT',
-                    url: "/admin/raters_management/update_raters/" + id,
+                    url: "/admin/raters_management/" + id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -176,7 +176,7 @@ resService.factory("AdminManage", ['$http', '$q',
         //获取默认的评论员
         adminManage.getDepartmentRater = function(department){
             return $q(function(resolve, reject){
-                $http.get('/admin/raters_management/get_raters?department='+department)
+                $http.get('/admin/raters_management?department='+department)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -188,7 +188,7 @@ resService.factory("AdminManage", ['$http', '$q',
         //获取全部assessment
         adminManage.getAllAssessmentsDetail = function(){
             return $q(function(resolve, reject){
-                $http.get('/admin/assessment_management/all_assessments_detail')
+                $http.get('/admin/assessment_management/index')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -220,7 +220,7 @@ resService.factory("AdminManage", ['$http', '$q',
             return $q(function(resolve, reject){
                 $http({
                     method: "PUT",
-                    url: "/admin/assessment_management/update/" + id,
+                    url: "/admin/assessment_management/" + id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -237,7 +237,7 @@ resService.factory("AdminManage", ['$http', '$q',
         //删除assessment
         adminManage.deleteAssessment = function(id){
             return $q(function(resolve, reject){
-                $http.delete('/admin/assessment_management/destroy/' + id)
+                $http.delete('/admin/assessment_management/' + id)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -251,7 +251,7 @@ resService.factory("AdminManage", ['$http', '$q',
             return $q(function(resolve, reject){
                 $http({
                     method: "PUT",
-                    url: "/admin/staff_management/update/" + id,
+                    url: "/admin/staff_management/" + id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },

@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 class TheAssessmentsManagementController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('admin');
     }
 
     //获取全部assessment
-    public function getAllAssessmentsDetail (){
+    public function index (){
         $assessments = Assessment::orderBy('year', "DESC")->orderBy("month", "DESC")->get();
         return $assessments;
     }
