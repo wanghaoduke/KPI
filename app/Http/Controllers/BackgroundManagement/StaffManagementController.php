@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class StaffManagementController extends Controller
 {
-    public function __construct(){
-        $this->middleware('admin');
-    }
 
     //获取全部员工信息 包括离职的
     public function index(Request $request){

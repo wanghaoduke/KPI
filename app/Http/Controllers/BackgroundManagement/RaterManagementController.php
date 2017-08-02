@@ -10,10 +10,6 @@ use Illuminate\Http\Request;
 class RaterManagementController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('admin');
-    }
-
     //获得策划组的评论员
 //    public function getPlanRater(){
 //        $raters = User::where('is_default_plan', 1)->get();

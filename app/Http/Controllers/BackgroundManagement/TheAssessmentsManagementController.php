@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 
 class TheAssessmentsManagementController extends Controller
 {
-    public function __construct(){
-        $this->middleware('admin');
-    }
 
     //获取全部assessment
     public function index (){
