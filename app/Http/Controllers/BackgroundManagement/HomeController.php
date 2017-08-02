@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-
+    public function __construct(){
+        $this->middleware('auth');
+    }
+    
     public function index(Request $request){
         $title1 = '首页';
         $title2 = '后台管理页面';

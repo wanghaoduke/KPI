@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class TheAssessmentsManagementController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     //获取全部assessment
     public function getAllAssessmentsDetail (){
         $assessments = Assessment::orderBy('year', "DESC")->orderBy("month", "DESC")->get();
@@ -17,12 +21,12 @@ class TheAssessmentsManagementController extends Controller
     }
 
     //改变assessment状态
-    public function changeAssessmentCompleted ($id, Request $request){
+    public function update ($id, Request $request){
         $assessment = Assessment::find($id)->update(['is_completed' => $request->get('is_completed')]);
     }
 
     //删除assessment
-    public function deleteAssessment($id){
+    public function destroy($id){
 //        $assessemnt = Assessment::find($id)->delete();
         \DB::beginTransaction();
         try{

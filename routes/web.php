@@ -59,26 +59,29 @@ Route::post('/get_period_all_scores', 'ShowScoreController@getPeriodAllScores');
 Route::get('/admin', 'BackgroundManagement\HomeController@index');
 
 //员工管理
-Route::get('/admin/get_all_staffs_with_leave', 'BackgroundManagement\StaffManagementController@getAllStaffsWithLeave');
-Route::post('/admin/change_is_admin/{id}', 'BackgroundManagement\StaffManagementController@changeIsAdmin');
-Route::post('/admin/save_staff_department/{id}', 'BackgroundManagement\StaffManagementController@saveStaffDepartment');
-Route::post('/admin/change_staff_jurisdiction/{id}', 'BackgroundManagement\StaffManagementController@changeStaffJurisdiction');
-Route::post('/admin/change_staff_status/{id}', 'BackgroundManagement\StaffManagementController@changeStaffStatus');
-Route::post('/admin/change_staff_is_senior_manager/{id}', 'BackgroundManagement\StaffManagementController@changeStaffIsSeniorManager');
+Route::get('/admin/staff_management/get_all_staffs_with_leave', 'BackgroundManagement\StaffManagementController@getAllStaffsWithLeave');//获取全部员工信息 包括离职的
+Route::put('/admin/staff_management/update/{id}', 'BackgroundManagement\StaffManagementController@update');
+//Route::post('/admin/change_is_admin/{id}', 'BackgroundManagement\StaffManagementController@changeIsAdmin');//更改员工的后台权限
+//Route::post('/admin/save_staff_department/{id}', 'BackgroundManagement\StaffManagementController@saveStaffDepartment');//后台更改员工的分组
+//Route::post('/admin/change_staff_jurisdiction/{id}', 'BackgroundManagement\StaffManagementController@changeStaffJurisdiction');//改变员工的权限
+//Route::post('/admin/change_staff_status/{id}', 'BackgroundManagement\StaffManagementController@changeStaffStatus');//改变员工的状态
+//Route::post('/admin/change_staff_is_senior_manager/{id}', 'BackgroundManagement\StaffManagementController@changeStaffIsSeniorManager');//改变员工是否是高级管理员
 
 //默认参评人管理
 //Route::get('/admin/get_plan_rater', 'BackgroundManagement\RaterManagementController@getPlanRater');
 //Route::get('/admin/get_development_rater', 'BackgroundManagement\RaterManagementController@getDevelopmentRater');
-Route::get('/admin/get_raters', 'BackgroundManagement\RaterManagementController@getRaters');
-Route::post('/admin/save_rater_percentage/{id}', 'BackgroundManagement\RaterManagementController@saveRaterPercentage');
-Route::post('/admin/delete_default_rater/{id}', 'BackgroundManagement\RaterManagementController@deleteDefaultRater');
-Route::post('/admin/add_new_raters', 'BackgroundManagement\RaterManagementController@addNewRaters');
-Route::post('/admin/get_all_staffs_no_leave_no_selected', 'BackgroundManagement\RaterManagementController@getAllStaffsNoLeave');
+Route::get('/admin/raters_management/get_raters', 'BackgroundManagement\RaterManagementController@getRaters');
+Route::put('/admin/raters_management/update_raters/{id}', 'BackgroundManagement\RaterManagementController@update');
+//Route::post('/admin/save_rater_percentage/{id}', 'BackgroundManagement\RaterManagementController@saveRaterPercentage');
+//Route::post('/admin/delete_default_rater/{id}', 'BackgroundManagement\RaterManagementController@deleteDefaultRater');
+Route::put('/admin/raters_management/update_new_raters', 'BackgroundManagement\RaterManagementController@addNewRaters');
+Route::get('/admin/raters_management/all_staffs_no_leave_no_selected', 'BackgroundManagement\RaterManagementController@getAllStaffsNoLeave');
+//Route::post('/admin/get_all_staffs_no_leave_no_selected', 'BackgroundManagement\RaterManagementController@getAllStaffsNoLeave');
 
 //每月的考核管理
-Route::get('/admin/get_all_assessments_detail', 'BackgroundManagement\TheAssessmentsManagementController@getAllAssessmentsDetail');
-Route::post('/admin/change_assessment_completed/{id}', 'BackgroundManagement\TheAssessmentsManagementController@changeAssessmentCompleted');
-Route::post('/admin/delete_assessment/{id}', 'BackgroundManagement\TheAssessmentsManagementController@deleteAssessment');
+Route::get('/admin/assessment_management/all_assessments_detail', 'BackgroundManagement\TheAssessmentsManagementController@getAllAssessmentsDetail');
+Route::put('/admin/assessment_management/update/{id}', 'BackgroundManagement\TheAssessmentsManagementController@update');
+Route::delete('/admin/assessment_management/destroy/{id}', 'BackgroundManagement\TheAssessmentsManagementController@destroy');
 
 
 

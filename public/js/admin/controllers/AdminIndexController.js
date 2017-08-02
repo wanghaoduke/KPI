@@ -22,7 +22,10 @@ controllers.controller("StaffManageController", ["$scope", "AdminManage",
 
         // 保存分组改变
         $scope.saveDepartment = function(id, department){
-            AdminManage.saveTheDepartment(id, department).then(function(data){
+            // AdminManage.saveTheDepartment(id, department).then(function(data){
+            //     getStaffs($scope.staffStatus);
+            // });
+            AdminManage.updateUsers(id, {department: department}).then(function(data){
                 getStaffs($scope.staffStatus);
             });
         };
@@ -49,30 +52,39 @@ controllers.controller("StaffManageController", ["$scope", "AdminManage",
 
         //改变员工的进入考核权限
         $scope.changeJurisdiction = function(id, value){
-            AdminManage.changeStaffJurisdiction(id,value).then(function(data){
+            // AdminManage.changeStaffJurisdiction(id,value).then(function(data){
+            //     getStaffs($scope.staffStatus);
+            // })
+            AdminManage.updateUsers(id, {Jurisdiction: value}).then(function(data) {
                 getStaffs($scope.staffStatus);
-            })
+            });
         };
 
         //改变员工是否有后台权限
         $scope.changeIsAdmin = function(id, value){
-            AdminManage.changeAdmin(id, value).then(function(data){
+            AdminManage.updateUsers(id, {is_admin: value}).then(function(data){
                 getStaffs($scope.staffStatus);
             });
         };
 
         //改变员工的是否为高级管理员
         $scope.changeManagerStatus = function(id, value){
-            AdminManage.changeStaffIsSeniorManager(id,value).then(function(data){
+            // AdminManage.changeStaffIsSeniorManager(id,value).then(function(data){
+            //     getStaffs($scope.staffStatus);
+            // });
+            AdminManage.updateUsers(id, {is_senior_manager: value}).then(function(data){
                 getStaffs($scope.staffStatus);
             });
         };
         
         //改变员工的状态
         $scope.changeStatus = function(id, value){
-            AdminManage.changeStaffStatus(id,value).then(function(data){
+            // AdminManage.changeStaffStatus(id,value).then(function(data){
+            //     getStaffs($scope.staffStatus);
+            // })
+            AdminManage.updateUsers(id, {status: value}).then(function(data){
                 getStaffs($scope.staffStatus);
-            })
+            });
         }
     }
 ]);
@@ -137,8 +149,31 @@ controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModa
             if(isNaN(percentage)){
                 alert('百分比必须是数字！');
             }else{
-                AdminManage.saveRaterPercentage(id, {'team': team, 'percentage': percentage}).then(function(data){
-
+                // AdminManage.saveRaterPercentage(id, {'team': team, 'percentage': percentage}).then(function(data){
+                //
+                //     if(team == 'plan'){
+                //         for(var i = 0; i < $scope.planRaters.length; i++){
+                //             if(id == $scope.planRaters[i]['id']){
+                //                 $scope.planRaters[i]['is_edit'] = false;
+                //             }
+                //         }
+                //     }
+                //     if(team == 'development'){
+                //         for(var i = 0; i < $scope.developmentRaters.length; i++){
+                //             if(id == $scope.developmentRaters[i]['id']){
+                //                 $scope.developmentRaters[i]['is_edit'] = false;
+                //             }
+                //         }
+                //     }
+                // });
+                var tempData = {};
+                if(team == 'plan'){
+                    tempData = {team: team, percentage_plan: percentage};
+                }else{
+                    tempData = {team: team, percentage_development: percentage};
+                }
+                AdminManage.updateRaters(id, tempData).then(function(data){
+                    tempData = {};
                     if(team == 'plan'){
                         for(var i = 0; i < $scope.planRaters.length; i++){
                             if(id == $scope.planRaters[i]['id']){
@@ -146,6 +181,7 @@ controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModa
                             }
                         }
                     }
+
                     if(team == 'development'){
                         for(var i = 0; i < $scope.developmentRaters.length; i++){
                             if(id == $scope.developmentRaters[i]['id']){
@@ -159,7 +195,7 @@ controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModa
 
         //删除默认的评论员
         $scope.deleteRater = function(id, team){
-            AdminManage.deleteDefaultRater(id,{'id': id, "team": team}).then(function(data){
+            // AdminManage.deleteDefaultRater(id,{'id': id, "team": team}).then(function(data){
                 // if(team == 'plan'){
                 //     AdminManage.getPlanRater().then(function(data){
                 //         $scope.planRaters = data;
@@ -176,6 +212,15 @@ controllers.controller("RaterSetController", ['$scope', 'AdminManage', '$uibModa
                 //         }
                 //     });
                 // }
+                // getRaters(team);
+            // });
+            var tempData = {};
+            if(team == 'plan'){
+                tempData = {team: team, is_default_plan: 0};
+            }else{
+                tempData = {team: team, is_default_development: 0};
+            }
+            AdminManage.updateRaters(id, tempData).then(function(data){
                 getRaters(team);
             });
         };
@@ -234,7 +279,7 @@ controllers.controller('AddRaterController', ['$scope', '$uibModalInstance', 'Ad
             $scope.selectedStaffs = angular.copy(selectedRaters);
         }
         
-        AdminManage.getAllStaffsNoLeaveNoSelected({'selectedIds': $scope.selectedStaffIds}).then(function(data){
+        AdminManage.getAllStaffsNoLeaveNoSelected(team).then(function(data){
             $scope.allStaffs = [];   //备选所有员工
             $scope.allStaffs = data;
             $scope.itemsPerPage = 12;
@@ -312,7 +357,8 @@ controllers.controller("AssessmentManageController", ["$scope", "AdminManage",
         
         //改变是否成为完成状态
         $scope.changeCompleted = function(id, value){
-            AdminManage.changeAssessmentCompleted(id, value).then(function(data){
+            var tempData = {is_completed: value};
+            AdminManage.changeAssessmentCompleted(id, tempData).then(function(data){
                 AdminManage.getAllAssessmentsDetail().then(function(data){
                     $scope.assessments = data;
                 });
