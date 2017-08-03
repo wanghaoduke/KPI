@@ -106,25 +106,30 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
+                        <div class="form-group" style="height: 36px;">
+                            <div class="col-md-8 col-md-offset-4">
+                                <div class="checkbox" style="position: relative; top: -15px;">
                                     <label>
                                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> 记住账户密码
                                     </label>
+                                    <a class="btn btn-link" href="/reset_get_code" style="margin: 0px 30px;">
+                                        忘记密码？找回密码。
+                                    </a>
                                 </div>
                             </div>
+
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                        <div class="form-group" style="position: relative; top: -18px;">
+                            <div class="col-md-4 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary col-md-12">
                                     登录
                                 </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8 col-md-offset-4">
 
-                                <a class="btn btn-link" href="/reset_get_code">
-                                    忘记密码？找回密码。
-                                </a>
                             </div>
                         </div>
                     </form>

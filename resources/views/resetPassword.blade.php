@@ -46,8 +46,8 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
+                                <div class="col-md-4 col-md-offset-4">
+                                    <button type="submit" class="btn btn-primary col-md-12">
                                         提交
                                     </button>
                                 </div>
