@@ -22,7 +22,7 @@ resService.factory('Kpi', ['$http', '$q',
 
         kpi.getStaffDetail = function(id){
             return $q(function(resolve, reject){
-                $http.get('/assessment/get_assessment_detail/'+id)
+                $http.get('/assessment/'+id)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -36,7 +36,7 @@ resService.factory('Kpi', ['$http', '$q',
                 // $http.get('/get_raters/'+data.staff_id)
                 $http({
                     method: 'GET',
-                    url: '/assessment/raters/all_raters/'+staff_id + '?assessment_id=' + assessment_id,
+                    url: '/raters/all_raters/'+staff_id + '?assessment_id=' + assessment_id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
@@ -52,7 +52,7 @@ resService.factory('Kpi', ['$http', '$q',
         //获取所有员工 除了已经离职的
         kpi.getAllStaffs = function(){
             return $q(function(resolve, reject){
-                $http.get('/assessment/raters')
+                $http.get('/raters')
                     
                     .success(function(data){
                         resolve(data);
@@ -79,7 +79,7 @@ resService.factory('Kpi', ['$http', '$q',
             return $q(function(resolve, reject){
                 $http({
                     method: 'GET',
-                    url: '/assessment/get_selected_staff_details/' + assessmentId + '?staffId=' + staffId,
+                    url: '/selected_staff_details/' + assessmentId + '?staffId=' + staffId,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }
@@ -96,7 +96,7 @@ resService.factory('Kpi', ['$http', '$q',
             return $q(function(resolve, reject){
                 $http({
                     method: 'PUT',
-                    url: '/assessment/raters/' + assessmentId,
+                    url: '/raters/' + assessmentId,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },

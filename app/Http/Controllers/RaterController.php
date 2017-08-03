@@ -47,7 +47,7 @@ class RaterController extends Controller
 
     
     //编辑raters
-    public function editRaters ($id, Request $request){
+    public function update ($id, Request $request){
 //        \Log::info($request->all());
         $selectedIds = [];
         $selectedStaffs = $request->get('selectedStaffs');

@@ -188,7 +188,7 @@ resService.factory("AdminManage", ['$http', '$q',
         //获取全部assessment
         adminManage.getAllAssessmentsDetail = function(){
             return $q(function(resolve, reject){
-                $http.get('/admin/assessment_management/index')
+                $http.get('/admin/assessment_management')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){

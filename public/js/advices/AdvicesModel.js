@@ -25,7 +25,7 @@ resService.factory("Advices", ['$http', '$q',
         //获取所有的合理化建议
         advices.getAllAdvices = function(){
             return $q(function(resolve, reject){
-                $http.get('/advices/get_all_auth_advices')
+                $http.get('/advices/all_auth_advices')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -49,7 +49,7 @@ resService.factory("Advices", ['$http', '$q',
         //获取评审的advice内容
         advices.raterGetAdviceDetail = function(id){
             return $q(function(resolve, reject){
-                $http.get('/rater_edit/get_advice_detail/' + id)
+                $http.get('/rater_edit/advice_detail/' + id)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -62,7 +62,7 @@ resService.factory("Advices", ['$http', '$q',
         //获得所有的建议者的advice
         advices.getAllSuggesterAllAdvices = function(team, search){
             return $q(function(resolve, reject){
-                $http.get('/advices/rater/get_all_suggester_all_advices?team=' + team + "&search=" + search)
+                $http.get('/advices/rater/all_suggester_all_advices?team=' + team + "&search=" + search)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
