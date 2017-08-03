@@ -28,30 +28,42 @@ Route::post('/new_password_store', 'ResetPasswordController@newPasswordStore');
 
 
 //创建编辑assessment
-Route::get('/assessment_manage', 'AssessmentController@show');
-Route::get('/create_assessment/{id}', 'AssessmentController@createAssessment');
-Route::put('/create_month_assessment', 'AssessmentController@createMonthAssessment');
-Route::get('/get_assessment_detail/{id}', 'AssessmentController@getAssessmentDetail');
-Route::post('/get_raters/{id}', 'AssessmentController@getRaters');
-Route::get('/get_all_staffs', 'AssessmentController@getAllStaffs');
-Route::post('/get_selected_staff_details/{id}', 'AssessmentController@getSelectedStaffDetails');
-Route::post('/edit_raters/{id}', 'AssessmentController@editRaters');
-Route::get('/get_all_assessments', 'AssessmentController@getAllAssessments');
-Route::post('/change_assessment_status/{id}', 'AssessmentController@changeAssessmentStatus');
+Route::group(['prefix' => 'assessment', 'middleware' => 'auth'], function(){
+    Route::get('/get_all_assessments', 'AssessmentController@getAllAssessments');
+    Route::get('/', 'AssessmentController@index');
+    Route::get('/get_assessment_detail/{id}', 'AssessmentController@show');
+//    Route::get('/create_assessment/{id}', 'AssessmentController@createAssessment'); //已经放弃使用
+    Route::post('/', 'AssessmentController@store');
+    Route::put('/{id}', 'AssessmentController@update');
+
+    //编辑评论人
+    Route::get('/raters/all_raters/{id}', 'RaterController@getRaters');
+    Route::get('/get_selected_staff_details/{id}', 'RaterController@getSelectedStaffDetails');
+    Route::get('/raters', 'RaterController@index');
+    Route::put('/raters/{id}', 'RaterController@editRaters');
+});
+
 
 
 //评分
-Route::get('/score/master', 'GiveScoreController@show');
-Route::get('/score/get_your_assessment', 'GiveScoreController@getYourAssessment');
-Route::get('/score/get_staff_scores/{id}', 'GiveScoreController@getStaffScores');
+Route::group(['prefix' => 'score', 'middleware' => 'auth'], function(){
+    Route::get('/home', 'GiveScoreController@home');
+    Route::get('/', 'GiveScoreController@index');
+    Route::get('/{id}', 'GiveScoreController@show');
 //Route::post('/score/save_staff_scores/{id}', 'GiveScoreController@saveStaffScores');
-Route::post('/score/save_the_staff_score/{id}', 'GiveScoreController@saveTheStaffScore');
+    Route::put('/{id}', 'GiveScoreController@update');
+});
 
 
 //评分查看系统
-Route::get('/show_score/index', 'ShowScoreController@index');
-Route::get('/get_last_assessment_date', 'ShowScoreController@getLastAssessmentDate');
-Route::post('/get_period_all_scores', 'ShowScoreController@getPeriodAllScores');
+Route::group(['prefix' => 'show_score', 'middleware' => 'auth'], function(){
+    Route::get('/get_last_assessment_date', 'ShowScoreController@getLastAssessmentDate');
+    Route::get('/home', 'ShowScoreController@home');
+    Route::get('/', 'ShowScoreController@index');
+});
+
+
+
 
 
 

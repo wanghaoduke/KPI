@@ -11,14 +11,14 @@ use Illuminate\Http\Request;
 
 class GiveScoreController extends Controller
 {
-    public function __construct(){
-        $this->middleware('auth');
-    }
+//    public function __construct(){
+//        $this->middleware('auth');
+//    }
 
-    public function show(){
+    public function home(){
         $title1 = '考核评分首页';
         $title2 = null;
-        $titleLink1 = '/score/master#/';
+        $titleLink1 = '/score/home#/';
         $titleLink2 = null;
         $count = StaffScore::leftJoin('assessments', 'assessments.id', '=', 'staff_scores.assessment_id')->where('rater_id', auth::user()->id)->where('assessments.is_completed', 0)->count();
 //        \Log::info($count);
@@ -29,7 +29,7 @@ class GiveScoreController extends Controller
     }
 
     //获取用户的需要评论的assessment
-    public function getYourAssessment () {
+    public function index () {
         $userId = auth::user()->id;
         $assessmentIds = StaffScore::where('rater_id', $userId)->distinct('assessment_id')->pluck('assessment_id');
 //        \Log::info($assessmentIds);
@@ -38,7 +38,7 @@ class GiveScoreController extends Controller
     }
 
     //保存评分数
-    public function saveTheStaffScore ($id, Request $request){
+    public function update ($id, Request $request){
 //        \Log::info($id);
 //        \Log::info($request->all());
         $staffScore = StaffScore::find($id);
@@ -55,7 +55,7 @@ class GiveScoreController extends Controller
     }
 
     //获取该月份的所有被评详情
-    public function getStaffScores ($id) {
+    public function show ($id) {
 //        \Log::info($id);
         $staffScores = StaffScore::select([
             'users.name',

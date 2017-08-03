@@ -5,7 +5,7 @@ resService.factory('ShowScore', ['$http', '$q',
 
         showScore.getLastAssessmentDate = function (){
             return $q(function(resolve, reject){
-                $http.get('/get_last_assessment_date')
+                $http.get('/show_score/get_last_assessment_date')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -17,12 +17,11 @@ resService.factory('ShowScore', ['$http', '$q',
         showScore.getPeriodAllScores = function (data){
             return $q(function(resolve, reject){
                 $http({
-                    method: 'POST',
-                    url: "/get_period_all_scores",
+                    method: 'GET',
+                    url: "/show_score?startDate="+data.startDate+"&&startDateStr="+data.startDateStr+"&&endDateStr="+data.endDateStr+"&&endDate="+data.endDate+"&&department="+data.department+"&&item="+data.item,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: $.param(data)
+                    }
                 }).success(function(data){
                     resolve(data);
                 }).error(function(data){

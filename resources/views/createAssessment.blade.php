@@ -2,6 +2,7 @@
 @extends('layouts.newApp')
 
 @section('content')
+    {{--已经不用了--}}
     {{--<script type="text/javascript" src="/jsdate/WdatePicker.js"></script>--}}
     <div class="container" ng-controller="CreateAssessmentDetailController">
         <div class="row">

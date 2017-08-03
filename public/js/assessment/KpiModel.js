@@ -6,8 +6,8 @@ resService.factory('Kpi', ['$http', '$q',
         kpi.createAssessment = function (data){
             return $q(function(resolve, reject){
                 $http({
-                    method: 'PUT',
-                    url: "/create_month_assessment",
+                    method: 'POST',
+                    url: "/assessment",
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -22,7 +22,7 @@ resService.factory('Kpi', ['$http', '$q',
 
         kpi.getStaffDetail = function(id){
             return $q(function(resolve, reject){
-                $http.get('/get_assessment_detail/'+id)
+                $http.get('/assessment/get_assessment_detail/'+id)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -31,16 +31,15 @@ resService.factory('Kpi', ['$http', '$q',
             });
         };
 
-        kpi.getRaters = function(data){
+        kpi.getRaters = function(staff_id, assessment_id){
             return $q(function(resolve, reject){
                 // $http.get('/get_raters/'+data.staff_id)
                 $http({
-                    method: 'POST',
-                    url: '/get_raters/'+data.staff_id,
+                    method: 'GET',
+                    url: '/assessment/raters/all_raters/'+staff_id + '?assessment_id=' + assessment_id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: $.param(data)
+                    }
                 })
                     .success(function(data){
                         resolve(data);
@@ -53,7 +52,8 @@ resService.factory('Kpi', ['$http', '$q',
         //获取所有员工 除了已经离职的
         kpi.getAllStaffs = function(){
             return $q(function(resolve, reject){
-                $http.get('/get_all_staffs')
+                $http.get('/assessment/raters')
+                    
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -65,7 +65,7 @@ resService.factory('Kpi', ['$http', '$q',
         //获取所有的assessment
         kpi.getAllAssessments = function (){
             return $q(function(resolve, reject){
-                $http.get('/get_all_assessments')
+                $http.get('/assessment/get_all_assessments')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -75,15 +75,14 @@ resService.factory('Kpi', ['$http', '$q',
         };
         
         //获取所有被选员工的详情
-        kpi.getSelectedStaffDetails = function(assessmentId ,data){
+        kpi.getSelectedStaffDetails = function(assessmentId ,staffId){
             return $q(function(resolve, reject){
                 $http({
-                    method: 'POST',
-                    url: '/get_selected_staff_details/' + assessmentId,
+                    method: 'GET',
+                    url: '/assessment/get_selected_staff_details/' + assessmentId + '?staffId=' + staffId,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: $.param(data)
+                    }
                 })
                     .success(function(data){
                         resolve(data);
@@ -96,8 +95,8 @@ resService.factory('Kpi', ['$http', '$q',
         kpi.editRaters = function(assessmentId, data){
             return $q(function(resolve, reject){
                 $http({
-                    method: 'POST',
-                    url: '/edit_raters/' + assessmentId,
+                    method: 'PUT',
+                    url: '/assessment/raters/' + assessmentId,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -115,8 +114,8 @@ resService.factory('Kpi', ['$http', '$q',
         kpi.changeAssessmentStatus = function(assessmentId){
             return $q(function(resolve, reject){
                 $http({
-                    method: "POST",
-                    url: "/change_assessment_status/" + assessmentId,
+                    method: "PUT",
+                    url: "/assessment/" + assessmentId,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }

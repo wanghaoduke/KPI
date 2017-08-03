@@ -6,7 +6,7 @@ resService.factory('Score', ['$http', '$q',
         //获取需要评分的记录
         score.getYourAssessment = function (){
             return $q(function(resolve, reject){
-                $http.get('/score/get_your_assessment')
+                $http.get('/score')
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -18,7 +18,7 @@ resService.factory('Score', ['$http', '$q',
         //获取该月份考核的详情
         score.getStaffScores = function (assessmentId) {
             return $q(function(resolve, reject){
-                $http.get('/score/get_staff_scores/' + assessmentId)
+                $http.get('/score/' + assessmentId)
                     .success(function(data){
                         resolve(data);
                     }).error(function(data){
@@ -50,8 +50,8 @@ resService.factory('Score', ['$http', '$q',
         score.saveTheStaffScore = function(id, data){
             return $q(function(resolve, reject){
                 $http({
-                    method: "POST",
-                    url: "/score/save_the_staff_score/" + id,
+                    method: "PUT",
+                    url: "/score/" + id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },

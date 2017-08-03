@@ -17,14 +17,14 @@
                     <br>
                     <br>
                     <div style="text-align: center;">
-                        <a class="btn btn-primary" href="/show_score/index" style="font-size: 20px; margin: 5px;">评分查询</a>
+                        <a class="btn btn-primary" href="/show_score/home" style="font-size: 20px; margin: 5px;">评分查询</a>
 
                         @if(Auth::check() && $count > 0)
-                            <a class="btn btn-primary" href="/score/master" style="font-size: 20px; margin: 5px;">进入系统</a>
+                            <a class="btn btn-primary" href="/score/home" style="font-size: 20px; margin: 5px;">进入系统</a>
                         @endif
 
                         @if(Auth::check() && auth()->user()->Jurisdiction == 1)
-                            <a href="/assessment_manage" class="btn btn-primary" style="font-size: 20px; margin: 5px;">考核管理</a>
+                            <a href="/assessment" class="btn btn-primary" style="font-size: 20px; margin: 5px;">考核管理</a>
                         @endif
 
                         @if(Auth::check())

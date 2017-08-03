@@ -19,7 +19,7 @@ assessmentControllers.controller('CreateAssessmentDetailController',['$scope', '
         //添加评选人
         $scope.addRater = function(staffId){
             console.log(staffId);
-            Kpi.getRaters({'staff_id': staffId, 'assessment_id': $routeParams['id']}).then(function(data){
+            Kpi.getRaters(staffId, $routeParams['id']).then(function(data){
                 // console.log(data.length);
                 // console.log('data:'+data);
                 if(data.length > 0){
@@ -81,7 +81,7 @@ assessmentControllers.controller('AddRaterController', ['$scope',  '$uibModalIns
                 });
                 $scope.selectedStaffs = angular.copy(selectedRaters);
                 //获取被选中rater的详情
-                Kpi.getSelectedStaffDetails(assessmentId ,{'selectedStaffIds': $scope.SelectedStaffIds, 'staffId': staffId}).then(function(data){
+                Kpi.getSelectedStaffDetails(assessmentId ,staffId).then(function(data){
                     angular.forEach(data, function(user){
                         angular.forEach($scope.selectedStaffs, function(staff){
                             if(user['id'] == staff['id']){

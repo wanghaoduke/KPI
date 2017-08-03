@@ -16,10 +16,10 @@ class ShowScoreController extends Controller
     }
 
     //显示主页
-    public function index () {
+    public function home () {
         $title1 = '评分查询';
         $title2 = null;
-        $titleLink1 = '/show_score/index#/';
+        $titleLink1 = '/show_score/home#/';
         $titleLink2 = null;
         return view('showScoreIndex', compact('title1','title2','titleLink1','titleLink2'));
     }
@@ -36,7 +36,7 @@ class ShowScoreController extends Controller
     }
 
     //获取显示数据
-    public function getPeriodAllScores(Request $request){
+    public function index(Request $request){
 //        \Log::info($request->all());
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');

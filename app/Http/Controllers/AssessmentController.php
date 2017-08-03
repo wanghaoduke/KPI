@@ -13,15 +13,15 @@ use Illuminate\Http\Request;
 class AssessmentController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('auth');
-    }
+//    public function __construct(){
+//        $this->middleware('auth');
+//    }
 
-    //显示主页面
-    public function show(){
+//    显示主页面
+    public function index(){
         $title1 = '考核管理';
         $title2 = null;
-        $titleLink1 = '/assessment_manage#/';
+        $titleLink1 = '/assessment#/';
         $titleLink2 = null;
         if(Gate::denies('assessment_manage')){
             return redirect('/')->withErrors(['gateError' => '您没有进入的权限！']);
@@ -30,18 +30,18 @@ class AssessmentController extends Controller
     }
 
     //创建新的kpi考核
-    public function createAssessment($id, Request $request){
-        $title1 = '考核管理';
-        $title2 = '添加考核';
-        $titleLink1 = '/assessment_manage';
-        $titleLink2 = '/create_assessment/' + $id;
-        $planUsers = User::where('Jurisdiction', 0)->where('department', 3)->where('status', 1)->get();
-        $developmentUsers = User::where('Jurisdiction', 0)->where('department', 4)->where('status', 1)->get();
-        return view('createAssessment', compact('title1','title2','titleLink1','titleLink2','planUsers','developmentUsers','id'));
-    }
+//    public function createAssessment($id, Request $request){
+//        $title1 = '考核管理';
+//        $title2 = '添加考核';
+//        $titleLink1 = '/assessment_manage';
+//        $titleLink2 = '/create_assessment/' + $id;
+//        $planUsers = User::where('Jurisdiction', 0)->where('department', 3)->where('status', 1)->get();
+//        $developmentUsers = User::where('Jurisdiction', 0)->where('department', 4)->where('status', 1)->get();
+//        return view('createAssessment', compact('title1','title2','titleLink1','titleLink2','planUsers','developmentUsers','id'));
+//    }
 
     //添加月份assessment
-    public function createMonthAssessment(Request $request){
+    public function store(Request $request){
 //        \Log::info($request->all());
         $count = Assessment::where('year', $request->get('year'))->where('month', $request->get('month'))->count();
 //        \Log::info($count);
@@ -88,8 +88,57 @@ class AssessmentController extends Controller
         return $assessment;
     }
 
+    //更改考核的状态
+    public function update($id){
+        \Log::info($id);
+        $assessment = Assessment::where('id', $id);
+//        Assessment::where('id', $id)->update(['is_completed' => 1]);
+        return AppResponse::result($assessment->update(['is_completed' => 1]));
+    }
+
+    //获取所有的assessment
+    public function getAllAssessments (){
+        $assessments = Assessment::select([
+            'assessments.year',
+            'assessments.month',
+            'assessments.is_completed',
+            'assessments.created_at',
+            'assessments.updated_at',
+            'assessments.id',
+            \DB::raw("(select count(distinct(rater_id)) 
+                         from staff_scores
+                         where staff_scores.assessment_id = assessments.id
+                         group by staff_scores.assessment_id 
+                      ) as count_rater"),
+            \DB::raw("(select count(distinct(staff_scores.rater_id)) from staff_scores
+                         where staff_scores.assessment_id = assessments.id
+                         and staff_scores.is_completed = 0) as count_no_give_rater")
+        ])
+            ->orderBy('year','DESC')
+            ->orderBy('month','DESC')
+            ->get();
+        $advices = Advice::select([
+            '*',
+            \DB::raw("date_format(created_at, '%Y')as year"),
+            \DB::raw("date_format(created_at, '%m')as month"),
+        ])->where("advices.is_processed", 0)
+            ->get();
+
+        $countArray = [];
+        for($i = 0; $i < count($assessments); $i++){
+            $countArray[$i] = 0;
+            for($j = 0; $j < count($advices); $j++){
+                if((intval($assessments[$i]['year']) == intval($advices[$j]['year'])) && (intval($assessments[$i]['month']) == intval($advices[$j]['month']))){
+                    $countArray[$i] = $countArray[$i] + 1;
+                }
+            }
+            $assessments[$i]->not_processed_advices_count = $countArray[$i];
+        }
+        return $assessments;
+    }
+
     //获取assessment详情
-    public function getAssessmentDetail ($id, Request $request){
+    public function show ($id, Request $request){
         $raters = User::whereIn('department',[1,2])->where('status', 1)->get();
         $staffIds = StaffScore::distinct('staff_id')->where('assessment_id', $id)->pluck('staff_id');
        
@@ -151,127 +200,7 @@ class AssessmentController extends Controller
         return [$planStaffs, $developmentStaffs, $raters, $assessment];
     }
 
-    //获取员工的评选人员
-    public function getRaters ($id, Request $request){
-//        \Log::info($request->all());
-        $raterIds = StaffScore::where('staff_id', $id)->where('assessment_id', $request->get('assessment_id'))->pluck('rater_id');
-        $raters = User::whereIn('id', $raterIds)->get();
-        return $raters;
-    }
 
-    //获取添加评选的所有员工 不包括离职员工
-    public function getAllStaffs (){
-        $staffs = User::where('status', 1)->get();
-        return $staffs;
-    }
 
-    //获取评选人员的详情
-    public function getSelectedStaffDetails ($id, Request $request) {
-//        \Log::info($request->all());
-        $staffs = User::select([
-            'users.id as id',
-            'users.name as name',
-            'staff_scores.staff_id',
-            'staff_scores.rater_id',
-            'staff_scores.percentage'
-        ])
-            ->leftJoin('staff_scores', 'users.id', '=', 'staff_scores.rater_id')
-            ->where('staff_scores.staff_id', $request->get('staffId'))
-            ->where('staff_scores.assessment_id', $id)
-            ->get();
-
-        return $staffs;
-
-    }
-
-    //编辑raters
-    public function editRaters ($id, Request $request){
-//        \Log::info($request->all());
-        $selectedIds = [];
-        $selectedStaffs = $request->get('selectedStaffs');
-        $staffScores = StaffScore::where('assessment_id',$id)
-            ->where('staff_id',$request->get('staffId'))
-            ->get();
-
-        //添加新记录
-        for($i = 0; $i < count($selectedStaffs); $i++){
-            $staffScore = StaffScore::where('staff_id',$request->get('staffId'))
-                ->where('assessment_id',$id)
-                ->where('rater_id',$selectedStaffs[$i]['id'])
-                ->get();
-//            \Log::info($staffScore);
-//            \Log::info($staffScore->count());
-            if($staffScore->count() > 0){            //是已存在的记录 则更新
-                $tempData = [];
-                $tempData['percentage'] = $selectedStaffs[$i]['percentage'];
-                $tempStaffScore = StaffScore::findOrFail($staffScore[0]['id']);
-                $tempStaffScore->fill($tempData);
-                $tempStaffScore->update();
-                array_push($selectedIds, $tempStaffScore->id);
-            }else{                                 //是不存在的记录则创建
-                $tempData = [];
-                $tempData['percentage'] = $selectedStaffs[$i]['percentage'];
-                $tempData['staff_id'] = $request->get('staffId');
-                $tempData['rater_id'] = $selectedStaffs[$i]['id'];
-                $tempData['assessment_id'] = $id;
-                $tempStaffScore = StaffScore::create($tempData);
-                array_push($selectedIds, $tempStaffScore->id);
-            }
-        }
-
-        //已经去掉的数据 要删除
-        $destoryStaffScores = StaffScore::where('staff_id',$request->get('staffId'))
-            ->where('assessment_id',$id)
-            ->whereNotIn('id',$selectedIds)
-            ->delete();
-    }
-
-    //获取所有的assessment
-    public function getAllAssessments (){
-        $assessments = Assessment::select([
-            'assessments.year',
-            'assessments.month',
-            'assessments.is_completed',
-            'assessments.created_at',
-            'assessments.updated_at',
-            'assessments.id',
-            \DB::raw("(select count(distinct(rater_id)) 
-                         from staff_scores
-                         where staff_scores.assessment_id = assessments.id
-                         group by staff_scores.assessment_id 
-                      ) as count_rater"),
-            \DB::raw("(select count(distinct(staff_scores.rater_id)) from staff_scores
-                         where staff_scores.assessment_id = assessments.id
-                         and staff_scores.is_completed = 0) as count_no_give_rater")
-        ])
-            ->orderBy('year','DESC')
-            ->orderBy('month','DESC')
-            ->get();
-        $advices = Advice::select([
-            '*',
-            \DB::raw("date_format(created_at, '%Y')as year"),
-            \DB::raw("date_format(created_at, '%m')as month"),
-        ])->where("advices.is_processed", 0)
-            ->get();
-
-        $countArray = [];
-        for($i = 0; $i < count($assessments); $i++){
-            $countArray[$i] = 0;
-            for($j = 0; $j < count($advices); $j++){
-                if((intval($assessments[$i]['year']) == intval($advices[$j]['year'])) && (intval($assessments[$i]['month']) == intval($advices[$j]['month']))){
-                    $countArray[$i] = $countArray[$i] + 1;
-                }
-            }
-            $assessments[$i]->not_processed_advices_count = $countArray[$i];
-        }
-        return $assessments;
-    }
-
-    //更改考核的状态
-    public function changeAssessmentStatus($id){
-        \Log::info($id);
-        $assessment = Assessment::where('id', $id);
-//        Assessment::where('id', $id)->update(['is_completed' => 1]);
-        return AppResponse::result($assessment->update(['is_completed' => 1]));
-    }
+ 
 }

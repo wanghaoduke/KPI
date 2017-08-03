@@ -164,6 +164,8 @@ controllers.controller('ShowScoresController', ['$scope', 'ShowScore', '$routePa
             },function(data){
                 $scope.showErrorTip = true;
                 $scope.errors = data;
+                $scope.allDatas = {};
+                $scope.changeTableDatas($scope.item, $scope.allDatas);
             });
         };
 
