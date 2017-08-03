@@ -151,7 +151,7 @@ class IndexController extends Controller
         return view('kpiIndex', compact('title1', 'title2', 'titleLink1', 'titleLink2', 'assessment', 'planScores', 'developmentScores', 'count'));
     }
 
-    public function rulesDown(){
-        return response()->download(realpath(base_path('public')).'/downFiles/rules.docx');
-    }
+//    public function rulesDown(){
+//        return response()->download(realpath(base_path('public')).'/downFiles/rules.docx');
+//    }
 }
