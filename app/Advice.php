@@ -8,6 +8,6 @@ class Advice extends Model
 {
     //
     protected $fillable = [
-        'title', 'content', 'suggest_id', 'rater_id', 'is_processed', 'is_accept', 'score'
+        'title', 'content', 'suggest_user_id', 'rater_user_id', 'is_processed', 'is_accept', 'score'
     ];
 }

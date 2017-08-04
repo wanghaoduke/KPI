@@ -29,6 +29,6 @@ class User extends Authenticatable
     ];
 
     public function staffScores (){
-        return $this->hasMany('App\StaffScore', 'staff_id', 'id');
+        return $this->hasMany('App\StaffScore', 'staff_user_id', 'id');
     }
 }

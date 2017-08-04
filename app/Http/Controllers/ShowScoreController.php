@@ -59,7 +59,7 @@ class ShowScoreController extends Controller
                     $assessmentIdString = $assessmentIdString.")";
                 }
             }
-            $sql = "(select staff_scores.staff_id,sum(staff_scores.is_completed)as completed_count,
+            $sql = "(select staff_scores.staff_user_id,sum(staff_scores.is_completed)as completed_count,
                           sum(
                                  (if(staff_scores.quality_score is null, 0, staff_scores.quality_score) + if(staff_scores.attitude_score is null, 0, staff_scores.attitude_score)
                                  )*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
@@ -73,19 +73,19 @@ class ShowScoreController extends Controller
                          
                       from staff_scores
                       where staff_scores.assessment_id in $assessmentIdString
-                      group by staff_scores.staff_id
+                      group by staff_scores.staff_user_id
                      ) as tt";
             $staffScores = User::select([
                 'users.id as id',
                 'users.name as name',
                 \DB::raw("(case when users.department = 3 then '策划组' when users.department = 4 then '开发组' end) as department"),
-                'tt.staff_id as staff_id',
+                'tt.staff_user_id as staff_user_id',
                 'tt.sumScore',
                 'tt.qualitySumScore',
                 'tt.attitudeSumScore'
-            ])->leftJoin(\DB::raw($sql), 'tt.staff_id', '=', 'users.id')
+            ])->leftJoin(\DB::raw($sql), 'tt.staff_user_id', '=', 'users.id')
                 ->where('tt.completed_count', '>', 0)
-                ->whereNotNull('tt.staff_id');
+                ->whereNotNull('tt.staff_user_id');
 
             //根据选的组来取数据
             switch($request->get('department')){
@@ -108,12 +108,12 @@ class ShowScoreController extends Controller
                 //把合理化建议分数加入
                 $advice = Advice::select([
                     \DB::raw("if(sum(score) > 30, 30, sum(score)) as sumScore"),
-                    "advices.suggest_id"
+                    "advices.suggest_user_id"
                 ])
                     ->whereRaw("date_format(created_at, '%Y-%m') >= '$startDateStr' and date_format(created_at, '%Y-%m') <= '$endDateStr'")
-                    ->whereIn('advices.suggest_id',[$data[$j]['id']])
+                    ->whereIn('advices.suggest_user_id',[$data[$j]['id']])
                     ->where('advices.score', '>', '0')
-                    ->groupBy("advices.suggest_id")
+                    ->groupBy("advices.suggest_user_id")
                     ->first();
                 $data[$j]['sumScore'] = $advice['sumScore'] + $data[$j]['sumScore'];
                 $data[$j]->advicesSumScore = $advice["sumScore"];
@@ -127,7 +127,7 @@ class ShowScoreController extends Controller
     }
 
     public function getTheStaffAvgScore($staffScores, $AssessmentIds){
-        $countAssessment = StaffScore::where('staff_id', $staffScores['staff_id'])->whereIn('assessment_id',$AssessmentIds)->distinct('assessment_id')->count('assessment_id');
+        $countAssessment = StaffScore::where('staff_user_id', $staffScores['staff_user_id'])->whereIn('assessment_id',$AssessmentIds)->distinct('assessment_id')->count('assessment_id');
 
         if($staffScores['sumScore']){
             $staffScores->avgScore = round($staffScores['sumScore'] / $countAssessment, 2);

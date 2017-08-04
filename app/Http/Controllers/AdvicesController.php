@@ -47,14 +47,14 @@ class AdvicesController extends Controller
         $tempAdvice = [];
         $tempAdvice['title'] = $request->get('title');
         $tempAdvice['content'] = $request->get('content');
-        $tempAdvice['suggest_id'] = auth()->user()->id;
-        $tempAdvice['rater_id'] = $rater->id;
+        $tempAdvice['suggest_user_id'] = auth()->user()->id;
+        $tempAdvice['rater_user_id'] = $rater->id;
         $advice = Advice::create($tempAdvice);
     }
 
     //获取所有的本人的合理化建议
     public function getAllAuthAdvices(){
-        $advices = Advice::where('suggest_id', auth()->user()->id)->orderBy("created_at", "DESC")->get();
+        $advices = Advice::where('suggest_user_id', auth()->user()->id)->orderBy("created_at", "DESC")->get();
         return $advices;
     }
 
@@ -74,9 +74,9 @@ class AdvicesController extends Controller
             'advices.is_accept',
             'advices.score',
             'advices.comment',
-            'advices.suggest_id',
+            'advices.suggest_user_id',
             'users.name'
-        ])->leftJoin("users", "users.id", "=", "advices.suggest_id")
+        ])->leftJoin("users", "users.id", "=", "advices.suggest_user_id")
             ->where("advices.id", "=", $id)
             ->get();
         return $adviceDetail;
@@ -108,7 +108,7 @@ class AdvicesController extends Controller
             'advices.id',
             'advices.title',
             'advices.content',
-            'advices.suggest_id',
+            'advices.suggest_user_id',
             'users.name',
             'advices.is_processed',
             'advices.is_accept',
@@ -116,7 +116,7 @@ class AdvicesController extends Controller
             'advices.created_at',
             'advices.comment'
         ])
-            ->leftJoin('users', 'users.id', '=', 'advices.suggest_id');
+            ->leftJoin('users', 'users.id', '=', 'advices.suggest_user_id');
 
         switch($request->get('team')){
             case "all":
@@ -137,7 +137,7 @@ class AdvicesController extends Controller
 
         if($request->has('search')){
             $idArray1 = Advice::where('advices.title', 'like', '%' . $request->get('search') . '%')->pluck('id');
-            $idArray2 = Advice::leftJoin('users', 'users.id', '=', 'advices.suggest_id')
+            $idArray2 = Advice::leftJoin('users', 'users.id', '=', 'advices.suggest_user_id')
                 ->where('users.name', 'like', '%' . $request->get('search') . '%')
                 ->pluck('advices.id');
             $idArray = [];

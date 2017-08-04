@@ -20,7 +20,7 @@ class GiveScoreController extends Controller
         $title2 = null;
         $titleLink1 = '/score/home#/';
         $titleLink2 = null;
-        $count = StaffScore::leftJoin('assessments', 'assessments.id', '=', 'staff_scores.assessment_id')->where('rater_id', auth::user()->id)->where('assessments.is_completed', 0)->count();
+        $count = StaffScore::leftJoin('assessments', 'assessments.id', '=', 'staff_scores.assessment_id')->where('rater_user_id', auth::user()->id)->where('assessments.is_completed', 0)->count();
 //        \Log::info($count);
         if($count == 0){
             return redirect('/')->withErrors(['gateError' => '您没有需要评审的内容！']);
@@ -31,7 +31,7 @@ class GiveScoreController extends Controller
     //获取用户的需要评论的assessment
     public function index () {
         $userId = auth::user()->id;
-        $assessmentIds = StaffScore::where('rater_id', $userId)->distinct('assessment_id')->pluck('assessment_id');
+        $assessmentIds = StaffScore::where('rater_user_id', $userId)->distinct('assessment_id')->pluck('assessment_id');
 //        \Log::info($assessmentIds);
         $assessments = Assessment::whereIn('id', $assessmentIds)->where('is_completed', 0)->orderBy('year', 'DESC')->orderBy('month', "DESC")->get();
         return $assessments;
@@ -59,7 +59,7 @@ class GiveScoreController extends Controller
 //        \Log::info($id);
         $staffScores = StaffScore::select([
             'users.name',
-            'staff_scores.rater_id',
+            'staff_scores.rater_user_id',
             'users.department',
             'staff_scores.id as staff_score_id',
             'assessments.year',
@@ -67,10 +67,10 @@ class GiveScoreController extends Controller
             'staff_scores.quality_score',
             'staff_scores.attitude_score',
         ])
-            ->leftJoin('users', "users.id", "=", "staff_scores.staff_id")
+            ->leftJoin('users', "users.id", "=", "staff_scores.staff_user_id")
             ->leftJoin('assessments', 'assessments.id', '=', 'staff_scores.assessment_id')
             ->where('assessment_id', $id)
-            ->where('rater_id', auth::user()->id)
+            ->where('rater_user_id', auth::user()->id)
             ->orderBy('staff_scores.id', "ASC")
             ->get();
         return $staffScores;

@@ -31,12 +31,12 @@ resService.factory('Kpi', ['$http', '$q',
             });
         };
 
-        kpi.getRaters = function(staff_id, assessment_id){
+        kpi.getRaters = function(staff_user_id, assessment_id){
             return $q(function(resolve, reject){
                 // $http.get('/get_raters/'+data.staff_id)
                 $http({
                     method: 'GET',
-                    url: '/raters/all_raters/'+staff_id + '?assessment_id=' + assessment_id,
+                    url: '/raters/all_raters/'+staff_user_id + '?assessment_id=' + assessment_id,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     }

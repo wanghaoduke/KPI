@@ -61,8 +61,8 @@ class AssessmentController extends Controller
                     foreach ($planRaters as $rater){
                         $staffScore = [];
                         $staffScore['assessment_id'] = $assessment->id;
-                        $staffScore['staff_id'] = $staff->id;
-                        $staffScore['rater_id'] = $rater->id;
+                        $staffScore['staff_user_id'] = $staff->id;
+                        $staffScore['rater_user_id'] = $rater->id;
                         $staffScore['percentage'] = $rater->percentage_plan;
                         $createStaffScore = StaffScore::create($staffScore);
 
@@ -72,8 +72,8 @@ class AssessmentController extends Controller
                     foreach ($developmentRaters as $rater){
                         $staffScore = [];
                         $staffScore['assessment_id'] = $assessment->id;
-                        $staffScore['staff_id'] = $staff->id;
-                        $staffScore['rater_id'] = $rater->id;
+                        $staffScore['staff_user_id'] = $staff->id;
+                        $staffScore['rater_user_id'] = $rater->id;
                         $staffScore['percentage'] = $rater->percentage_development;
                         $createStaffScore = StaffScore::create($staffScore);
 
@@ -105,12 +105,12 @@ class AssessmentController extends Controller
             'assessments.created_at',
             'assessments.updated_at',
             'assessments.id',
-            \DB::raw("(select count(distinct(rater_id)) 
+            \DB::raw("(select count(distinct(rater_user_id)) 
                          from staff_scores
                          where staff_scores.assessment_id = assessments.id
                          group by staff_scores.assessment_id 
                       ) as count_rater"),
-            \DB::raw("(select count(distinct(staff_scores.rater_id)) from staff_scores
+            \DB::raw("(select count(distinct(staff_scores.rater_user_id)) from staff_scores
                          where staff_scores.assessment_id = assessments.id
                          and staff_scores.is_completed = 0) as count_no_give_rater")
         ])
@@ -140,16 +140,16 @@ class AssessmentController extends Controller
     //获取assessment详情
     public function show ($id, Request $request){
         $raters = User::whereIn('department',[1,2])->where('status', 1)->get();
-        $staffIds = StaffScore::distinct('staff_id')->where('assessment_id', $id)->pluck('staff_id');
+        $staffIds = StaffScore::distinct('staff_user_id')->where('assessment_id', $id)->pluck('staff_user_id');
        
         $planStaffs = User::with(['staffScores' => function($query) use ($id){
             $query->select([
                 'staff_scores.id',
-                'staff_scores.rater_id',
-                'staff_scores.staff_id',
+                'staff_scores.rater_user_id',
+                'staff_scores.staff_user_id',
                 'staff_scores.percentage',
                 'users.name',
-            ])->leftJoin('users', 'users.id', '=', 'staff_scores.rater_id')
+            ])->leftJoin('users', 'users.id', '=', 'staff_scores.rater_user_id')
                 ->where('assessment_id', $id);
         }
         ])->whereIn('users.id', $staffIds)
@@ -171,12 +171,12 @@ class AssessmentController extends Controller
         $developmentStaffs = User::with(['staffScores' => function($query) use ($id){
             $query->select([
                 'staff_scores.id',
-                'staff_scores.rater_id',
-                'staff_scores.staff_id',
+                'staff_scores.rater_user_id',
+                'staff_scores.staff_user_id',
                 'staff_scores.percentage',
                 'users.name',
             ])
-                ->leftJoin('users','users.id','=','staff_scores.rater_id')
+                ->leftJoin('users','users.id','=','staff_scores.rater_user_id')
                 ->where('assessment_id', $id);
         }
         ])->whereIn('users.id', $staffIds)
