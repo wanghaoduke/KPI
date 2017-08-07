@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AppResponse;
 use App\Assessment;
+use App\AssessmentStaffFinalScore;
 use App\StaffScore;
 use App\User;
 use App\Advice;
@@ -59,33 +60,47 @@ class ShowScoreController extends Controller
                     $assessmentIdString = $assessmentIdString.")";
                 }
             }
-            $sql = "(select staff_scores.staff_user_id,sum(staff_scores.is_completed)as completed_count,
-                          sum(
-                                 (if(staff_scores.quality_score is null, 0, staff_scores.quality_score) + if(staff_scores.attitude_score is null, 0, staff_scores.attitude_score)
-                                 )*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
-                          )as sumScore,
-                          sum(
-                                 (staff_scores.quality_score)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
-                          )as qualitySumScore,
-                          sum(
-                                 (staff_scores.attitude_score)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
-                          )as attitudeSumScore
-                         
-                      from staff_scores
-                      where staff_scores.assessment_id in $assessmentIdString
-                      group by staff_scores.staff_user_id
-                     ) as tt";
-            $staffScores = User::select([
+
+//            $sql = "(select staff_scores.staff_user_id,sum(staff_scores.is_completed)as completed_count,
+//                          sum(
+//                                 (if(staff_scores.quality_score is null, 0, staff_scores.quality_score) + if(staff_scores.attitude_score is null, 0, staff_scores.attitude_score)
+//                                 )*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
+//                          )as sumScore,
+//                          sum(
+//                                 (staff_scores.quality_score)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
+//                          )as qualitySumScore,
+//                          sum(
+//                                 (staff_scores.attitude_score)*if(staff_scores.percentage is null, 0, staff_scores.percentage)*0.01
+//                          )as attitudeSumScore
+//
+//                      from staff_scores
+//                      where staff_scores.assessment_id in $assessmentIdString
+//                      group by staff_scores.staff_user_id
+//                     ) as tt";
+//
+//            $staffScores = User::select([
+//                'users.id as id',
+//                'users.name as name',
+//                \DB::raw("(case when users.department = 3 then '策划组' when users.department = 4 then '开发组' end) as department"),
+//                'tt.staff_user_id as staff_user_id',
+//                'tt.sumScore',
+//                'tt.qualitySumScore',
+//                'tt.attitudeSumScore'
+//            ])->leftJoin(\DB::raw($sql), 'tt.staff_user_id', '=', 'users.id')
+//                ->where('tt.completed_count', '>', 0)
+//                ->whereNotNull('tt.staff_user_id');
+
+            $staffScores = AssessmentStaffFinalScore::select([
                 'users.id as id',
                 'users.name as name',
                 \DB::raw("(case when users.department = 3 then '策划组' when users.department = 4 then '开发组' end) as department"),
-                'tt.staff_user_id as staff_user_id',
-                'tt.sumScore',
-                'tt.qualitySumScore',
-                'tt.attitudeSumScore'
-            ])->leftJoin(\DB::raw($sql), 'tt.staff_user_id', '=', 'users.id')
-                ->where('tt.completed_count', '>', 0)
-                ->whereNotNull('tt.staff_user_id');
+                'assessment_staff_final_scores.user_id as staff_user_id',
+                \DB::raw("sum(assessment_staff_final_scores.sum_score) as sumScore"),
+                \DB::raw("sum(assessment_staff_final_scores.quality_score) as qualitySumScore"),
+                \DB::raw("sum(assessment_staff_final_scores.attitude_score) as attitudeSumScore"),
+                \DB::raw("sum(assessment_staff_final_scores.advices_score) as advicesSumScore"),
+            ])->leftJoin('users', 'users.id', '=', 'assessment_staff_final_scores.user_id')
+                ->whereIn('assessment_staff_final_scores.assessment_id', $AssessmentIds);
 
             //根据选的组来取数据
             switch($request->get('department')){
@@ -102,21 +117,22 @@ class ShowScoreController extends Controller
                     $data = $staffScores;
             }
 
-            $data = $data->get();
+//            $data = $data->get();
+            $data = $data->groupBy('assessment_staff_final_scores.user_id')->get();
 
             for($j = 0; $j < count($data); $j++){
                 //把合理化建议分数加入
-                $advice = Advice::select([
-                    \DB::raw("if(sum(score) > 30, 30, sum(score)) as sumScore"),
-                    "advices.suggest_user_id"
-                ])
-                    ->whereRaw("date_format(created_at, '%Y-%m') >= '$startDateStr' and date_format(created_at, '%Y-%m') <= '$endDateStr'")
-                    ->whereIn('advices.suggest_user_id',[$data[$j]['id']])
-                    ->where('advices.score', '>', '0')
-                    ->groupBy("advices.suggest_user_id")
-                    ->first();
-                $data[$j]['sumScore'] = $advice['sumScore'] + $data[$j]['sumScore'];
-                $data[$j]->advicesSumScore = $advice["sumScore"];
+//                $advice = Advice::select([
+//                    \DB::raw("if(sum(score) > 30, 30, sum(score)) as sumScore"),
+//                    "advices.suggest_user_id"
+//                ])
+//                    ->whereRaw("date_format(created_at, '%Y-%m') >= '$startDateStr' and date_format(created_at, '%Y-%m') <= '$endDateStr'")
+//                    ->whereIn('advices.suggest_user_id',[$data[$j]['id']])
+//                    ->where('advices.score', '>', '0')
+//                    ->groupBy("advices.suggest_user_id")
+//                    ->first();
+//                $data[$j]['sumScore'] = $advice['sumScore'] + $data[$j]['sumScore'];
+//                $data[$j]->advicesSumScore = $advice["sumScore"];
                 $data[$j] = $this->getTheStaffAvgScore($data[$j], $AssessmentIds);  //获取每个员工的每项平均分
             }
             $data = $this->theScoreOrder($data, $request->get("item"));  //不同分项目的不同排序
