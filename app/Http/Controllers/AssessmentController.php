@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Advice;
 use App\AppResponse;
 use App\Assessment;
+use App\AssessmentStaffFinalScore;
 use App\StaffScore;
 use App\User;
 use Illuminate\Support\Facades\Gate;
@@ -246,11 +247,18 @@ class AssessmentController extends Controller
             $staffScore->advices_sum_score = $advice['sumScore'];
 
             //相关的数据填入新的数据表中
-            \DB::table('assessment_staff_final_scores')->insert([ 'user_id'=>$staffScore['staff_user_id'], 'assessment_id'=>$staffScore['assessment_id'],
-                'sum_score'=>$staffScore['sumScore'], 'quality_score'=>$staffScore['sum_quality_score'],
-                'attitude_score'=>$staffScore['sum_attitude_score'], 'advices_score'=>$staffScore['advices_sum_score'],
-                'assessment_date'=>$staffScore['tempDate'].'-01'
-            ]);
+            $count = AssessmentStaffFinalScore::where('assessment_id', $staffScore['assessment_id'])->where('user_id', $staffScore['staff_user_id'])->count();
+            if($count > 0){
+                AssessmentStaffFinalScore::where('assessment_id', $staffScore['assessment_id'])->where('user_id', $staffScore['staff_user_id'])->update(['sum_score'=>$staffScore['sumScore'], 'quality_score'=>$staffScore['sum_quality_score'],
+                    'attitude_score'=>$staffScore['sum_attitude_score'], 'advices_score'=>$staffScore['advices_sum_score']
+                ]);
+            }else{
+                AssessmentStaffFinalScore::create([ 'user_id'=>$staffScore['staff_user_id'], 'assessment_id'=>$staffScore['assessment_id'],
+                    'sum_score'=>$staffScore['sumScore'], 'quality_score'=>$staffScore['sum_quality_score'],
+                    'attitude_score'=>$staffScore['sum_attitude_score'], 'advices_score'=>$staffScore['advices_sum_score'],
+                    'assessment_date'=>$staffScore['tempDate'].'-01'
+                ]);
+            }
         }
     }
  

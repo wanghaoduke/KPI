@@ -22,16 +22,16 @@ class TheAssessmentsManagementController extends Controller
     //改变assessment状态
     public function update ($id, Request $request){
         $assessment = Assessment::find($id)->update(['is_completed' => $request->get('is_completed')]);
-        if($request->get('is_completed') == 0){
-            \DB::beginTransaction();
-            try{
-                AssessmentStaffFinalScore::where('assessment_id', $id)->delete();
-                \DB::commit();
-            }catch(Exception $exception){
-                \DB::rollback();
-                return AppResponse::result(false, $exception->getMessage());
-            }
-        }
+//        if($request->get('is_completed') == 0){
+//            \DB::beginTransaction();
+//            try{
+//                AssessmentStaffFinalScore::where('assessment_id', $id)->delete();
+//                \DB::commit();
+//            }catch(Exception $exception){
+//                \DB::rollback();
+//                return AppResponse::result(false, $exception->getMessage());
+//            }
+//        }
 
         if($request->get('is_completed') == 1){  //计算出最终得分并写入
             $this->getFinalScore($id);
@@ -99,11 +99,18 @@ class TheAssessmentsManagementController extends Controller
             $staffScore->advices_sum_score = $advice['sumScore'];
 
             //相关的数据填入新的数据表中
-            \DB::table('assessment_staff_final_scores')->insert([ 'user_id'=>$staffScore['staff_user_id'], 'assessment_id'=>$staffScore['assessment_id'],
-                'sum_score'=>$staffScore['sumScore'], 'quality_score'=>$staffScore['sum_quality_score'],
-                'attitude_score'=>$staffScore['sum_attitude_score'], 'advices_score'=>$staffScore['advices_sum_score'],
-                'assessment_date'=>$staffScore['tempDate'].'-01'
-            ]);
+            $count = AssessmentStaffFinalScore::where('assessment_id', $staffScore['assessment_id'])->where('user_id', $staffScore['staff_user_id'])->count();
+            if($count > 0){
+                AssessmentStaffFinalScore::where('assessment_id', $staffScore['assessment_id'])->where('user_id', $staffScore['staff_user_id'])->update(['sum_score'=>$staffScore['sumScore'], 'quality_score'=>$staffScore['sum_quality_score'],
+                    'attitude_score'=>$staffScore['sum_attitude_score'], 'advices_score'=>$staffScore['advices_sum_score']
+                ]);
+            }else{
+                AssessmentStaffFinalScore::create([ 'user_id'=>$staffScore['staff_user_id'], 'assessment_id'=>$staffScore['assessment_id'],
+                    'sum_score'=>$staffScore['sumScore'], 'quality_score'=>$staffScore['sum_quality_score'],
+                    'attitude_score'=>$staffScore['sum_attitude_score'], 'advices_score'=>$staffScore['advices_sum_score'],
+                    'assessment_date'=>$staffScore['tempDate'].'-01'
+                ]);
+            }
         }
     }
 }
