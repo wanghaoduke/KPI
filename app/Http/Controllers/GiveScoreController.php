@@ -31,9 +31,10 @@ class GiveScoreController extends Controller
     //获取用户的需要评论的assessment
     public function index () {
         $userId = auth::user()->id;
-        $assessmentIds = StaffScore::where('rater_user_id', $userId)->distinct('assessment_id')->pluck('assessment_id');
+//        $assessmentIds = StaffScore::where('rater_user_id', $userId)->distinct('assessment_id')->pluck('assessment_id');
 //        \Log::info($assessmentIds);
-        $assessments = Assessment::whereIn('id', $assessmentIds)->where('is_completed', 0)->orderBy('year', 'DESC')->orderBy('month', "DESC")->get();
+//        $assessments = Assessment::whereIn('id', $assessmentIds)->where('is_completed', 0)->orderBy('year', 'DESC')->orderBy('month', "DESC")->get();
+        $assessments = Assessment::where('is_completed', 0)->orderBy('year', 'DESC')->orderBy('month', "DESC")->get();
         return $assessments;
     }
 
