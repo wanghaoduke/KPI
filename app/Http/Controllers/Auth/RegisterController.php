@@ -202,8 +202,8 @@ class RegisterController extends Controller
             }
         }
 
-//        $createCode = rand(100000, 999999);
-        $createCode = 111111;
+        $createCode = rand(100000, 999999);
+
         if($request->session()->has('createCode')){
             $request->session()->forget('createCode');
             $request->session()->put('createCode', $createCode);
@@ -211,9 +211,9 @@ class RegisterController extends Controller
             $request->session()->put('createCode', $createCode);
         }
 
-//        $client = \Hprose\Client::create(config('app.HPROSE_IP'), false);
-//        $content = '您收到了创建kpi考勤系统的验证码，将其输入到验证码输入框。验证码为：'.$createCode;
-//        $client->push_sms_store($request->get('phone'),$content);
+        $client = \Hprose\Client::create(config('app.HPROSE_IP'), false);
+        $content = '您收到了创建kpi考勤系统的验证码，将其输入到验证码输入框。验证码为：'.$createCode;
+        $client->push_sms_store($request->get('phone'),$content);
 
         return redirect()->action('Auth\RegisterController@showRegistrationForm');
     }
